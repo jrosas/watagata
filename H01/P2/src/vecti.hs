@@ -31,7 +31,7 @@ import Lexer
 main :: IO ()
 main =  do
   args <- getArgs
-  if null(args) then do putStrLn "Jodete"
+  if null(args) then do putStrLn "No ha introducido elementos"
                   else if head args == "-e" then do
                          print $ lexer $ head $ tail args
                        else do
