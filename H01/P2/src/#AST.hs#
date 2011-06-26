@@ -71,10 +71,8 @@ data Print = Exp
 
 data Exp = Num Double
          | LeftVal
-         | BinExp String Exp Exp
-         | OnceI String Exp
-         | OnceDExp String Exp
-           --         | OnceA String Exp
+         | Suma Exp Exp
+         | 
          | Function
          deriving (Eq, Show)
 
