@@ -22,8 +22,9 @@
 module AST (
   Raiz(..),
   FunDec(..),
-  Vartype(..),
-  VarDec(..),
+  VarType(..),
+  VarFun(..),
+  VarBlock(..),
   Instruc(..),
   Cond2(..),
   Print(..),
@@ -39,15 +40,15 @@ data AST = Raiz
 data Raiz = Prog [FunDec] Instruc
           deriving (Eq, Show)
 
-data FunDec = FuncDec String [VarFun] Vartype Instruc
+data FunDec = FuncDec String [VarFun] VarType Instruc
             deriving (Eq, Show)
                      
-data Vartype = TNum
+data VarType = TNum
              | TVec
              | TMat
              deriving (Eq, Show)
 
-data VarFun = Var String Vartype
+data VarFun = Var String VarType
             deriving (Eq, Show)
 
 data Instruc = Asign LeftVal Exp
@@ -60,7 +61,9 @@ data Instruc = Asign LeftVal Exp
              | Cond BoolExp Instruc Cond2
              deriving (Eq, Show)
 
-data VarBlock = [String] VarType
+data VarBlock = Vars [String] VarType
+              deriving (Eq, Show)
+                       
 data Cond2 = Nothing 
            | Else Instruc
            deriving (Eq, Show)
@@ -80,7 +83,7 @@ data Exp = Num Double
 
 data BoolExp = Reserve
              | BinBool String BoolExp BoolExp
-             | BinBool String Exp Exp
+             | BinBoolE String Exp Exp
              | OnceDBool String BoolExp
             --          | OnceA String Bool
              deriving (Eq, Show)
