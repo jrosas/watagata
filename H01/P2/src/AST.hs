@@ -40,7 +40,7 @@ data AST = Raiz
 data Raiz = Prog [FunDec] Instruc
           deriving (Eq, Show)
 
-data FunDec = FuncDec String [VarDec] Vartype Instruc
+data FunDec = FuncDec String [VarFun] Vartype Instruc
             deriving (Eq, Show)
                      
 data Vartype = TNum
@@ -48,12 +48,13 @@ data Vartype = TNum
              | TMat
              deriving (Eq, Show)
 
-data VarDec = Var String Vartype
+data VarFun = Var String Vartype
             deriving (Eq, Show)
 
 data Instruc = Asign LeftVal Exp
-             | InsBlock [VarDec] [Instruc]
-             | While BoolExp Instruc
+             | InsBlock [VarBlock] [Instruc]
+             | While BoolExp Ins
+truc
              | Iter String Exp Instruc
              | Read Exp
              | Write [Print]
@@ -61,6 +62,7 @@ data Instruc = Asign LeftVal Exp
              | Cond BoolExp Instruc Cond2
              deriving (Eq, Show)
 
+data VarBlock = [String] VarType
 data Cond2 = Nothing 
            | Else Instruc
            deriving (Eq, Show)
@@ -80,6 +82,7 @@ data Exp = Num Double
 
 data BoolExp = Reserve
              | BinBool String BoolExp BoolExp
+             | BinBool String Exp Exp
              | OnceDBool String BoolExp
             --          | OnceA String Bool
              deriving (Eq, Show)
