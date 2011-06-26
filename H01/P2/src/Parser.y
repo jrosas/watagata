@@ -80,14 +80,16 @@ import Token.hs
 %left '||'
 %left '&&'
 %right '!'
-%left '=' '!='
-%left '<' '>' '<=' '>='
+%nonassoc '=' '!='
+%nonassoc '<' '>' '<=' '>='
 %left '+' '-'
 %left '*' '/' '.' '%'
-%right UN '^' '$' '@'
+%left '^'
+%right UN  '$' '@'
 %left '**'
-
-
+%nonassoc '{' '}'
+%nonassoc '[' ']'
+%nonassoc '(' ')'
 
 %%
 Prog : FunDec Instruc {$1}
@@ -103,30 +105,38 @@ VarType : tnum{$1}
         | tvec{$1}
         | tmat{$1}
           
-Instruc : Asig{$1}
-       | InsBlock{$1}
-       | CondSelect{$1}
-       | While{$1}
-       | ForEach{$1}
-       | Read{$1}
-       | Write{$1}
-       | Return{$1}
+Instruc : Matched {$1}
+        | Unmatched {$1}
 
+Matched : if Boolean then Matched else Matched {$1}
+        | Asig{$1}
+        | InsBlock{$1}
+        | While{$1}
+        | ForEach{$1}
+        | Read{$1}
+        | Write{$1}
+        | Return{$1}
+
+Unmatched : if Boolean then Instruc {$2}
+          | if Boolean then Matched else Unmatched          {$1}  
 
 Asig : Lval ':=' Exp{$1} 
 
-Lval : id{$1}
-     | id '[' Exp ']'{$1}
-     | id '[' Exp ',' Exp ']' {$1}
-     | id '[' Ind ':' Ind ']'{$1}
-     | id '[' Ind ':' Ind ',' Ind ':' Ind ']'{$1}
+Lval : Mat {$1}
+     | Access '[' Exp ']'{$1}
+     | Access '[' Exp ',' Exp ']' {$1}
+     | Access '[' Ind ':' Ind ']'{$1}
+     | Access '[' Ind ':' Ind ',' Ind ':' Ind ']'{$1}
+
+Access : Mat {$1}
+       | id  {$1}
        
 Ind : {-empty-}{}
     | Exp{$1}
+
     
 Exp : num          {$1}
     | string {$1}
-    | Mat{$1}
     | '(' Exp ')'{$1}
     | Exp '+' Exp{$1}
     | Exp '-' Exp{$1}
@@ -137,24 +147,19 @@ Exp : num          {$1}
     | Exp '.' Exp{$1}
     | Lval{$1}
     | '-' Exp %prec UN {$1}
-    | '^' Exp{$1}
+    | Exp '^' {$1}
     | '$' Exp{$1}
     | '@' Exp{$1}
     | FunCall{$1}
     | FunEmb{$1}
       
-Mat : '{' MatList '}'{$1}
-    | '{' ExpList '}'{$1}
-    | '{' ElemList '}'{$1}
-      
-MatList : Mat{$1}
-        | MatList ';' Mat{$1}
+Mat : '{' ElemList '}'{$1}   
+
+ElemList : ExpList {$1}
+         | ElemList ';' ExpList{$1}
 
 ExpList : Exp{$1}
         | ExpList ',' Exp{$1}
-                    
-ElemList : ExpList {$1}
-         | ElemList ';' ExpList{$1}
 
 FunCall : id  '(' ExpList ')'{$1}
         | id '(' ')'{$1}
@@ -184,8 +189,7 @@ IdList : id {$1}
 InsList : Instruc{$1}
          | InsList ';' Instruc{$1}
 
-CondSelect : if Boolean then Instruc{$1}
-           | if Boolean then Instruc else Instruc                             {$1}
+
  
 While : while Boolean do Instruc{$1}
 
