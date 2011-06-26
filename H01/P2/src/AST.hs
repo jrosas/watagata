@@ -63,10 +63,13 @@ data Instruc = Asign LeftVal Exp
 
 data VarBlock = Vars [String] VarType
                 deriving (Eq, Show)
-data Cond2 = Nothing 
-           | Else Instruc
+
+data Cond2 = Maybe OptElse
            deriving (Eq, Show)
-                    
+
+data OptElse = Else Instruc
+               deriving (Eq, Show)
+
 data Print = Exp
            | Chars String
            deriving (Eq, Show)
@@ -80,24 +83,27 @@ data Exp = Num Double
          | Mod Exp Exp
          | Expo Exp Exp
          | Dot Exp Exp
-         | RB Exp
-         | CB Exp
+         | MinusU Exp
+         | Caret Exp
          | DS Exp
+         | RB Exp
          | At Exp
-         | Circum Exp
          | Function
          deriving (Eq, Show)
 
-data BoolExp = Reserve
+data BoolExp = True
+             | False
              | OnceDBool String BoolExp
              | Less Exp Exp
              | Great Exp Exp
              | LET Exp Exp
              | GET Exp Exp
              | Equal Exp Exp
-             | Nequal Exp Exp
+             | NEqual Exp Exp
              | And BoolExp BoolExp
              | Or BoolExp BoolExp
+             | BoolEqual BoolExp BoolExp
+             | BoolRB Exp
              | Not BoolExp
                --          | OnceA String Bool
              deriving (Eq, Show)
@@ -109,6 +115,7 @@ data Function = Func String [Exp]
               deriving (Eq, Show)
 
 data LeftVal = IdMat String
+             | CB Exp
              | AccessElemV String Exp
              | AccessElemM String Exp Exp
              | ParAccessV String (Maybe Exp) (Maybe Exp)
