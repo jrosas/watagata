@@ -88,7 +88,6 @@ data Exp = Num Double
          | DS Exp
          | RB Exp
          | At Exp
-         | Function
          deriving (Eq, Show)
 
 data BoolExp = True
@@ -110,13 +109,24 @@ data BoolExp = True
 data Reserve = Res String
              deriving (Eq, Show)
 
+data LeftVal = Only Access
+             | AccessElemV Access Exp
+             | AccessElemM Access Exp Exp
+             | ParAccessV Access (Maybe Exp) (Maybe Exp)
+             | ParAccessM Access (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
+             deriving (Eq, Show)
+
+data Access = Id String
+            | Function
+            | Matrix
+             deriving (Eq, Show)
+                
 data Function = Func String [Exp]
+                deriving (Eq, Show)
+                       
+data Matrix = CB MatList
               deriving (Eq, Show)
 
-data LeftVal = IdMat String
-             | CB Exp
-             | AccessElemV String Exp
-             | AccessElemM String Exp Exp
-             | ParAccessV String (Maybe Exp) (Maybe Exp)
-             | ParAccessM String (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
-             deriving (Eq, Show)
+data MatList = List String [Exp]
+               deriving (Eq, Show)
+
