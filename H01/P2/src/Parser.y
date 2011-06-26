@@ -8,8 +8,9 @@ module Parser (
        parser
 ) where
 
-import Tokens
 import AST
+import Tokens
+
 
 }
 

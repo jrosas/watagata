@@ -8,8 +8,8 @@ module Parser (
        parser
 ) where
 
-import Tokens
 import AST
+import Tokens
 
 -- parser produced by Happy Version 1.18.4
 
