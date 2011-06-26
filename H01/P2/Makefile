@@ -24,10 +24,12 @@ clean:
 	mv src/Lexer.x bin/.
 	mv src/Tokens.hs bin/.
 	mv src/vecti.hs bin/.
+	mv src/Parser.y bin/.
 	rm -rf src/*
 	mv bin/Lexer.x src/.
 	mv bin/Tokens.hs src/.
 	mv bin/vecti.hs src/.
+	mv bin/Parser.y src/.
 	rm -rf bin/*
 
 cleanall:
@@ -35,10 +37,12 @@ cleanall:
 	mv src/Lexer.x bin/.
 	mv src/Tokens.hs bin/.
 	mv src/vecti.hs bin/.
+	mv src/Parser.y bin/.
 	rm -rf src/*
 	mv bin/Lexer.x src/.
 	mv bin/Tokens.hs src/.
 	mv bin/vecti.hs src/.
+	mv bin/Parser.y src/.
 
 doc:	src/Lexer.x
 	cd src/; alex -o Lexer.hs Lexer.x
