@@ -76,6 +76,7 @@ import Token.hs
 
 %right ',' 
 %right ':='
+%nonassoc LOWER_ELSE
 %right if else
 %left '||'
 %left '&&'
@@ -92,34 +93,36 @@ import Token.hs
 %nonassoc '(' ')'
 
 %%
-Prog : FunDec Instruc {$1}
+Prog : FunDecList Instruc {$1}
 
-FunDec : {- empty -} {}
-       | FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$2}
+FunDecList : {- empty -} {}
+           | FunDec {$1}
+           | FunDecList  FunDec {$1}
+ 
+FunDec : FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$2}
        | FunDec define id '(' ')' of type VarType as Instruc{$1}
            
 VarListFunc : id ':' VarType {$1}
-            | VarListFunc ',' VarListFunc{$1}
+            | VarListFunc ',' id ':' VarType {$1}
                     
 VarType : tnum{$1}
         | tvec{$1}
         | tmat{$1}
           
-Instruc : Matched {$1}
-        | Unmatched {$1}
-
-Matched : if Boolean then Matched else Matched {$1}
-        | Asig{$1}
+Instruc :  Asig{$1}
         | InsBlock{$1}
         | While{$1}
         | ForEach{$1}
         | Read{$1}
         | Write{$1}
         | Return{$1}
-
-Unmatched : if Boolean then Instruc {$2}
-          | if Boolean then Matched else Unmatched          {$1}  
-
+        | CondSelect {$1}
+	      
+CondSelect : if Boolean then Instruc OptionElse{$2}
+ 
+OptionElse : {- empty -} %prec LOWER_ELSE {}
+           | else Instruc       {$1}  
+	      
 Asig : Lval ':=' Exp{$1} 
 
 Lval : Mat {$1}
@@ -136,7 +139,6 @@ Ind : {-empty-}{}
 
     
 Exp : num          {$1}
-    | string {$1}
     | '(' Exp ')'{$1}
     | Exp '+' Exp{$1}
     | Exp '-' Exp{$1}
@@ -188,8 +190,6 @@ IdList : id {$1}
        
 InsList : Instruc{$1}
          | InsList ';' Instruc{$1}
-
-
  
 While : while Boolean do Instruc{$1}
 
@@ -197,7 +197,13 @@ ForEach : foreach id in Exp do Instruc{$1}
 
 Read : read Exp{$1}
 
-Write : write ExpList{$1}
+Write : write PrintList{$1}
+
+Print : Exp {$1}
+      | string {$1}
+
+PrintList : Print {$1}
+          | PrintList ',' Print {$1}
 
 Return : return Exp {$1}
 
