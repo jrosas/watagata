@@ -1,6 +1,16 @@
 {
 {-
-Comentarios BLAH
+
+   Asunto: C&#243;digo fuente del proyecto 1. 
+   Proyecto: Analizador Lexicogr&#225;fico en Haskell
+   Materia: Taller de Traductores (CI-3725)
+   Trimestre: Abril-Julio 2011
+   Profesor: Carlos Colmenares
+   
+   Grupo: H01
+   Integrantes:            Carnet:  
+   * Juan Rosas           (07-41502)
+   * Jos&#233; Lezama     (07-41104)
 
 -}
 

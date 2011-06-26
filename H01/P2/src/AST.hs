@@ -1,6 +1,4 @@
-{------------------------------------- 
-  Estos son los tipos que definimos   
----------------------------------------}
+
 {-|
    Asunto: C&#243;digo fuente del proyecto 1. 
    Proyecto: Analizador Lexicogr&#225;fico en Haskell
@@ -13,10 +11,6 @@
    * Juan Rosas           (07-41502)
    * Jos&#233; Lezama     (07-41104)
    
-   Analizador Lexicogr&#225;fico desarrollado en Alex (A lexical analyser 
-   generator for Haskell) para el lenguaje Vectorinox, basado en la
-   especificaci&#243;n suministrada para el desarrollo del mismo
-   
  -}
 
 module AST (
@@ -24,15 +18,18 @@ module AST (
   FunDec(..),
   VarType(..),
   VarFun(..),
-  VarBlock(..),
   Instruc(..),
+  VarBlock(..), 
   Cond2(..),
+  OptElse(..),
   Print(..),
   Exp(..),
-  Bool(..),
-  Reserve(..),
+  BoolExp(..),
+  Access(..),
   Function(..),
-  LeftVal(..),
+  Matrix(..),
+  MatList(..),
+  LeftVal(..)
   ) where
 
 
@@ -51,7 +48,7 @@ data VarType = TNum
 data VarFun = Var String VarType
             deriving (Eq, Show)
 
-data Instruc = Asign LeftVal Exp
+data Instruc = Asign Exp Exp
              | InsBlock [VarBlock] [Instruc]
              | While BoolExp Instruc
              | Iter String Exp Instruc
@@ -75,7 +72,7 @@ data Print = Exp
            deriving (Eq, Show)
 
 data Exp = Num Double
-         | LeftVal
+         | Lef LeftVal
          | Plus Exp Exp
          | Minus Exp Exp
          | Times Exp Exp
@@ -88,10 +85,17 @@ data Exp = Num Double
          | DS Exp
          | RB Exp
          | At Exp
-         deriving (Eq, Show)
+           deriving (Eq, Show)
 
-data BoolExp = True
-             | False
+data LeftVal =  Only Access
+         | AccessElemV Access Exp
+         | AccessElemM Access Exp Exp
+         | ParAccessV Access (Maybe Exp) (Maybe Exp)
+         | ParAccessM Access (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
+           deriving (Eq, Show)
+
+data BoolExp = TRUE 
+             | FALSE
              | Less Exp Exp
              | Great Exp Exp
              | LET Exp Exp
@@ -101,32 +105,22 @@ data BoolExp = True
              | And BoolExp BoolExp
              | Or BoolExp BoolExp
              | BoolEqual BoolExp BoolExp
-             | BoolRB Exp
+             | BoolRB BoolExp
              | Not BoolExp
                --          | OnceA String Bool
              deriving (Eq, Show)
                    
-data Reserve = Res String
-             deriving (Eq, Show)
-
-data LeftVal = Only Access
-             | AccessElemV Access Exp
-             | AccessElemM Access Exp Exp
-             | ParAccessV Access (Maybe Exp) (Maybe Exp)
-             | ParAccessM Access (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
-             deriving (Eq, Show)
 
 data Access = Id String
-            | Function
-            | Matrix
+            | Funct Function
+            | MatC Matrix
              deriving (Eq, Show)
                 
 data Function = Func String [Exp]
                 deriving (Eq, Show)
                        
-data Matrix = CB MatList
+data Matrix = Matr [[Exp]]
               deriving (Eq, Show)
 
-data MatList = List String [Exp]
+data MatList = Elems String [Exp]
                deriving (Eq, Show)
-
