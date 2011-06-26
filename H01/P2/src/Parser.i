@@ -37,24 +37,24 @@ Grammar
 	Lval -> Access '[' Ind ':' Ind ',' Ind ':' Ind ']'   (28)
 	Access -> Mat                                      (29)
 	Access -> id                                       (30)
-	Ind ->                                             (31)
-	Ind -> Exp                                         (32)
-	Exp -> num                                         (33)
-	Exp -> '(' Exp ')'                                 (34)
-	Exp -> Exp '+' Exp                                 (35)
-	Exp -> Exp '-' Exp                                 (36)
-	Exp -> Exp '*' Exp                                 (37)
-	Exp -> Exp '/' Exp                                 (38)
-	Exp -> Exp '%' Exp                                 (39)
-	Exp -> Exp '**' Exp                                (40)
-	Exp -> Exp '.' Exp                                 (41)
-	Exp -> Lval                                        (42)
-	Exp -> '-' Exp                                     (43)
-	Exp -> Exp '^'                                     (44)
-	Exp -> '$' Exp                                     (45)
-	Exp -> '@' Exp                                     (46)
-	Exp -> FunCall                                     (47)
-	Exp -> FunEmb                                      (48)
+	Access -> FunCall                                  (31)
+	Access -> FunEmb                                   (32)
+	Ind ->                                             (33)
+	Ind -> Exp                                         (34)
+	Exp -> num                                         (35)
+	Exp -> '(' Exp ')'                                 (36)
+	Exp -> Exp '+' Exp                                 (37)
+	Exp -> Exp '-' Exp                                 (38)
+	Exp -> Exp '*' Exp                                 (39)
+	Exp -> Exp '/' Exp                                 (40)
+	Exp -> Exp '%' Exp                                 (41)
+	Exp -> Exp '**' Exp                                (42)
+	Exp -> Exp '.' Exp                                 (43)
+	Exp -> Lval                                        (44)
+	Exp -> '-' Exp                                     (45)
+	Exp -> Exp '^'                                     (46)
+	Exp -> '$' Exp                                     (47)
+	Exp -> '@' Exp                                     (48)
 	Mat -> '{' ElemList '}'                            (49)
 	Mat -> '{' '}'                                     (50)
 	ElemList -> ExpList                                (51)
@@ -177,9 +177,9 @@ Non-terminals
 	OptionElse      rules 21, 22
 	Asig            rule  23
 	Lval            rules 24, 25, 26, 27, 28
-	Access          rules 29, 30
-	Ind             rules 31, 32
-	Exp             rules 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+	Access          rules 29, 30, 31, 32
+	Ind             rules 33, 34
+	Exp             rules 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
 	Mat             rules 49, 50
 	ElemList        rules 51, 52
 	ExpList         rules 53, 54
@@ -210,6 +210,9 @@ State 0
 
 	id             reduce using rule 2
 	'{'            reduce using rule 2
+	zeroes         reduce using rule 2
+	range          reduce using rule 2
+	eye            reduce using rule 2
 	read           reduce using rule 2
 	write          reduce using rule 2
 	begin          reduce using rule 2
@@ -234,15 +237,18 @@ State 2
 	Prog -> FunDecList . Instruc                        (rule 1)
 	FunDecList -> FunDecList . FunDec                   (rule 4)
 
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
 	FunDec         goto state 6
 	Instruc        goto state 7
@@ -251,12 +257,17 @@ State 2
 	Lval           goto state 10
 	Access         goto state 11
 	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
 State 3
 
@@ -266,6 +277,9 @@ State 3
 
 	id             reduce using rule 3
 	'{'            reduce using rule 3
+	zeroes         reduce using rule 3
+	range          reduce using rule 3
+	eye            reduce using rule 3
 	read           reduce using rule 3
 	write          reduce using rule 3
 	define         shift, and enter state 5
@@ -288,7 +302,7 @@ State 5
 	FunDec -> FunDec define . id '(' VarListFunc ')' of type VarType as Instruc    (rule 5)
 	FunDec -> FunDec define . id '(' ')' of type VarType as Instruc    (rule 6)
 
-	id             shift, and enter state 65
+	id             shift, and enter state 68
 
 
 State 6
@@ -299,6 +313,9 @@ State 6
 
 	id             reduce using rule 4
 	'{'            reduce using rule 4
+	zeroes         reduce using rule 4
+	range          reduce using rule 4
+	eye            reduce using rule 4
 	read           reduce using rule 4
 	write          reduce using rule 4
 	define         shift, and enter state 5
@@ -323,6 +340,9 @@ State 8
 	id             reduce using rule 19
 	'{'            reduce using rule 19
 	';'            reduce using rule 19
+	zeroes         reduce using rule 19
+	range          reduce using rule 19
+	eye            reduce using rule 19
 	read           reduce using rule 19
 	write          reduce using rule 19
 	define         reduce using rule 19
@@ -343,6 +363,9 @@ State 9
 	id             reduce using rule 12
 	'{'            reduce using rule 12
 	';'            reduce using rule 12
+	zeroes         reduce using rule 12
+	range          reduce using rule 12
+	eye            reduce using rule 12
 	read           reduce using rule 12
 	write          reduce using rule 12
 	define         reduce using rule 12
@@ -360,7 +383,7 @@ State 10
 
 	Asig -> Lval . ':=' Exp                             (rule 23)
 
-	':='           shift, and enter state 64
+	':='           shift, and enter state 67
 
 
 State 11
@@ -386,7 +409,7 @@ State 11
 	'='            reduce using rule 24
 	'!='           reduce using rule 24
 	':='           reduce using rule 24
-	'['            shift, and enter state 63
+	'['            shift, and enter state 66
 	']'            reduce using rule 24
 	'{'            reduce using rule 24
 	'}'            reduce using rule 24
@@ -397,6 +420,9 @@ State 11
 	';'            reduce using rule 24
 	'&&'           reduce using rule 24
 	'||'           reduce using rule 24
+	zeroes         reduce using rule 24
+	range          reduce using rule 24
+	eye            reduce using rule 24
 	read           reduce using rule 24
 	write          reduce using rule 24
 	define         reduce using rule 24
@@ -442,6 +468,9 @@ State 12
 	';'            reduce using rule 29
 	'&&'           reduce using rule 29
 	'||'           reduce using rule 29
+	zeroes         reduce using rule 29
+	range          reduce using rule 29
+	eye            reduce using rule 29
 	read           reduce using rule 29
 	write          reduce using rule 29
 	define         reduce using rule 29
@@ -459,487 +488,101 @@ State 12
 
 State 13
 
-	Instruc -> InsBlock .                               (rule 13)
+	Access -> FunCall .                                 (rule 31)
 
-	id             reduce using rule 13
-	'{'            reduce using rule 13
-	';'            reduce using rule 13
-	read           reduce using rule 13
-	write          reduce using rule 13
-	define         reduce using rule 13
-	begin          reduce using rule 13
-	end            reduce using rule 13
-	if             reduce using rule 13
-	else           reduce using rule 13
-	while          reduce using rule 13
-	foreach        reduce using rule 13
-	return         reduce using rule 13
-	%eof           reduce using rule 13
+	id             reduce using rule 31
+	'+'            reduce using rule 31
+	'-'            reduce using rule 31
+	'*'            reduce using rule 31
+	'/'            reduce using rule 31
+	'%'            reduce using rule 31
+	'**'           reduce using rule 31
+	'.'            reduce using rule 31
+	'<'            reduce using rule 31
+	'>'            reduce using rule 31
+	'<='           reduce using rule 31
+	'>='           reduce using rule 31
+	'='            reduce using rule 31
+	'!='           reduce using rule 31
+	':='           reduce using rule 31
+	'['            reduce using rule 31
+	']'            reduce using rule 31
+	'{'            reduce using rule 31
+	'}'            reduce using rule 31
+	')'            reduce using rule 31
+	'^'            reduce using rule 31
+	':'            reduce using rule 31
+	','            reduce using rule 31
+	';'            reduce using rule 31
+	'&&'           reduce using rule 31
+	'||'           reduce using rule 31
+	zeroes         reduce using rule 31
+	range          reduce using rule 31
+	eye            reduce using rule 31
+	read           reduce using rule 31
+	write          reduce using rule 31
+	define         reduce using rule 31
+	begin          reduce using rule 31
+	end            reduce using rule 31
+	if             reduce using rule 31
+	else           reduce using rule 31
+	then           reduce using rule 31
+	while          reduce using rule 31
+	do             reduce using rule 31
+	foreach        reduce using rule 31
+	return         reduce using rule 31
+	%eof           reduce using rule 31
 
 
 State 14
 
-	Instruc -> While .                                  (rule 14)
+	Access -> FunEmb .                                  (rule 32)
 
-	id             reduce using rule 14
-	'{'            reduce using rule 14
-	';'            reduce using rule 14
-	read           reduce using rule 14
-	write          reduce using rule 14
-	define         reduce using rule 14
-	begin          reduce using rule 14
-	end            reduce using rule 14
-	if             reduce using rule 14
-	else           reduce using rule 14
-	while          reduce using rule 14
-	foreach        reduce using rule 14
-	return         reduce using rule 14
-	%eof           reduce using rule 14
+	id             reduce using rule 32
+	'+'            reduce using rule 32
+	'-'            reduce using rule 32
+	'*'            reduce using rule 32
+	'/'            reduce using rule 32
+	'%'            reduce using rule 32
+	'**'           reduce using rule 32
+	'.'            reduce using rule 32
+	'<'            reduce using rule 32
+	'>'            reduce using rule 32
+	'<='           reduce using rule 32
+	'>='           reduce using rule 32
+	'='            reduce using rule 32
+	'!='           reduce using rule 32
+	':='           reduce using rule 32
+	'['            reduce using rule 32
+	']'            reduce using rule 32
+	'{'            reduce using rule 32
+	'}'            reduce using rule 32
+	')'            reduce using rule 32
+	'^'            reduce using rule 32
+	':'            reduce using rule 32
+	','            reduce using rule 32
+	';'            reduce using rule 32
+	'&&'           reduce using rule 32
+	'||'           reduce using rule 32
+	zeroes         reduce using rule 32
+	range          reduce using rule 32
+	eye            reduce using rule 32
+	read           reduce using rule 32
+	write          reduce using rule 32
+	define         reduce using rule 32
+	begin          reduce using rule 32
+	end            reduce using rule 32
+	if             reduce using rule 32
+	else           reduce using rule 32
+	then           reduce using rule 32
+	while          reduce using rule 32
+	do             reduce using rule 32
+	foreach        reduce using rule 32
+	return         reduce using rule 32
+	%eof           reduce using rule 32
 
 
 State 15
-
-	Instruc -> ForEach .                                (rule 15)
-
-	id             reduce using rule 15
-	'{'            reduce using rule 15
-	';'            reduce using rule 15
-	read           reduce using rule 15
-	write          reduce using rule 15
-	define         reduce using rule 15
-	begin          reduce using rule 15
-	end            reduce using rule 15
-	if             reduce using rule 15
-	else           reduce using rule 15
-	while          reduce using rule 15
-	foreach        reduce using rule 15
-	return         reduce using rule 15
-	%eof           reduce using rule 15
-
-
-State 16
-
-	Instruc -> Read .                                   (rule 16)
-
-	id             reduce using rule 16
-	'{'            reduce using rule 16
-	';'            reduce using rule 16
-	read           reduce using rule 16
-	write          reduce using rule 16
-	define         reduce using rule 16
-	begin          reduce using rule 16
-	end            reduce using rule 16
-	if             reduce using rule 16
-	else           reduce using rule 16
-	while          reduce using rule 16
-	foreach        reduce using rule 16
-	return         reduce using rule 16
-	%eof           reduce using rule 16
-
-
-State 17
-
-	Instruc -> Write .                                  (rule 17)
-
-	id             reduce using rule 17
-	'{'            reduce using rule 17
-	';'            reduce using rule 17
-	read           reduce using rule 17
-	write          reduce using rule 17
-	define         reduce using rule 17
-	begin          reduce using rule 17
-	end            reduce using rule 17
-	if             reduce using rule 17
-	else           reduce using rule 17
-	while          reduce using rule 17
-	foreach        reduce using rule 17
-	return         reduce using rule 17
-	%eof           reduce using rule 17
-
-
-State 18
-
-	Instruc -> Return .                                 (rule 18)
-
-	id             reduce using rule 18
-	'{'            reduce using rule 18
-	';'            reduce using rule 18
-	read           reduce using rule 18
-	write          reduce using rule 18
-	define         reduce using rule 18
-	begin          reduce using rule 18
-	end            reduce using rule 18
-	if             reduce using rule 18
-	else           reduce using rule 18
-	while          reduce using rule 18
-	foreach        reduce using rule 18
-	return         reduce using rule 18
-	%eof           reduce using rule 18
-
-
-State 19
-
-	Access -> id .                                      (rule 30)
-
-	':='           reduce using rule 30
-	'['            reduce using rule 30
-
-
-State 20
-
-	Mat -> '{' . ElemList '}'                           (rule 49)
-	Mat -> '{' . '}'                                    (rule 50)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'}'            shift, and enter state 62
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 59
-	Mat            goto state 12
-	ElemList       goto state 60
-	ExpList        goto state 61
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 21
-
-	Read -> read . Exp                                  (rule 75)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 58
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 22
-
-	Write -> write . PrintList                          (rule 76)
-
-	string         shift, and enter state 57
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 54
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Print          goto state 55
-	PrintList      goto state 56
-
-State 23
-
-	InsBlock -> begin . VarDec InsList end              (rule 64)
-
-	id             reduce using rule 66
-	'{'            reduce using rule 66
-	read           reduce using rule 66
-	write          reduce using rule 66
-	begin          reduce using rule 66
-	vars           shift, and enter state 53
-	if             reduce using rule 66
-	while          reduce using rule 66
-	foreach        reduce using rule 66
-	return         reduce using rule 66
-
-	VarDec         goto state 52
-
-State 24
-
-	CondSelect -> if . Boolean then Instruc OptionElse    (rule 20)
-
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 45
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 51
-
-State 25
-
-	While -> while . Boolean do Instruc                 (rule 73)
-
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 45
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 46
-
-State 26
-
-	ForEach -> foreach . id in Exp do Instruc           (rule 74)
-
-	id             shift, and enter state 44
-
-
-State 27
-
-	Return -> return . Exp                              (rule 81)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 29
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 28
-
-	Exp -> Lval .                                       (rule 42)
-
-	id             reduce using rule 42
-	'+'            reduce using rule 42
-	'-'            reduce using rule 42
-	'*'            reduce using rule 42
-	'/'            reduce using rule 42
-	'%'            reduce using rule 42
-	'**'           reduce using rule 42
-	'.'            reduce using rule 42
-	'<'            reduce using rule 42
-	'>'            reduce using rule 42
-	'<='           reduce using rule 42
-	'>='           reduce using rule 42
-	'='            reduce using rule 42
-	'!='           reduce using rule 42
-	']'            reduce using rule 42
-	'{'            reduce using rule 42
-	'}'            reduce using rule 42
-	')'            reduce using rule 42
-	'^'            reduce using rule 42
-	':'            reduce using rule 42
-	','            reduce using rule 42
-	';'            reduce using rule 42
-	'&&'           reduce using rule 42
-	'||'           reduce using rule 42
-	read           reduce using rule 42
-	write          reduce using rule 42
-	define         reduce using rule 42
-	begin          reduce using rule 42
-	end            reduce using rule 42
-	if             reduce using rule 42
-	else           reduce using rule 42
-	then           reduce using rule 42
-	while          reduce using rule 42
-	do             reduce using rule 42
-	foreach        reduce using rule 42
-	return         reduce using rule 42
-	%eof           reduce using rule 42
-
-
-State 29
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Return -> return Exp .                              (rule 81)
-
-	id             reduce using rule 81
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'{'            reduce using rule 81
-	'^'            shift, and enter state 80
-	';'            reduce using rule 81
-	read           reduce using rule 81
-	write          reduce using rule 81
-	define         reduce using rule 81
-	begin          reduce using rule 81
-	end            reduce using rule 81
-	if             reduce using rule 81
-	else           reduce using rule 81
-	while          reduce using rule 81
-	foreach        reduce using rule 81
-	return         reduce using rule 81
-	%eof           reduce using rule 81
-
-
-State 30
-
-	Exp -> FunCall .                                    (rule 47)
-
-	id             reduce using rule 47
-	'+'            reduce using rule 47
-	'-'            reduce using rule 47
-	'*'            reduce using rule 47
-	'/'            reduce using rule 47
-	'%'            reduce using rule 47
-	'**'           reduce using rule 47
-	'.'            reduce using rule 47
-	'<'            reduce using rule 47
-	'>'            reduce using rule 47
-	'<='           reduce using rule 47
-	'>='           reduce using rule 47
-	'='            reduce using rule 47
-	'!='           reduce using rule 47
-	']'            reduce using rule 47
-	'{'            reduce using rule 47
-	'}'            reduce using rule 47
-	')'            reduce using rule 47
-	'^'            reduce using rule 47
-	':'            reduce using rule 47
-	','            reduce using rule 47
-	';'            reduce using rule 47
-	'&&'           reduce using rule 47
-	'||'           reduce using rule 47
-	read           reduce using rule 47
-	write          reduce using rule 47
-	define         reduce using rule 47
-	begin          reduce using rule 47
-	end            reduce using rule 47
-	if             reduce using rule 47
-	else           reduce using rule 47
-	then           reduce using rule 47
-	while          reduce using rule 47
-	do             reduce using rule 47
-	foreach        reduce using rule 47
-	return         reduce using rule 47
-	%eof           reduce using rule 47
-
-
-State 31
-
-	Exp -> FunEmb .                                     (rule 48)
-
-	id             reduce using rule 48
-	'+'            reduce using rule 48
-	'-'            reduce using rule 48
-	'*'            reduce using rule 48
-	'/'            reduce using rule 48
-	'%'            reduce using rule 48
-	'**'           reduce using rule 48
-	'.'            reduce using rule 48
-	'<'            reduce using rule 48
-	'>'            reduce using rule 48
-	'<='           reduce using rule 48
-	'>='           reduce using rule 48
-	'='            reduce using rule 48
-	'!='           reduce using rule 48
-	']'            reduce using rule 48
-	'{'            reduce using rule 48
-	'}'            reduce using rule 48
-	')'            reduce using rule 48
-	'^'            reduce using rule 48
-	':'            reduce using rule 48
-	','            reduce using rule 48
-	';'            reduce using rule 48
-	'&&'           reduce using rule 48
-	'||'           reduce using rule 48
-	read           reduce using rule 48
-	write          reduce using rule 48
-	define         reduce using rule 48
-	begin          reduce using rule 48
-	end            reduce using rule 48
-	if             reduce using rule 48
-	else           reduce using rule 48
-	then           reduce using rule 48
-	while          reduce using rule 48
-	do             reduce using rule 48
-	foreach        reduce using rule 48
-	return         reduce using rule 48
-	%eof           reduce using rule 48
-
-
-State 32
 
 	FunEmb -> Zeroes .                                  (rule 57)
 
@@ -957,6 +600,8 @@ State 32
 	'>='           reduce using rule 57
 	'='            reduce using rule 57
 	'!='           reduce using rule 57
+	':='           reduce using rule 57
+	'['            reduce using rule 57
 	']'            reduce using rule 57
 	'{'            reduce using rule 57
 	'}'            reduce using rule 57
@@ -967,6 +612,9 @@ State 32
 	';'            reduce using rule 57
 	'&&'           reduce using rule 57
 	'||'           reduce using rule 57
+	zeroes         reduce using rule 57
+	range          reduce using rule 57
+	eye            reduce using rule 57
 	read           reduce using rule 57
 	write          reduce using rule 57
 	define         reduce using rule 57
@@ -982,7 +630,7 @@ State 32
 	%eof           reduce using rule 57
 
 
-State 33
+State 16
 
 	FunEmb -> Range .                                   (rule 58)
 
@@ -1000,6 +648,8 @@ State 33
 	'>='           reduce using rule 58
 	'='            reduce using rule 58
 	'!='           reduce using rule 58
+	':='           reduce using rule 58
+	'['            reduce using rule 58
 	']'            reduce using rule 58
 	'{'            reduce using rule 58
 	'}'            reduce using rule 58
@@ -1010,6 +660,9 @@ State 33
 	';'            reduce using rule 58
 	'&&'           reduce using rule 58
 	'||'           reduce using rule 58
+	zeroes         reduce using rule 58
+	range          reduce using rule 58
+	eye            reduce using rule 58
 	read           reduce using rule 58
 	write          reduce using rule 58
 	define         reduce using rule 58
@@ -1025,7 +678,7 @@ State 33
 	%eof           reduce using rule 58
 
 
-State 34
+State 17
 
 	FunEmb -> Eye .                                     (rule 59)
 
@@ -1043,6 +696,8 @@ State 34
 	'>='           reduce using rule 59
 	'='            reduce using rule 59
 	'!='           reduce using rule 59
+	':='           reduce using rule 59
+	'['            reduce using rule 59
 	']'            reduce using rule 59
 	'{'            reduce using rule 59
 	'}'            reduce using rule 59
@@ -1053,6 +708,9 @@ State 34
 	';'            reduce using rule 59
 	'&&'           reduce using rule 59
 	'||'           reduce using rule 59
+	zeroes         reduce using rule 59
+	range          reduce using rule 59
+	eye            reduce using rule 59
 	read           reduce using rule 59
 	write          reduce using rule 59
 	define         reduce using rule 59
@@ -1068,7 +726,145 @@ State 34
 	%eof           reduce using rule 59
 
 
-State 35
+State 18
+
+	Instruc -> InsBlock .                               (rule 13)
+
+	id             reduce using rule 13
+	'{'            reduce using rule 13
+	';'            reduce using rule 13
+	zeroes         reduce using rule 13
+	range          reduce using rule 13
+	eye            reduce using rule 13
+	read           reduce using rule 13
+	write          reduce using rule 13
+	define         reduce using rule 13
+	begin          reduce using rule 13
+	end            reduce using rule 13
+	if             reduce using rule 13
+	else           reduce using rule 13
+	while          reduce using rule 13
+	foreach        reduce using rule 13
+	return         reduce using rule 13
+	%eof           reduce using rule 13
+
+
+State 19
+
+	Instruc -> While .                                  (rule 14)
+
+	id             reduce using rule 14
+	'{'            reduce using rule 14
+	';'            reduce using rule 14
+	zeroes         reduce using rule 14
+	range          reduce using rule 14
+	eye            reduce using rule 14
+	read           reduce using rule 14
+	write          reduce using rule 14
+	define         reduce using rule 14
+	begin          reduce using rule 14
+	end            reduce using rule 14
+	if             reduce using rule 14
+	else           reduce using rule 14
+	while          reduce using rule 14
+	foreach        reduce using rule 14
+	return         reduce using rule 14
+	%eof           reduce using rule 14
+
+
+State 20
+
+	Instruc -> ForEach .                                (rule 15)
+
+	id             reduce using rule 15
+	'{'            reduce using rule 15
+	';'            reduce using rule 15
+	zeroes         reduce using rule 15
+	range          reduce using rule 15
+	eye            reduce using rule 15
+	read           reduce using rule 15
+	write          reduce using rule 15
+	define         reduce using rule 15
+	begin          reduce using rule 15
+	end            reduce using rule 15
+	if             reduce using rule 15
+	else           reduce using rule 15
+	while          reduce using rule 15
+	foreach        reduce using rule 15
+	return         reduce using rule 15
+	%eof           reduce using rule 15
+
+
+State 21
+
+	Instruc -> Read .                                   (rule 16)
+
+	id             reduce using rule 16
+	'{'            reduce using rule 16
+	';'            reduce using rule 16
+	zeroes         reduce using rule 16
+	range          reduce using rule 16
+	eye            reduce using rule 16
+	read           reduce using rule 16
+	write          reduce using rule 16
+	define         reduce using rule 16
+	begin          reduce using rule 16
+	end            reduce using rule 16
+	if             reduce using rule 16
+	else           reduce using rule 16
+	while          reduce using rule 16
+	foreach        reduce using rule 16
+	return         reduce using rule 16
+	%eof           reduce using rule 16
+
+
+State 22
+
+	Instruc -> Write .                                  (rule 17)
+
+	id             reduce using rule 17
+	'{'            reduce using rule 17
+	';'            reduce using rule 17
+	zeroes         reduce using rule 17
+	range          reduce using rule 17
+	eye            reduce using rule 17
+	read           reduce using rule 17
+	write          reduce using rule 17
+	define         reduce using rule 17
+	begin          reduce using rule 17
+	end            reduce using rule 17
+	if             reduce using rule 17
+	else           reduce using rule 17
+	while          reduce using rule 17
+	foreach        reduce using rule 17
+	return         reduce using rule 17
+	%eof           reduce using rule 17
+
+
+State 23
+
+	Instruc -> Return .                                 (rule 18)
+
+	id             reduce using rule 18
+	'{'            reduce using rule 18
+	';'            reduce using rule 18
+	zeroes         reduce using rule 18
+	range          reduce using rule 18
+	eye            reduce using rule 18
+	read           reduce using rule 18
+	write          reduce using rule 18
+	define         reduce using rule 18
+	begin          reduce using rule 18
+	end            reduce using rule 18
+	if             reduce using rule 18
+	else           reduce using rule 18
+	while          reduce using rule 18
+	foreach        reduce using rule 18
+	return         reduce using rule 18
+	%eof           reduce using rule 18
+
+
+State 24
 
 	Access -> id .                                      (rule 30)
 	FunCall -> id . '(' ExpList ')'                     (rule 55)
@@ -1088,11 +884,12 @@ State 35
 	'>='           reduce using rule 30
 	'='            reduce using rule 30
 	'!='           reduce using rule 30
+	':='           reduce using rule 30
 	'['            reduce using rule 30
 	']'            reduce using rule 30
 	'{'            reduce using rule 30
 	'}'            reduce using rule 30
-	'('            shift, and enter state 109
+	'('            shift, and enter state 65
 	')'            reduce using rule 30
 	'^'            reduce using rule 30
 	':'            reduce using rule 30
@@ -1100,6 +897,9 @@ State 35
 	';'            reduce using rule 30
 	'&&'           reduce using rule 30
 	'||'           reduce using rule 30
+	zeroes         reduce using rule 30
+	range          reduce using rule 30
+	eye            reduce using rule 30
 	read           reduce using rule 30
 	write          reduce using rule 30
 	define         reduce using rule 30
@@ -1115,188 +915,468 @@ State 35
 	%eof           reduce using rule 30
 
 
-State 36
+State 25
 
-	Exp -> num .                                        (rule 33)
+	Mat -> '{' . ElemList '}'                           (rule 49)
+	Mat -> '{' . '}'                                    (rule 50)
 
-	id             reduce using rule 33
-	'+'            reduce using rule 33
-	'-'            reduce using rule 33
-	'*'            reduce using rule 33
-	'/'            reduce using rule 33
-	'%'            reduce using rule 33
-	'**'           reduce using rule 33
-	'.'            reduce using rule 33
-	'<'            reduce using rule 33
-	'>'            reduce using rule 33
-	'<='           reduce using rule 33
-	'>='           reduce using rule 33
-	'='            reduce using rule 33
-	'!='           reduce using rule 33
-	']'            reduce using rule 33
-	'{'            reduce using rule 33
-	'}'            reduce using rule 33
-	')'            reduce using rule 33
-	'^'            reduce using rule 33
-	':'            reduce using rule 33
-	','            reduce using rule 33
-	';'            reduce using rule 33
-	'&&'           reduce using rule 33
-	'||'           reduce using rule 33
-	read           reduce using rule 33
-	write          reduce using rule 33
-	define         reduce using rule 33
-	begin          reduce using rule 33
-	end            reduce using rule 33
-	if             reduce using rule 33
-	else           reduce using rule 33
-	then           reduce using rule 33
-	while          reduce using rule 33
-	do             reduce using rule 33
-	foreach        reduce using rule 33
-	return         reduce using rule 33
-	%eof           reduce using rule 33
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'}'            shift, and enter state 64
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-
-State 37
-
-	Exp -> '-' . Exp                                    (rule 43)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 108
+	Exp            goto state 61
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	ElemList       goto state 62
+	ExpList        goto state 63
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 38
-
-	Exp -> '(' . Exp ')'                                (rule 34)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 107
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 39
-
-	Exp -> '$' . Exp                                    (rule 45)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 106
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 40
-
-	Exp -> '@' . Exp                                    (rule 46)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 105
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 41
+State 26
 
 	Zeroes -> zeroes . '(' Exp ',' Exp ')'              (rule 60)
 	Zeroes -> zeroes . '(' Exp ')'                      (rule 61)
 
-	'('            shift, and enter state 104
+	'('            shift, and enter state 60
 
 
-State 42
+State 27
 
 	Range -> range . '(' Exp ')'                        (rule 62)
 
-	'('            shift, and enter state 103
+	'('            shift, and enter state 59
 
 
-State 43
+State 28
 
 	Eye -> eye . '(' Exp ')'                            (rule 63)
 
-	'('            shift, and enter state 102
+	'('            shift, and enter state 58
+
+
+State 29
+
+	Read -> read . Exp                                  (rule 75)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 57
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 30
+
+	Write -> write . PrintList                          (rule 76)
+
+	string         shift, and enter state 56
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 53
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Print          goto state 54
+	PrintList      goto state 55
+
+State 31
+
+	InsBlock -> begin . VarDec InsList end              (rule 64)
+
+	id             reduce using rule 66
+	'{'            reduce using rule 66
+	zeroes         reduce using rule 66
+	range          reduce using rule 66
+	eye            reduce using rule 66
+	read           reduce using rule 66
+	write          reduce using rule 66
+	begin          reduce using rule 66
+	vars           shift, and enter state 52
+	if             reduce using rule 66
+	while          reduce using rule 66
+	foreach        reduce using rule 66
+	return         reduce using rule 66
+
+	VarDec         goto state 51
+
+State 32
+
+	CondSelect -> if . Boolean then Instruc OptionElse    (rule 20)
+
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 44
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 50
+
+State 33
+
+	While -> while . Boolean do Instruc                 (rule 73)
+
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 44
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 45
+
+State 34
+
+	ForEach -> foreach . id in Exp do Instruc           (rule 74)
+
+	id             shift, and enter state 43
+
+
+State 35
+
+	Return -> return . Exp                              (rule 81)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 37
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 36
+
+	Exp -> Lval .                                       (rule 44)
+
+	id             reduce using rule 44
+	'+'            reduce using rule 44
+	'-'            reduce using rule 44
+	'*'            reduce using rule 44
+	'/'            reduce using rule 44
+	'%'            reduce using rule 44
+	'**'           reduce using rule 44
+	'.'            reduce using rule 44
+	'<'            reduce using rule 44
+	'>'            reduce using rule 44
+	'<='           reduce using rule 44
+	'>='           reduce using rule 44
+	'='            reduce using rule 44
+	'!='           reduce using rule 44
+	']'            reduce using rule 44
+	'{'            reduce using rule 44
+	'}'            reduce using rule 44
+	')'            reduce using rule 44
+	'^'            reduce using rule 44
+	':'            reduce using rule 44
+	','            reduce using rule 44
+	';'            reduce using rule 44
+	'&&'           reduce using rule 44
+	'||'           reduce using rule 44
+	zeroes         reduce using rule 44
+	range          reduce using rule 44
+	eye            reduce using rule 44
+	read           reduce using rule 44
+	write          reduce using rule 44
+	define         reduce using rule 44
+	begin          reduce using rule 44
+	end            reduce using rule 44
+	if             reduce using rule 44
+	else           reduce using rule 44
+	then           reduce using rule 44
+	while          reduce using rule 44
+	do             reduce using rule 44
+	foreach        reduce using rule 44
+	return         reduce using rule 44
+	%eof           reduce using rule 44
+
+
+State 37
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Return -> return Exp .                              (rule 81)
+
+	id             reduce using rule 81
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'{'            reduce using rule 81
+	'^'            shift, and enter state 85
+	';'            reduce using rule 81
+	zeroes         reduce using rule 81
+	range          reduce using rule 81
+	eye            reduce using rule 81
+	read           reduce using rule 81
+	write          reduce using rule 81
+	define         reduce using rule 81
+	begin          reduce using rule 81
+	end            reduce using rule 81
+	if             reduce using rule 81
+	else           reduce using rule 81
+	while          reduce using rule 81
+	foreach        reduce using rule 81
+	return         reduce using rule 81
+	%eof           reduce using rule 81
+
+
+State 38
+
+	Exp -> num .                                        (rule 35)
+
+	id             reduce using rule 35
+	'+'            reduce using rule 35
+	'-'            reduce using rule 35
+	'*'            reduce using rule 35
+	'/'            reduce using rule 35
+	'%'            reduce using rule 35
+	'**'           reduce using rule 35
+	'.'            reduce using rule 35
+	'<'            reduce using rule 35
+	'>'            reduce using rule 35
+	'<='           reduce using rule 35
+	'>='           reduce using rule 35
+	'='            reduce using rule 35
+	'!='           reduce using rule 35
+	']'            reduce using rule 35
+	'{'            reduce using rule 35
+	'}'            reduce using rule 35
+	')'            reduce using rule 35
+	'^'            reduce using rule 35
+	':'            reduce using rule 35
+	','            reduce using rule 35
+	';'            reduce using rule 35
+	'&&'           reduce using rule 35
+	'||'           reduce using rule 35
+	zeroes         reduce using rule 35
+	range          reduce using rule 35
+	eye            reduce using rule 35
+	read           reduce using rule 35
+	write          reduce using rule 35
+	define         reduce using rule 35
+	begin          reduce using rule 35
+	end            reduce using rule 35
+	if             reduce using rule 35
+	else           reduce using rule 35
+	then           reduce using rule 35
+	while          reduce using rule 35
+	do             reduce using rule 35
+	foreach        reduce using rule 35
+	return         reduce using rule 35
+	%eof           reduce using rule 35
+
+
+State 39
+
+	Exp -> '-' . Exp                                    (rule 45)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 113
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 40
+
+	Exp -> '(' . Exp ')'                                (rule 36)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 112
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 41
+
+	Exp -> '$' . Exp                                    (rule 47)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 111
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 42
+
+	Exp -> '@' . Exp                                    (rule 48)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 110
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 43
+
+	ForEach -> foreach id . in Exp do Instruc           (rule 74)
+
+	in             shift, and enter state 109
 
 
 State 44
 
-	ForEach -> foreach id . in Exp do Instruc           (rule 74)
-
-	in             shift, and enter state 101
-
-
-State 45
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 	Boolean -> Exp . '<' Exp                            (rule 82)
 	Boolean -> Exp . '>' Exp                            (rule 83)
 	Boolean -> Exp . '<=' Exp                           (rule 84)
@@ -1304,36 +1384,36 @@ State 45
 	Boolean -> Exp . '=' Exp                            (rule 86)
 	Boolean -> Exp . '!=' Exp                           (rule 87)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'<'            shift, and enter state 95
-	'>'            shift, and enter state 96
-	'<='           shift, and enter state 97
-	'>='           shift, and enter state 98
-	'='            shift, and enter state 99
-	'!='           shift, and enter state 100
-	'^'            shift, and enter state 80
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'<'            shift, and enter state 103
+	'>'            shift, and enter state 104
+	'<='           shift, and enter state 105
+	'>='           shift, and enter state 106
+	'='            shift, and enter state 107
+	'!='           shift, and enter state 108
+	'^'            shift, and enter state 85
 
 
-State 46
+State 45
 
 	While -> while Boolean . do Instruc                 (rule 73)
 	Boolean -> Boolean . '&&' Boolean                   (rule 90)
 	Boolean -> Boolean . '||' Boolean                   (rule 91)
 	Boolean -> Boolean . '=' Boolean                    (rule 92)
 
-	'='            shift, and enter state 87
-	'&&'           shift, and enter state 88
-	'||'           shift, and enter state 89
-	do             shift, and enter state 94
+	'='            shift, and enter state 95
+	'&&'           shift, and enter state 96
+	'||'           shift, and enter state 97
+	do             shift, and enter state 102
 
 
-State 47
+State 46
 
 	Boolean -> true .                                   (rule 88)
 
@@ -1345,7 +1425,7 @@ State 47
 	do             reduce using rule 88
 
 
-State 48
+State 47
 
 	Boolean -> false .                                  (rule 89)
 
@@ -1357,139 +1437,150 @@ State 48
 	do             reduce using rule 89
 
 
-State 49
+State 48
 
-	Exp -> '(' . Exp ')'                                (rule 34)
+	Exp -> '(' . Exp ')'                                (rule 36)
 	Boolean -> '(' . Boolean ')'                        (rule 93)
 
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 92
+	Exp            goto state 100
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 93
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 101
 
-State 50
+State 49
 
 	Boolean -> '!' . Boolean                            (rule 94)
 
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 45
+	Exp            goto state 44
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 91
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 99
 
-State 51
+State 50
 
 	CondSelect -> if Boolean . then Instruc OptionElse    (rule 20)
 	Boolean -> Boolean . '&&' Boolean                   (rule 90)
 	Boolean -> Boolean . '||' Boolean                   (rule 91)
 	Boolean -> Boolean . '=' Boolean                    (rule 92)
 
-	'='            shift, and enter state 87
-	'&&'           shift, and enter state 88
-	'||'           shift, and enter state 89
-	then           shift, and enter state 90
+	'='            shift, and enter state 95
+	'&&'           shift, and enter state 96
+	'||'           shift, and enter state 97
+	then           shift, and enter state 98
 
 
-State 52
+State 51
 
 	InsBlock -> begin VarDec . InsList end              (rule 64)
 
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
-	Instruc        goto state 85
+	Instruc        goto state 93
 	CondSelect     goto state 8
 	Asig           goto state 9
 	Lval           goto state 10
 	Access         goto state 11
 	Mat            goto state 12
-	InsBlock       goto state 13
-	InsList        goto state 86
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	InsList        goto state 94
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
-State 53
+State 52
 
 	VarDec -> vars . VarListDec                         (rule 65)
 
-	id             shift, and enter state 84
+	id             shift, and enter state 92
 
-	VarListDec     goto state 82
-	IdList         goto state 83
+	VarListDec     goto state 90
+	IdList         goto state 91
 
-State 54
+State 53
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 	Print -> Exp .                                      (rule 77)
 
 	id             reduce using rule 77
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	'{'            reduce using rule 77
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 	','            reduce using rule 77
 	';'            reduce using rule 77
+	zeroes         reduce using rule 77
+	range          reduce using rule 77
+	eye            reduce using rule 77
 	read           reduce using rule 77
 	write          reduce using rule 77
 	define         reduce using rule 77
@@ -1503,7 +1594,7 @@ State 54
 	%eof           reduce using rule 77
 
 
-State 55
+State 54
 
 	PrintList -> Print .                                (rule 79)
 
@@ -1511,6 +1602,9 @@ State 55
 	'{'            reduce using rule 79
 	','            reduce using rule 79
 	';'            reduce using rule 79
+	zeroes         reduce using rule 79
+	range          reduce using rule 79
+	eye            reduce using rule 79
 	read           reduce using rule 79
 	write          reduce using rule 79
 	define         reduce using rule 79
@@ -1524,15 +1618,18 @@ State 55
 	%eof           reduce using rule 79
 
 
-State 56
+State 55
 
 	Write -> write PrintList .                          (rule 76)
 	PrintList -> PrintList . ',' Print                  (rule 80)
 
 	id             reduce using rule 76
 	'{'            reduce using rule 76
-	','            shift, and enter state 81
+	','            shift, and enter state 89
 	';'            reduce using rule 76
+	zeroes         reduce using rule 76
+	range          reduce using rule 76
+	eye            reduce using rule 76
 	read           reduce using rule 76
 	write          reduce using rule 76
 	define         reduce using rule 76
@@ -1546,7 +1643,7 @@ State 56
 	%eof           reduce using rule 76
 
 
-State 57
+State 56
 
 	Print -> string .                                   (rule 78)
 
@@ -1554,6 +1651,9 @@ State 57
 	'{'            reduce using rule 78
 	','            reduce using rule 78
 	';'            reduce using rule 78
+	zeroes         reduce using rule 78
+	range          reduce using rule 78
+	eye            reduce using rule 78
 	read           reduce using rule 78
 	write          reduce using rule 78
 	define         reduce using rule 78
@@ -1567,29 +1667,32 @@ State 57
 	%eof           reduce using rule 78
 
 
-State 58
+State 57
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 	Read -> read Exp .                                  (rule 75)
 
 	id             reduce using rule 75
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	'{'            reduce using rule 75
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 	';'            reduce using rule 75
+	zeroes         reduce using rule 75
+	range          reduce using rule 75
+	eye            reduce using rule 75
 	read           reduce using rule 75
 	write          reduce using rule 75
 	define         reduce using rule 75
@@ -1603,52 +1706,128 @@ State 58
 	%eof           reduce using rule 75
 
 
+State 58
+
+	Eye -> eye '(' . Exp ')'                            (rule 63)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 88
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
 State 59
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Range -> range '(' . Exp ')'                        (rule 62)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 87
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 60
+
+	Zeroes -> zeroes '(' . Exp ',' Exp ')'              (rule 60)
+	Zeroes -> zeroes '(' . Exp ')'                      (rule 61)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 86
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 61
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 	ExpList -> Exp .                                    (rule 53)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	'}'            reduce using rule 53
 	')'            reduce using rule 53
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 	','            reduce using rule 53
 	';'            reduce using rule 53
 
 
-State 60
+State 62
 
 	Mat -> '{' ElemList . '}'                           (rule 49)
 	ElemList -> ElemList . ';' ExpList                  (rule 52)
 
-	'}'            shift, and enter state 71
-	';'            shift, and enter state 72
+	'}'            shift, and enter state 76
+	';'            shift, and enter state 77
 
 
-State 61
+State 63
 
 	ElemList -> ExpList .                               (rule 51)
 	ExpList -> ExpList . ',' Exp                        (rule 54)
 
 	'}'            reduce using rule 51
-	','            shift, and enter state 70
+	','            shift, and enter state 75
 	';'            reduce using rule 51
 
 
-State 62
+State 64
 
 	Mat -> '{' '}' .                                    (rule 50)
 
@@ -1678,6 +1857,9 @@ State 62
 	';'            reduce using rule 50
 	'&&'           reduce using rule 50
 	'||'           reduce using rule 50
+	zeroes         reduce using rule 50
+	range          reduce using rule 50
+	eye            reduce using rule 50
 	read           reduce using rule 50
 	write          reduce using rule 50
 	define         reduce using rule 50
@@ -1693,102 +1875,133 @@ State 62
 	%eof           reduce using rule 50
 
 
-State 63
+State 65
+
+	FunCall -> id '(' . ExpList ')'                     (rule 55)
+	FunCall -> id '(' . ')'                             (rule 56)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	')'            shift, and enter state 74
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 61
+	Mat            goto state 12
+	ExpList        goto state 73
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 66
 
 	Lval -> Access '[' . Exp ']'                        (rule 25)
 	Lval -> Access '[' . Exp ',' Exp ']'                (rule 26)
 	Lval -> Access '[' . Ind ':' Ind ']'                (rule 27)
 	Lval -> Access '[' . Ind ':' Ind ',' Ind ':' Ind ']'    (rule 28)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	':'            reduce using rule 31
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	':'            reduce using rule 33
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Ind            goto state 68
-	Exp            goto state 69
+	Ind            goto state 71
+	Exp            goto state 72
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 64
+State 67
 
 	Asig -> Lval ':=' . Exp                             (rule 23)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 67
+	Exp            goto state 70
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 65
+State 68
 
 	FunDec -> FunDec define id . '(' VarListFunc ')' of type VarType as Instruc    (rule 5)
 	FunDec -> FunDec define id . '(' ')' of type VarType as Instruc    (rule 6)
 
-	'('            shift, and enter state 66
+	'('            shift, and enter state 69
 
 
-State 66
+State 69
 
 	FunDec -> FunDec define id '(' . VarListFunc ')' of type VarType as Instruc    (rule 5)
 	FunDec -> FunDec define id '(' . ')' of type VarType as Instruc    (rule 6)
 
-	id             shift, and enter state 148
-	')'            shift, and enter state 149
+	id             shift, and enter state 152
+	')'            shift, and enter state 153
 
-	VarListFunc    goto state 147
+	VarListFunc    goto state 151
 
-State 67
+State 70
 
 	Asig -> Lval ':=' Exp .                             (rule 23)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 
 	id             reduce using rule 23
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	'{'            reduce using rule 23
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 	';'            reduce using rule 23
+	zeroes         reduce using rule 23
+	range          reduce using rule 23
+	eye            reduce using rule 23
 	read           reduce using rule 23
 	write          reduce using rule 23
 	define         reduce using rule 23
@@ -1802,67 +2015,124 @@ State 67
 	%eof           reduce using rule 23
 
 
-State 68
+State 71
 
 	Lval -> Access '[' Ind . ':' Ind ']'                (rule 27)
 	Lval -> Access '[' Ind . ':' Ind ',' Ind ':' Ind ']'    (rule 28)
 
-	':'            shift, and enter state 146
+	':'            shift, and enter state 150
 
 
-State 69
+State 72
 
 	Lval -> Access '[' Exp . ']'                        (rule 25)
 	Lval -> Access '[' Exp . ',' Exp ']'                (rule 26)
-	Ind -> Exp .                                        (rule 32)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Ind -> Exp .                                        (rule 34)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	']'            shift, and enter state 144
-	'^'            shift, and enter state 80
-	':'            reduce using rule 32
-	','            shift, and enter state 145
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	']'            shift, and enter state 148
+	'^'            shift, and enter state 85
+	':'            reduce using rule 34
+	','            shift, and enter state 149
 
 
-State 70
+State 73
+
+	ExpList -> ExpList . ',' Exp                        (rule 54)
+	FunCall -> id '(' ExpList . ')'                     (rule 55)
+
+	')'            shift, and enter state 147
+	','            shift, and enter state 75
+
+
+State 74
+
+	FunCall -> id '(' ')' .                             (rule 56)
+
+	id             reduce using rule 56
+	'+'            reduce using rule 56
+	'-'            reduce using rule 56
+	'*'            reduce using rule 56
+	'/'            reduce using rule 56
+	'%'            reduce using rule 56
+	'**'           reduce using rule 56
+	'.'            reduce using rule 56
+	'<'            reduce using rule 56
+	'>'            reduce using rule 56
+	'<='           reduce using rule 56
+	'>='           reduce using rule 56
+	'='            reduce using rule 56
+	'!='           reduce using rule 56
+	':='           reduce using rule 56
+	'['            reduce using rule 56
+	']'            reduce using rule 56
+	'{'            reduce using rule 56
+	'}'            reduce using rule 56
+	')'            reduce using rule 56
+	'^'            reduce using rule 56
+	':'            reduce using rule 56
+	','            reduce using rule 56
+	';'            reduce using rule 56
+	'&&'           reduce using rule 56
+	'||'           reduce using rule 56
+	zeroes         reduce using rule 56
+	range          reduce using rule 56
+	eye            reduce using rule 56
+	read           reduce using rule 56
+	write          reduce using rule 56
+	define         reduce using rule 56
+	begin          reduce using rule 56
+	end            reduce using rule 56
+	if             reduce using rule 56
+	else           reduce using rule 56
+	then           reduce using rule 56
+	while          reduce using rule 56
+	do             reduce using rule 56
+	foreach        reduce using rule 56
+	return         reduce using rule 56
+	%eof           reduce using rule 56
+
+
+State 75
 
 	ExpList -> ExpList ',' . Exp                        (rule 54)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 143
+	Exp            goto state 146
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 71
+State 76
 
 	Mat -> '{' ElemList '}' .                           (rule 49)
 
@@ -1892,6 +2162,9 @@ State 71
 	';'            reduce using rule 49
 	'&&'           reduce using rule 49
 	'||'           reduce using rule 49
+	zeroes         reduce using rule 49
+	range          reduce using rule 49
+	eye            reduce using rule 49
 	read           reduce using rule 49
 	write          reduce using rule 49
 	define         reduce using rule 49
@@ -1907,794 +2180,210 @@ State 71
 	%eof           reduce using rule 49
 
 
-State 72
+State 77
 
 	ElemList -> ElemList ';' . ExpList                  (rule 52)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 59
+	Exp            goto state 61
 	Mat            goto state 12
-	ExpList        goto state 142
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 73
-
-	Exp -> Exp '+' . Exp                                (rule 35)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 141
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 74
-
-	Exp -> Exp '-' . Exp                                (rule 36)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 140
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 75
-
-	Exp -> Exp '*' . Exp                                (rule 37)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 139
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 76
-
-	Exp -> Exp '/' . Exp                                (rule 38)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 138
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 77
-
-	Exp -> Exp '%' . Exp                                (rule 39)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 137
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	ExpList        goto state 145
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 78
 
-	Exp -> Exp '**' . Exp                               (rule 40)
+	Exp -> Exp '+' . Exp                                (rule 37)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 136
+	Exp            goto state 144
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 79
 
-	Exp -> Exp '.' . Exp                                (rule 41)
+	Exp -> Exp '-' . Exp                                (rule 38)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 135
+	Exp            goto state 143
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 80
 
-	Exp -> Exp '^' .                                    (rule 44)
+	Exp -> Exp '*' . Exp                                (rule 39)
 
-	id             reduce using rule 44
-	'+'            reduce using rule 44
-	'-'            reduce using rule 44
-	'*'            reduce using rule 44
-	'/'            reduce using rule 44
-	'%'            reduce using rule 44
-	'**'           reduce using rule 44
-	'.'            reduce using rule 44
-	'<'            reduce using rule 44
-	'>'            reduce using rule 44
-	'<='           reduce using rule 44
-	'>='           reduce using rule 44
-	'='            reduce using rule 44
-	'!='           reduce using rule 44
-	']'            reduce using rule 44
-	'{'            reduce using rule 44
-	'}'            reduce using rule 44
-	')'            reduce using rule 44
-	'^'            reduce using rule 44
-	':'            reduce using rule 44
-	','            reduce using rule 44
-	';'            reduce using rule 44
-	'&&'           reduce using rule 44
-	'||'           reduce using rule 44
-	read           reduce using rule 44
-	write          reduce using rule 44
-	define         reduce using rule 44
-	begin          reduce using rule 44
-	end            reduce using rule 44
-	if             reduce using rule 44
-	else           reduce using rule 44
-	then           reduce using rule 44
-	while          reduce using rule 44
-	do             reduce using rule 44
-	foreach        reduce using rule 44
-	return         reduce using rule 44
-	%eof           reduce using rule 44
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 142
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 81
 
-	PrintList -> PrintList ',' . Print                  (rule 80)
+	Exp -> Exp '/' . Exp                                (rule 40)
 
-	string         shift, and enter state 57
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 54
+	Exp            goto state 141
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Print          goto state 134
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 82
 
-	VarDec -> vars VarListDec .                         (rule 65)
-	VarListDec -> VarListDec . ';' IdList ':' VarType    (rule 68)
+	Exp -> Exp '%' . Exp                                (rule 41)
 
-	id             reduce using rule 65
-	'{'            reduce using rule 65
-	';'            shift, and enter state 133
-	read           reduce using rule 65
-	write          reduce using rule 65
-	begin          reduce using rule 65
-	if             reduce using rule 65
-	while          reduce using rule 65
-	foreach        reduce using rule 65
-	return         reduce using rule 65
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 140
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 83
 
-	VarListDec -> IdList . ':' VarType                  (rule 67)
-	IdList -> IdList . ',' id                           (rule 70)
+	Exp -> Exp '**' . Exp                               (rule 42)
 
-	':'            shift, and enter state 131
-	','            shift, and enter state 132
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 139
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 84
 
-	IdList -> id .                                      (rule 69)
+	Exp -> Exp '.' . Exp                                (rule 43)
 
-	':'            reduce using rule 69
-	','            reduce using rule 69
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 138
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 85
 
-	InsList -> Instruc .                                (rule 71)
-
-	';'            reduce using rule 71
-	end            reduce using rule 71
-
-
-State 86
-
-	InsBlock -> begin VarDec InsList . end              (rule 64)
-	InsList -> InsList . ';' Instruc                    (rule 72)
-
-	';'            shift, and enter state 129
-	end            shift, and enter state 130
-
-
-State 87
-
-	Boolean -> Boolean '=' . Boolean                    (rule 92)
-
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 45
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 128
-
-State 88
-
-	Boolean -> Boolean '&&' . Boolean                   (rule 90)
-
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 45
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 127
-
-State 89
-
-	Boolean -> Boolean '||' . Boolean                   (rule 91)
-
-	true           shift, and enter state 47
-	false          shift, and enter state 48
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 49
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	'!'            shift, and enter state 50
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 45
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-	Boolean        goto state 126
-
-State 90
-
-	CondSelect -> if Boolean then . Instruc OptionElse    (rule 20)
-
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
-
-	Instruc        goto state 125
-	CondSelect     goto state 8
-	Asig           goto state 9
-	Lval           goto state 10
-	Access         goto state 11
-	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
-
-State 91
-
-	Boolean -> Boolean . '&&' Boolean                   (rule 90)
-	Boolean -> Boolean . '||' Boolean                   (rule 91)
-	Boolean -> Boolean . '=' Boolean                    (rule 92)
-	Boolean -> '!' Boolean .                            (rule 94)
-
-	'='            shift, and enter state 87
-	')'            reduce using rule 94
-	'&&'           reduce using rule 94
-	'||'           reduce using rule 94
-	then           reduce using rule 94
-	do             reduce using rule 94
-
-
-State 92
-
-	Exp -> '(' Exp . ')'                                (rule 34)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp . '<' Exp                            (rule 82)
-	Boolean -> Exp . '>' Exp                            (rule 83)
-	Boolean -> Exp . '<=' Exp                           (rule 84)
-	Boolean -> Exp . '>=' Exp                           (rule 85)
-	Boolean -> Exp . '=' Exp                            (rule 86)
-	Boolean -> Exp . '!=' Exp                           (rule 87)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'<'            shift, and enter state 95
-	'>'            shift, and enter state 96
-	'<='           shift, and enter state 97
-	'>='           shift, and enter state 98
-	'='            shift, and enter state 99
-	'!='           shift, and enter state 100
-	')'            shift, and enter state 112
-	'^'            shift, and enter state 80
-
-
-State 93
-
-	Boolean -> Boolean . '&&' Boolean                   (rule 90)
-	Boolean -> Boolean . '||' Boolean                   (rule 91)
-	Boolean -> Boolean . '=' Boolean                    (rule 92)
-	Boolean -> '(' Boolean . ')'                        (rule 93)
-
-	'='            shift, and enter state 87
-	')'            shift, and enter state 124
-	'&&'           shift, and enter state 88
-	'||'           shift, and enter state 89
-
-
-State 94
-
-	While -> while Boolean do . Instruc                 (rule 73)
-
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
-
-	Instruc        goto state 123
-	CondSelect     goto state 8
-	Asig           goto state 9
-	Lval           goto state 10
-	Access         goto state 11
-	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
-
-State 95
-
-	Boolean -> Exp '<' . Exp                            (rule 82)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 122
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 96
-
-	Boolean -> Exp '>' . Exp                            (rule 83)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 121
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 97
-
-	Boolean -> Exp '<=' . Exp                           (rule 84)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 120
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 98
-
-	Boolean -> Exp '>=' . Exp                           (rule 85)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 119
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 99
-
-	Boolean -> Exp '=' . Exp                            (rule 86)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 118
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 100
-
-	Boolean -> Exp '!=' . Exp                           (rule 87)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 117
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 101
-
-	ForEach -> foreach id in . Exp do Instruc           (rule 74)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 116
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 102
-
-	Eye -> eye '(' . Exp ')'                            (rule 63)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 115
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 103
-
-	Range -> range '(' . Exp ')'                        (rule 62)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 114
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 104
-
-	Zeroes -> zeroes '(' . Exp ',' Exp ')'              (rule 60)
-	Zeroes -> zeroes '(' . Exp ')'                      (rule 61)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 113
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 105
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Exp -> '@' Exp .                                    (rule 46)
+	Exp -> Exp '^' .                                    (rule 46)
 
 	id             reduce using rule 46
 	'+'            reduce using rule 46
@@ -2702,7 +2391,7 @@ State 105
 	'*'            reduce using rule 46
 	'/'            reduce using rule 46
 	'%'            reduce using rule 46
-	'**'           shift, and enter state 78
+	'**'           reduce using rule 46
 	'.'            reduce using rule 46
 	'<'            reduce using rule 46
 	'>'            reduce using rule 46
@@ -2720,6 +2409,9 @@ State 105
 	';'            reduce using rule 46
 	'&&'           reduce using rule 46
 	'||'           reduce using rule 46
+	zeroes         reduce using rule 46
+	range          reduce using rule 46
+	eye            reduce using rule 46
 	read           reduce using rule 46
 	write          reduce using rule 46
 	define         reduce using rule 46
@@ -2735,17 +2427,695 @@ State 105
 	%eof           reduce using rule 46
 
 
+State 86
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Zeroes -> zeroes '(' Exp . ',' Exp ')'              (rule 60)
+	Zeroes -> zeroes '(' Exp . ')'                      (rule 61)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	')'            shift, and enter state 136
+	'^'            shift, and enter state 85
+	','            shift, and enter state 137
+
+
+State 87
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Range -> range '(' Exp . ')'                        (rule 62)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	')'            shift, and enter state 135
+	'^'            shift, and enter state 85
+
+
+State 88
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Eye -> eye '(' Exp . ')'                            (rule 63)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	')'            shift, and enter state 134
+	'^'            shift, and enter state 85
+
+
+State 89
+
+	PrintList -> PrintList ',' . Print                  (rule 80)
+
+	string         shift, and enter state 56
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 53
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Print          goto state 133
+
+State 90
+
+	VarDec -> vars VarListDec .                         (rule 65)
+	VarListDec -> VarListDec . ';' IdList ':' VarType    (rule 68)
+
+	id             reduce using rule 65
+	'{'            reduce using rule 65
+	';'            shift, and enter state 132
+	zeroes         reduce using rule 65
+	range          reduce using rule 65
+	eye            reduce using rule 65
+	read           reduce using rule 65
+	write          reduce using rule 65
+	begin          reduce using rule 65
+	if             reduce using rule 65
+	while          reduce using rule 65
+	foreach        reduce using rule 65
+	return         reduce using rule 65
+
+
+State 91
+
+	VarListDec -> IdList . ':' VarType                  (rule 67)
+	IdList -> IdList . ',' id                           (rule 70)
+
+	':'            shift, and enter state 130
+	','            shift, and enter state 131
+
+
+State 92
+
+	IdList -> id .                                      (rule 69)
+
+	':'            reduce using rule 69
+	','            reduce using rule 69
+
+
+State 93
+
+	InsList -> Instruc .                                (rule 71)
+
+	';'            reduce using rule 71
+	end            reduce using rule 71
+
+
+State 94
+
+	InsBlock -> begin VarDec InsList . end              (rule 64)
+	InsList -> InsList . ';' Instruc                    (rule 72)
+
+	';'            shift, and enter state 128
+	end            shift, and enter state 129
+
+
+State 95
+
+	Boolean -> Boolean '=' . Boolean                    (rule 92)
+
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 44
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 127
+
+State 96
+
+	Boolean -> Boolean '&&' . Boolean                   (rule 90)
+
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 44
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 126
+
+State 97
+
+	Boolean -> Boolean '||' . Boolean                   (rule 91)
+
+	true           shift, and enter state 46
+	false          shift, and enter state 47
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 48
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	'!'            shift, and enter state 49
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 44
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	Boolean        goto state 125
+
+State 98
+
+	CondSelect -> if Boolean then . Instruc OptionElse    (rule 20)
+
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
+
+	Instruc        goto state 124
+	CondSelect     goto state 8
+	Asig           goto state 9
+	Lval           goto state 10
+	Access         goto state 11
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
+
+State 99
+
+	Boolean -> Boolean . '&&' Boolean                   (rule 90)
+	Boolean -> Boolean . '||' Boolean                   (rule 91)
+	Boolean -> Boolean . '=' Boolean                    (rule 92)
+	Boolean -> '!' Boolean .                            (rule 94)
+
+	'='            shift, and enter state 95
+	')'            reduce using rule 94
+	'&&'           reduce using rule 94
+	'||'           reduce using rule 94
+	then           reduce using rule 94
+	do             reduce using rule 94
+
+
+State 100
+
+	Exp -> '(' Exp . ')'                                (rule 36)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp . '<' Exp                            (rule 82)
+	Boolean -> Exp . '>' Exp                            (rule 83)
+	Boolean -> Exp . '<=' Exp                           (rule 84)
+	Boolean -> Exp . '>=' Exp                           (rule 85)
+	Boolean -> Exp . '=' Exp                            (rule 86)
+	Boolean -> Exp . '!=' Exp                           (rule 87)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'<'            shift, and enter state 103
+	'>'            shift, and enter state 104
+	'<='           shift, and enter state 105
+	'>='           shift, and enter state 106
+	'='            shift, and enter state 107
+	'!='           shift, and enter state 108
+	')'            shift, and enter state 114
+	'^'            shift, and enter state 85
+
+
+State 101
+
+	Boolean -> Boolean . '&&' Boolean                   (rule 90)
+	Boolean -> Boolean . '||' Boolean                   (rule 91)
+	Boolean -> Boolean . '=' Boolean                    (rule 92)
+	Boolean -> '(' Boolean . ')'                        (rule 93)
+
+	'='            shift, and enter state 95
+	')'            shift, and enter state 123
+	'&&'           shift, and enter state 96
+	'||'           shift, and enter state 97
+
+
+State 102
+
+	While -> while Boolean do . Instruc                 (rule 73)
+
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
+
+	Instruc        goto state 122
+	CondSelect     goto state 8
+	Asig           goto state 9
+	Lval           goto state 10
+	Access         goto state 11
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
+
+State 103
+
+	Boolean -> Exp '<' . Exp                            (rule 82)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 121
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 104
+
+	Boolean -> Exp '>' . Exp                            (rule 83)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 120
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 105
+
+	Boolean -> Exp '<=' . Exp                           (rule 84)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 119
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
 State 106
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Exp -> '$' Exp .                                    (rule 45)
+	Boolean -> Exp '>=' . Exp                           (rule 85)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 118
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 107
+
+	Boolean -> Exp '=' . Exp                            (rule 86)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 117
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 108
+
+	Boolean -> Exp '!=' . Exp                           (rule 87)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 116
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 109
+
+	ForEach -> foreach id in . Exp do Instruc           (rule 74)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 115
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 110
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Exp -> '@' Exp .                                    (rule 48)
+
+	id             reduce using rule 48
+	'+'            reduce using rule 48
+	'-'            reduce using rule 48
+	'*'            reduce using rule 48
+	'/'            reduce using rule 48
+	'%'            reduce using rule 48
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 48
+	'<'            reduce using rule 48
+	'>'            reduce using rule 48
+	'<='           reduce using rule 48
+	'>='           reduce using rule 48
+	'='            reduce using rule 48
+	'!='           reduce using rule 48
+	']'            reduce using rule 48
+	'{'            reduce using rule 48
+	'}'            reduce using rule 48
+	')'            reduce using rule 48
+	'^'            reduce using rule 48
+	':'            reduce using rule 48
+	','            reduce using rule 48
+	';'            reduce using rule 48
+	'&&'           reduce using rule 48
+	'||'           reduce using rule 48
+	zeroes         reduce using rule 48
+	range          reduce using rule 48
+	eye            reduce using rule 48
+	read           reduce using rule 48
+	write          reduce using rule 48
+	define         reduce using rule 48
+	begin          reduce using rule 48
+	end            reduce using rule 48
+	if             reduce using rule 48
+	else           reduce using rule 48
+	then           reduce using rule 48
+	while          reduce using rule 48
+	do             reduce using rule 48
+	foreach        reduce using rule 48
+	return         reduce using rule 48
+	%eof           reduce using rule 48
+
+
+State 111
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Exp -> '$' Exp .                                    (rule 47)
+
+	id             reduce using rule 47
+	'+'            reduce using rule 47
+	'-'            reduce using rule 47
+	'*'            reduce using rule 47
+	'/'            reduce using rule 47
+	'%'            reduce using rule 47
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 47
+	'<'            reduce using rule 47
+	'>'            reduce using rule 47
+	'<='           reduce using rule 47
+	'>='           reduce using rule 47
+	'='            reduce using rule 47
+	'!='           reduce using rule 47
+	']'            reduce using rule 47
+	'{'            reduce using rule 47
+	'}'            reduce using rule 47
+	')'            reduce using rule 47
+	'^'            reduce using rule 47
+	':'            reduce using rule 47
+	','            reduce using rule 47
+	';'            reduce using rule 47
+	'&&'           reduce using rule 47
+	'||'           reduce using rule 47
+	zeroes         reduce using rule 47
+	range          reduce using rule 47
+	eye            reduce using rule 47
+	read           reduce using rule 47
+	write          reduce using rule 47
+	define         reduce using rule 47
+	begin          reduce using rule 47
+	end            reduce using rule 47
+	if             reduce using rule 47
+	else           reduce using rule 47
+	then           reduce using rule 47
+	while          reduce using rule 47
+	do             reduce using rule 47
+	foreach        reduce using rule 47
+	return         reduce using rule 47
+	%eof           reduce using rule 47
+
+
+State 112
+
+	Exp -> '(' Exp . ')'                                (rule 36)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	')'            shift, and enter state 114
+	'^'            shift, and enter state 85
+
+
+State 113
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> '-' Exp .                                    (rule 45)
+	Exp -> Exp . '^'                                    (rule 46)
 
 	id             reduce using rule 45
 	'+'            reduce using rule 45
@@ -2753,7 +3123,7 @@ State 106
 	'*'            reduce using rule 45
 	'/'            reduce using rule 45
 	'%'            reduce using rule 45
-	'**'           shift, and enter state 78
+	'**'           shift, and enter state 83
 	'.'            reduce using rule 45
 	'<'            reduce using rule 45
 	'>'            reduce using rule 45
@@ -2771,6 +3141,9 @@ State 106
 	';'            reduce using rule 45
 	'&&'           reduce using rule 45
 	'||'           reduce using rule 45
+	zeroes         reduce using rule 45
+	range          reduce using rule 45
+	eye            reduce using rule 45
 	read           reduce using rule 45
 	write          reduce using rule 45
 	define         reduce using rule 45
@@ -2786,931 +3159,18 @@ State 106
 	%eof           reduce using rule 45
 
 
-State 107
-
-	Exp -> '(' Exp . ')'                                (rule 34)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	')'            shift, and enter state 112
-	'^'            shift, and enter state 80
-
-
-State 108
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> '-' Exp .                                    (rule 43)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 43
-	'+'            reduce using rule 43
-	'-'            reduce using rule 43
-	'*'            reduce using rule 43
-	'/'            reduce using rule 43
-	'%'            reduce using rule 43
-	'**'           shift, and enter state 78
-	'.'            reduce using rule 43
-	'<'            reduce using rule 43
-	'>'            reduce using rule 43
-	'<='           reduce using rule 43
-	'>='           reduce using rule 43
-	'='            reduce using rule 43
-	'!='           reduce using rule 43
-	']'            reduce using rule 43
-	'{'            reduce using rule 43
-	'}'            reduce using rule 43
-	')'            reduce using rule 43
-	'^'            reduce using rule 43
-	':'            reduce using rule 43
-	','            reduce using rule 43
-	';'            reduce using rule 43
-	'&&'           reduce using rule 43
-	'||'           reduce using rule 43
-	read           reduce using rule 43
-	write          reduce using rule 43
-	define         reduce using rule 43
-	begin          reduce using rule 43
-	end            reduce using rule 43
-	if             reduce using rule 43
-	else           reduce using rule 43
-	then           reduce using rule 43
-	while          reduce using rule 43
-	do             reduce using rule 43
-	foreach        reduce using rule 43
-	return         reduce using rule 43
-	%eof           reduce using rule 43
-
-
-State 109
-
-	FunCall -> id '(' . ExpList ')'                     (rule 55)
-	FunCall -> id '(' . ')'                             (rule 56)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	')'            shift, and enter state 111
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 59
-	Mat            goto state 12
-	ExpList        goto state 110
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
-
-State 110
-
-	ExpList -> ExpList . ',' Exp                        (rule 54)
-	FunCall -> id '(' ExpList . ')'                     (rule 55)
-
-	')'            shift, and enter state 171
-	','            shift, and enter state 70
-
-
-State 111
-
-	FunCall -> id '(' ')' .                             (rule 56)
-
-	id             reduce using rule 56
-	'+'            reduce using rule 56
-	'-'            reduce using rule 56
-	'*'            reduce using rule 56
-	'/'            reduce using rule 56
-	'%'            reduce using rule 56
-	'**'           reduce using rule 56
-	'.'            reduce using rule 56
-	'<'            reduce using rule 56
-	'>'            reduce using rule 56
-	'<='           reduce using rule 56
-	'>='           reduce using rule 56
-	'='            reduce using rule 56
-	'!='           reduce using rule 56
-	']'            reduce using rule 56
-	'{'            reduce using rule 56
-	'}'            reduce using rule 56
-	')'            reduce using rule 56
-	'^'            reduce using rule 56
-	':'            reduce using rule 56
-	','            reduce using rule 56
-	';'            reduce using rule 56
-	'&&'           reduce using rule 56
-	'||'           reduce using rule 56
-	read           reduce using rule 56
-	write          reduce using rule 56
-	define         reduce using rule 56
-	begin          reduce using rule 56
-	end            reduce using rule 56
-	if             reduce using rule 56
-	else           reduce using rule 56
-	then           reduce using rule 56
-	while          reduce using rule 56
-	do             reduce using rule 56
-	foreach        reduce using rule 56
-	return         reduce using rule 56
-	%eof           reduce using rule 56
-
-
-State 112
-
-	Exp -> '(' Exp ')' .                                (rule 34)
-
-	id             reduce using rule 34
-	'+'            reduce using rule 34
-	'-'            reduce using rule 34
-	'*'            reduce using rule 34
-	'/'            reduce using rule 34
-	'%'            reduce using rule 34
-	'**'           reduce using rule 34
-	'.'            reduce using rule 34
-	'<'            reduce using rule 34
-	'>'            reduce using rule 34
-	'<='           reduce using rule 34
-	'>='           reduce using rule 34
-	'='            reduce using rule 34
-	'!='           reduce using rule 34
-	']'            reduce using rule 34
-	'{'            reduce using rule 34
-	'}'            reduce using rule 34
-	')'            reduce using rule 34
-	'^'            reduce using rule 34
-	':'            reduce using rule 34
-	','            reduce using rule 34
-	';'            reduce using rule 34
-	'&&'           reduce using rule 34
-	'||'           reduce using rule 34
-	read           reduce using rule 34
-	write          reduce using rule 34
-	define         reduce using rule 34
-	begin          reduce using rule 34
-	end            reduce using rule 34
-	if             reduce using rule 34
-	else           reduce using rule 34
-	then           reduce using rule 34
-	while          reduce using rule 34
-	do             reduce using rule 34
-	foreach        reduce using rule 34
-	return         reduce using rule 34
-	%eof           reduce using rule 34
-
-
-State 113
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Zeroes -> zeroes '(' Exp . ',' Exp ')'              (rule 60)
-	Zeroes -> zeroes '(' Exp . ')'                      (rule 61)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	')'            shift, and enter state 169
-	'^'            shift, and enter state 80
-	','            shift, and enter state 170
-
-
 State 114
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Range -> range '(' Exp . ')'                        (rule 62)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	')'            shift, and enter state 168
-	'^'            shift, and enter state 80
-
-
-State 115
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Eye -> eye '(' Exp . ')'                            (rule 63)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	')'            shift, and enter state 167
-	'^'            shift, and enter state 80
-
-
-State 116
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	ForEach -> foreach id in Exp . do Instruc           (rule 74)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'^'            shift, and enter state 80
-	do             shift, and enter state 166
-
-
-State 117
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '!=' Exp .                           (rule 87)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 87
-	')'            reduce using rule 87
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 87
-	'||'           reduce using rule 87
-	then           reduce using rule 87
-	do             reduce using rule 87
-
-
-State 118
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '=' Exp .                            (rule 86)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 86
-	')'            reduce using rule 86
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 86
-	'||'           reduce using rule 86
-	then           reduce using rule 86
-	do             reduce using rule 86
-
-
-State 119
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '>=' Exp .                           (rule 85)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 85
-	')'            reduce using rule 85
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 85
-	'||'           reduce using rule 85
-	then           reduce using rule 85
-	do             reduce using rule 85
-
-
-State 120
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '<=' Exp .                           (rule 84)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 84
-	')'            reduce using rule 84
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 84
-	'||'           reduce using rule 84
-	then           reduce using rule 84
-	do             reduce using rule 84
-
-
-State 121
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '>' Exp .                            (rule 83)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 83
-	')'            reduce using rule 83
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 83
-	'||'           reduce using rule 83
-	then           reduce using rule 83
-	do             reduce using rule 83
-
-
-State 122
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Boolean -> Exp '<' Exp .                            (rule 82)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'='            reduce using rule 82
-	')'            reduce using rule 82
-	'^'            shift, and enter state 80
-	'&&'           reduce using rule 82
-	'||'           reduce using rule 82
-	then           reduce using rule 82
-	do             reduce using rule 82
-
-
-State 123
-
-	While -> while Boolean do Instruc .                 (rule 73)
-
-	id             reduce using rule 73
-	'{'            reduce using rule 73
-	';'            reduce using rule 73
-	read           reduce using rule 73
-	write          reduce using rule 73
-	define         reduce using rule 73
-	begin          reduce using rule 73
-	end            reduce using rule 73
-	if             reduce using rule 73
-	else           reduce using rule 73
-	while          reduce using rule 73
-	foreach        reduce using rule 73
-	return         reduce using rule 73
-	%eof           reduce using rule 73
-
-
-State 124
-
-	Boolean -> '(' Boolean ')' .                        (rule 93)
-
-	'='            reduce using rule 93
-	')'            reduce using rule 93
-	'&&'           reduce using rule 93
-	'||'           reduce using rule 93
-	then           reduce using rule 93
-	do             reduce using rule 93
-
-
-State 125
-
-	CondSelect -> if Boolean then Instruc . OptionElse    (rule 20)
-
-	id             reduce using rule 21
-	'{'            reduce using rule 21
-	';'            reduce using rule 21
-	read           reduce using rule 21
-	write          reduce using rule 21
-	define         reduce using rule 21
-	begin          reduce using rule 21
-	end            reduce using rule 21
-	if             reduce using rule 21
-	else           shift, and enter state 165
-	while          reduce using rule 21
-	foreach        reduce using rule 21
-	return         reduce using rule 21
-	%eof           reduce using rule 21
-
-	OptionElse     goto state 164
-
-State 126
-
-	Boolean -> Boolean . '&&' Boolean                   (rule 90)
-	Boolean -> Boolean . '||' Boolean                   (rule 91)
-	Boolean -> Boolean '||' Boolean .                   (rule 91)
-	Boolean -> Boolean . '=' Boolean                    (rule 92)
-
-	'='            shift, and enter state 87
-	')'            reduce using rule 91
-	'&&'           shift, and enter state 88
-	'||'           reduce using rule 91
-	then           reduce using rule 91
-	do             reduce using rule 91
-
-
-State 127
-
-	Boolean -> Boolean . '&&' Boolean                   (rule 90)
-	Boolean -> Boolean '&&' Boolean .                   (rule 90)
-	Boolean -> Boolean . '||' Boolean                   (rule 91)
-	Boolean -> Boolean . '=' Boolean                    (rule 92)
-
-	'='            shift, and enter state 87
-	')'            reduce using rule 90
-	'&&'           reduce using rule 90
-	'||'           reduce using rule 90
-	then           reduce using rule 90
-	do             reduce using rule 90
-
-
-State 128
-
-	Boolean -> Boolean . '&&' Boolean                   (rule 90)
-	Boolean -> Boolean . '||' Boolean                   (rule 91)
-	Boolean -> Boolean . '=' Boolean                    (rule 92)
-	Boolean -> Boolean '=' Boolean .                    (rule 92)
-
-	'='            fail
-	')'            reduce using rule 92
-	'&&'           reduce using rule 92
-	'||'           reduce using rule 92
-	then           reduce using rule 92
-	do             reduce using rule 92
-
-
-State 129
-
-	InsList -> InsList ';' . Instruc                    (rule 72)
-
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
-
-	Instruc        goto state 163
-	CondSelect     goto state 8
-	Asig           goto state 9
-	Lval           goto state 10
-	Access         goto state 11
-	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
-
-State 130
-
-	InsBlock -> begin VarDec InsList end .              (rule 64)
-
-	id             reduce using rule 64
-	'{'            reduce using rule 64
-	';'            reduce using rule 64
-	read           reduce using rule 64
-	write          reduce using rule 64
-	define         reduce using rule 64
-	begin          reduce using rule 64
-	end            reduce using rule 64
-	if             reduce using rule 64
-	else           reduce using rule 64
-	while          reduce using rule 64
-	foreach        reduce using rule 64
-	return         reduce using rule 64
-	%eof           reduce using rule 64
-
-
-State 131
-
-	VarListDec -> IdList ':' . VarType                  (rule 67)
-
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
-
-	VarType        goto state 159
-
-State 132
-
-	IdList -> IdList ',' . id                           (rule 70)
-
-	id             shift, and enter state 158
-
-
-State 133
-
-	VarListDec -> VarListDec ';' . IdList ':' VarType    (rule 68)
-
-	id             shift, and enter state 84
-
-	IdList         goto state 157
-
-State 134
-
-	PrintList -> PrintList ',' Print .                  (rule 80)
-
-	id             reduce using rule 80
-	'{'            reduce using rule 80
-	','            reduce using rule 80
-	';'            reduce using rule 80
-	read           reduce using rule 80
-	write          reduce using rule 80
-	define         reduce using rule 80
-	begin          reduce using rule 80
-	end            reduce using rule 80
-	if             reduce using rule 80
-	else           reduce using rule 80
-	while          reduce using rule 80
-	foreach        reduce using rule 80
-	return         reduce using rule 80
-	%eof           reduce using rule 80
-
-
-State 135
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp '.' Exp .                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 41
-	'+'            reduce using rule 41
-	'-'            reduce using rule 41
-	'*'            reduce using rule 41
-	'/'            reduce using rule 41
-	'%'            reduce using rule 41
-	'**'           shift, and enter state 78
-	'.'            reduce using rule 41
-	'<'            reduce using rule 41
-	'>'            reduce using rule 41
-	'<='           reduce using rule 41
-	'>='           reduce using rule 41
-	'='            reduce using rule 41
-	'!='           reduce using rule 41
-	']'            reduce using rule 41
-	'{'            reduce using rule 41
-	'}'            reduce using rule 41
-	')'            reduce using rule 41
-	'^'            shift, and enter state 80
-	':'            reduce using rule 41
-	','            reduce using rule 41
-	';'            reduce using rule 41
-	'&&'           reduce using rule 41
-	'||'           reduce using rule 41
-	read           reduce using rule 41
-	write          reduce using rule 41
-	define         reduce using rule 41
-	begin          reduce using rule 41
-	end            reduce using rule 41
-	if             reduce using rule 41
-	else           reduce using rule 41
-	then           reduce using rule 41
-	while          reduce using rule 41
-	do             reduce using rule 41
-	foreach        reduce using rule 41
-	return         reduce using rule 41
-	%eof           reduce using rule 41
-
-
-State 136
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp '**' Exp .                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 40
-	'+'            reduce using rule 40
-	'-'            reduce using rule 40
-	'*'            reduce using rule 40
-	'/'            reduce using rule 40
-	'%'            reduce using rule 40
-	'**'           reduce using rule 40
-	'.'            reduce using rule 40
-	'<'            reduce using rule 40
-	'>'            reduce using rule 40
-	'<='           reduce using rule 40
-	'>='           reduce using rule 40
-	'='            reduce using rule 40
-	'!='           reduce using rule 40
-	']'            reduce using rule 40
-	'{'            reduce using rule 40
-	'}'            reduce using rule 40
-	')'            reduce using rule 40
-	'^'            reduce using rule 40
-	':'            reduce using rule 40
-	','            reduce using rule 40
-	';'            reduce using rule 40
-	'&&'           reduce using rule 40
-	'||'           reduce using rule 40
-	read           reduce using rule 40
-	write          reduce using rule 40
-	define         reduce using rule 40
-	begin          reduce using rule 40
-	end            reduce using rule 40
-	if             reduce using rule 40
-	else           reduce using rule 40
-	then           reduce using rule 40
-	while          reduce using rule 40
-	do             reduce using rule 40
-	foreach        reduce using rule 40
-	return         reduce using rule 40
-	%eof           reduce using rule 40
-
-
-State 137
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp '%' Exp .                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 39
-	'+'            reduce using rule 39
-	'-'            reduce using rule 39
-	'*'            reduce using rule 39
-	'/'            reduce using rule 39
-	'%'            reduce using rule 39
-	'**'           shift, and enter state 78
-	'.'            reduce using rule 39
-	'<'            reduce using rule 39
-	'>'            reduce using rule 39
-	'<='           reduce using rule 39
-	'>='           reduce using rule 39
-	'='            reduce using rule 39
-	'!='           reduce using rule 39
-	']'            reduce using rule 39
-	'{'            reduce using rule 39
-	'}'            reduce using rule 39
-	')'            reduce using rule 39
-	'^'            shift, and enter state 80
-	':'            reduce using rule 39
-	','            reduce using rule 39
-	';'            reduce using rule 39
-	'&&'           reduce using rule 39
-	'||'           reduce using rule 39
-	read           reduce using rule 39
-	write          reduce using rule 39
-	define         reduce using rule 39
-	begin          reduce using rule 39
-	end            reduce using rule 39
-	if             reduce using rule 39
-	else           reduce using rule 39
-	then           reduce using rule 39
-	while          reduce using rule 39
-	do             reduce using rule 39
-	foreach        reduce using rule 39
-	return         reduce using rule 39
-	%eof           reduce using rule 39
-
-
-State 138
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp '/' Exp .                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 38
-	'+'            reduce using rule 38
-	'-'            reduce using rule 38
-	'*'            reduce using rule 38
-	'/'            reduce using rule 38
-	'%'            reduce using rule 38
-	'**'           shift, and enter state 78
-	'.'            reduce using rule 38
-	'<'            reduce using rule 38
-	'>'            reduce using rule 38
-	'<='           reduce using rule 38
-	'>='           reduce using rule 38
-	'='            reduce using rule 38
-	'!='           reduce using rule 38
-	']'            reduce using rule 38
-	'{'            reduce using rule 38
-	'}'            reduce using rule 38
-	')'            reduce using rule 38
-	'^'            shift, and enter state 80
-	':'            reduce using rule 38
-	','            reduce using rule 38
-	';'            reduce using rule 38
-	'&&'           reduce using rule 38
-	'||'           reduce using rule 38
-	read           reduce using rule 38
-	write          reduce using rule 38
-	define         reduce using rule 38
-	begin          reduce using rule 38
-	end            reduce using rule 38
-	if             reduce using rule 38
-	else           reduce using rule 38
-	then           reduce using rule 38
-	while          reduce using rule 38
-	do             reduce using rule 38
-	foreach        reduce using rule 38
-	return         reduce using rule 38
-	%eof           reduce using rule 38
-
-
-State 139
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp '*' Exp .                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-
-	id             reduce using rule 37
-	'+'            reduce using rule 37
-	'-'            reduce using rule 37
-	'*'            reduce using rule 37
-	'/'            reduce using rule 37
-	'%'            reduce using rule 37
-	'**'           shift, and enter state 78
-	'.'            reduce using rule 37
-	'<'            reduce using rule 37
-	'>'            reduce using rule 37
-	'<='           reduce using rule 37
-	'>='           reduce using rule 37
-	'='            reduce using rule 37
-	'!='           reduce using rule 37
-	']'            reduce using rule 37
-	'{'            reduce using rule 37
-	'}'            reduce using rule 37
-	')'            reduce using rule 37
-	'^'            shift, and enter state 80
-	':'            reduce using rule 37
-	','            reduce using rule 37
-	';'            reduce using rule 37
-	'&&'           reduce using rule 37
-	'||'           reduce using rule 37
-	read           reduce using rule 37
-	write          reduce using rule 37
-	define         reduce using rule 37
-	begin          reduce using rule 37
-	end            reduce using rule 37
-	if             reduce using rule 37
-	else           reduce using rule 37
-	then           reduce using rule 37
-	while          reduce using rule 37
-	do             reduce using rule 37
-	foreach        reduce using rule 37
-	return         reduce using rule 37
-	%eof           reduce using rule 37
-
-
-State 140
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp '-' Exp .                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> '(' Exp ')' .                                (rule 36)
 
 	id             reduce using rule 36
 	'+'            reduce using rule 36
 	'-'            reduce using rule 36
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'*'            reduce using rule 36
+	'/'            reduce using rule 36
+	'%'            reduce using rule 36
+	'**'           reduce using rule 36
+	'.'            reduce using rule 36
 	'<'            reduce using rule 36
 	'>'            reduce using rule 36
 	'<='           reduce using rule 36
@@ -3721,12 +3181,15 @@ State 140
 	'{'            reduce using rule 36
 	'}'            reduce using rule 36
 	')'            reduce using rule 36
-	'^'            shift, and enter state 80
+	'^'            reduce using rule 36
 	':'            reduce using rule 36
 	','            reduce using rule 36
 	';'            reduce using rule 36
 	'&&'           reduce using rule 36
 	'||'           reduce using rule 36
+	zeroes         reduce using rule 36
+	range          reduce using rule 36
+	eye            reduce using rule 36
 	read           reduce using rule 36
 	write          reduce using rule 36
 	define         reduce using rule 36
@@ -3742,94 +3205,1040 @@ State 140
 	%eof           reduce using rule 36
 
 
+State 115
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	ForEach -> foreach id in Exp . do Instruc           (rule 74)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'^'            shift, and enter state 85
+	do             shift, and enter state 171
+
+
+State 116
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '!=' Exp .                           (rule 87)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 87
+	')'            reduce using rule 87
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 87
+	'||'           reduce using rule 87
+	then           reduce using rule 87
+	do             reduce using rule 87
+
+
+State 117
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '=' Exp .                            (rule 86)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 86
+	')'            reduce using rule 86
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 86
+	'||'           reduce using rule 86
+	then           reduce using rule 86
+	do             reduce using rule 86
+
+
+State 118
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '>=' Exp .                           (rule 85)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 85
+	')'            reduce using rule 85
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 85
+	'||'           reduce using rule 85
+	then           reduce using rule 85
+	do             reduce using rule 85
+
+
+State 119
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '<=' Exp .                           (rule 84)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 84
+	')'            reduce using rule 84
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 84
+	'||'           reduce using rule 84
+	then           reduce using rule 84
+	do             reduce using rule 84
+
+
+State 120
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '>' Exp .                            (rule 83)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 83
+	')'            reduce using rule 83
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 83
+	'||'           reduce using rule 83
+	then           reduce using rule 83
+	do             reduce using rule 83
+
+
+State 121
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Boolean -> Exp '<' Exp .                            (rule 82)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'='            reduce using rule 82
+	')'            reduce using rule 82
+	'^'            shift, and enter state 85
+	'&&'           reduce using rule 82
+	'||'           reduce using rule 82
+	then           reduce using rule 82
+	do             reduce using rule 82
+
+
+State 122
+
+	While -> while Boolean do Instruc .                 (rule 73)
+
+	id             reduce using rule 73
+	'{'            reduce using rule 73
+	';'            reduce using rule 73
+	zeroes         reduce using rule 73
+	range          reduce using rule 73
+	eye            reduce using rule 73
+	read           reduce using rule 73
+	write          reduce using rule 73
+	define         reduce using rule 73
+	begin          reduce using rule 73
+	end            reduce using rule 73
+	if             reduce using rule 73
+	else           reduce using rule 73
+	while          reduce using rule 73
+	foreach        reduce using rule 73
+	return         reduce using rule 73
+	%eof           reduce using rule 73
+
+
+State 123
+
+	Boolean -> '(' Boolean ')' .                        (rule 93)
+
+	'='            reduce using rule 93
+	')'            reduce using rule 93
+	'&&'           reduce using rule 93
+	'||'           reduce using rule 93
+	then           reduce using rule 93
+	do             reduce using rule 93
+
+
+State 124
+
+	CondSelect -> if Boolean then Instruc . OptionElse    (rule 20)
+
+	id             reduce using rule 21
+	'{'            reduce using rule 21
+	';'            reduce using rule 21
+	zeroes         reduce using rule 21
+	range          reduce using rule 21
+	eye            reduce using rule 21
+	read           reduce using rule 21
+	write          reduce using rule 21
+	define         reduce using rule 21
+	begin          reduce using rule 21
+	end            reduce using rule 21
+	if             reduce using rule 21
+	else           shift, and enter state 170
+	while          reduce using rule 21
+	foreach        reduce using rule 21
+	return         reduce using rule 21
+	%eof           reduce using rule 21
+
+	OptionElse     goto state 169
+
+State 125
+
+	Boolean -> Boolean . '&&' Boolean                   (rule 90)
+	Boolean -> Boolean . '||' Boolean                   (rule 91)
+	Boolean -> Boolean '||' Boolean .                   (rule 91)
+	Boolean -> Boolean . '=' Boolean                    (rule 92)
+
+	'='            shift, and enter state 95
+	')'            reduce using rule 91
+	'&&'           shift, and enter state 96
+	'||'           reduce using rule 91
+	then           reduce using rule 91
+	do             reduce using rule 91
+
+
+State 126
+
+	Boolean -> Boolean . '&&' Boolean                   (rule 90)
+	Boolean -> Boolean '&&' Boolean .                   (rule 90)
+	Boolean -> Boolean . '||' Boolean                   (rule 91)
+	Boolean -> Boolean . '=' Boolean                    (rule 92)
+
+	'='            shift, and enter state 95
+	')'            reduce using rule 90
+	'&&'           reduce using rule 90
+	'||'           reduce using rule 90
+	then           reduce using rule 90
+	do             reduce using rule 90
+
+
+State 127
+
+	Boolean -> Boolean . '&&' Boolean                   (rule 90)
+	Boolean -> Boolean . '||' Boolean                   (rule 91)
+	Boolean -> Boolean . '=' Boolean                    (rule 92)
+	Boolean -> Boolean '=' Boolean .                    (rule 92)
+
+	'='            fail
+	')'            reduce using rule 92
+	'&&'           reduce using rule 92
+	'||'           reduce using rule 92
+	then           reduce using rule 92
+	do             reduce using rule 92
+
+
+State 128
+
+	InsList -> InsList ';' . Instruc                    (rule 72)
+
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
+
+	Instruc        goto state 168
+	CondSelect     goto state 8
+	Asig           goto state 9
+	Lval           goto state 10
+	Access         goto state 11
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
+
+State 129
+
+	InsBlock -> begin VarDec InsList end .              (rule 64)
+
+	id             reduce using rule 64
+	'{'            reduce using rule 64
+	';'            reduce using rule 64
+	zeroes         reduce using rule 64
+	range          reduce using rule 64
+	eye            reduce using rule 64
+	read           reduce using rule 64
+	write          reduce using rule 64
+	define         reduce using rule 64
+	begin          reduce using rule 64
+	end            reduce using rule 64
+	if             reduce using rule 64
+	else           reduce using rule 64
+	while          reduce using rule 64
+	foreach        reduce using rule 64
+	return         reduce using rule 64
+	%eof           reduce using rule 64
+
+
+State 130
+
+	VarListDec -> IdList ':' . VarType                  (rule 67)
+
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
+
+	VarType        goto state 164
+
+State 131
+
+	IdList -> IdList ',' . id                           (rule 70)
+
+	id             shift, and enter state 163
+
+
+State 132
+
+	VarListDec -> VarListDec ';' . IdList ':' VarType    (rule 68)
+
+	id             shift, and enter state 92
+
+	IdList         goto state 162
+
+State 133
+
+	PrintList -> PrintList ',' Print .                  (rule 80)
+
+	id             reduce using rule 80
+	'{'            reduce using rule 80
+	','            reduce using rule 80
+	';'            reduce using rule 80
+	zeroes         reduce using rule 80
+	range          reduce using rule 80
+	eye            reduce using rule 80
+	read           reduce using rule 80
+	write          reduce using rule 80
+	define         reduce using rule 80
+	begin          reduce using rule 80
+	end            reduce using rule 80
+	if             reduce using rule 80
+	else           reduce using rule 80
+	while          reduce using rule 80
+	foreach        reduce using rule 80
+	return         reduce using rule 80
+	%eof           reduce using rule 80
+
+
+State 134
+
+	Eye -> eye '(' Exp ')' .                            (rule 63)
+
+	id             reduce using rule 63
+	'+'            reduce using rule 63
+	'-'            reduce using rule 63
+	'*'            reduce using rule 63
+	'/'            reduce using rule 63
+	'%'            reduce using rule 63
+	'**'           reduce using rule 63
+	'.'            reduce using rule 63
+	'<'            reduce using rule 63
+	'>'            reduce using rule 63
+	'<='           reduce using rule 63
+	'>='           reduce using rule 63
+	'='            reduce using rule 63
+	'!='           reduce using rule 63
+	':='           reduce using rule 63
+	'['            reduce using rule 63
+	']'            reduce using rule 63
+	'{'            reduce using rule 63
+	'}'            reduce using rule 63
+	')'            reduce using rule 63
+	'^'            reduce using rule 63
+	':'            reduce using rule 63
+	','            reduce using rule 63
+	';'            reduce using rule 63
+	'&&'           reduce using rule 63
+	'||'           reduce using rule 63
+	zeroes         reduce using rule 63
+	range          reduce using rule 63
+	eye            reduce using rule 63
+	read           reduce using rule 63
+	write          reduce using rule 63
+	define         reduce using rule 63
+	begin          reduce using rule 63
+	end            reduce using rule 63
+	if             reduce using rule 63
+	else           reduce using rule 63
+	then           reduce using rule 63
+	while          reduce using rule 63
+	do             reduce using rule 63
+	foreach        reduce using rule 63
+	return         reduce using rule 63
+	%eof           reduce using rule 63
+
+
+State 135
+
+	Range -> range '(' Exp ')' .                        (rule 62)
+
+	id             reduce using rule 62
+	'+'            reduce using rule 62
+	'-'            reduce using rule 62
+	'*'            reduce using rule 62
+	'/'            reduce using rule 62
+	'%'            reduce using rule 62
+	'**'           reduce using rule 62
+	'.'            reduce using rule 62
+	'<'            reduce using rule 62
+	'>'            reduce using rule 62
+	'<='           reduce using rule 62
+	'>='           reduce using rule 62
+	'='            reduce using rule 62
+	'!='           reduce using rule 62
+	':='           reduce using rule 62
+	'['            reduce using rule 62
+	']'            reduce using rule 62
+	'{'            reduce using rule 62
+	'}'            reduce using rule 62
+	')'            reduce using rule 62
+	'^'            reduce using rule 62
+	':'            reduce using rule 62
+	','            reduce using rule 62
+	';'            reduce using rule 62
+	'&&'           reduce using rule 62
+	'||'           reduce using rule 62
+	zeroes         reduce using rule 62
+	range          reduce using rule 62
+	eye            reduce using rule 62
+	read           reduce using rule 62
+	write          reduce using rule 62
+	define         reduce using rule 62
+	begin          reduce using rule 62
+	end            reduce using rule 62
+	if             reduce using rule 62
+	else           reduce using rule 62
+	then           reduce using rule 62
+	while          reduce using rule 62
+	do             reduce using rule 62
+	foreach        reduce using rule 62
+	return         reduce using rule 62
+	%eof           reduce using rule 62
+
+
+State 136
+
+	Zeroes -> zeroes '(' Exp ')' .                      (rule 61)
+
+	id             reduce using rule 61
+	'+'            reduce using rule 61
+	'-'            reduce using rule 61
+	'*'            reduce using rule 61
+	'/'            reduce using rule 61
+	'%'            reduce using rule 61
+	'**'           reduce using rule 61
+	'.'            reduce using rule 61
+	'<'            reduce using rule 61
+	'>'            reduce using rule 61
+	'<='           reduce using rule 61
+	'>='           reduce using rule 61
+	'='            reduce using rule 61
+	'!='           reduce using rule 61
+	':='           reduce using rule 61
+	'['            reduce using rule 61
+	']'            reduce using rule 61
+	'{'            reduce using rule 61
+	'}'            reduce using rule 61
+	')'            reduce using rule 61
+	'^'            reduce using rule 61
+	':'            reduce using rule 61
+	','            reduce using rule 61
+	';'            reduce using rule 61
+	'&&'           reduce using rule 61
+	'||'           reduce using rule 61
+	zeroes         reduce using rule 61
+	range          reduce using rule 61
+	eye            reduce using rule 61
+	read           reduce using rule 61
+	write          reduce using rule 61
+	define         reduce using rule 61
+	begin          reduce using rule 61
+	end            reduce using rule 61
+	if             reduce using rule 61
+	else           reduce using rule 61
+	then           reduce using rule 61
+	while          reduce using rule 61
+	do             reduce using rule 61
+	foreach        reduce using rule 61
+	return         reduce using rule 61
+	%eof           reduce using rule 61
+
+
+State 137
+
+	Zeroes -> zeroes '(' Exp ',' . Exp ')'              (rule 60)
+
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+
+	Lval           goto state 36
+	Access         goto state 11
+	Exp            goto state 161
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+
+State 138
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp '.' Exp .                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 43
+	'+'            reduce using rule 43
+	'-'            reduce using rule 43
+	'*'            reduce using rule 43
+	'/'            reduce using rule 43
+	'%'            reduce using rule 43
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 43
+	'<'            reduce using rule 43
+	'>'            reduce using rule 43
+	'<='           reduce using rule 43
+	'>='           reduce using rule 43
+	'='            reduce using rule 43
+	'!='           reduce using rule 43
+	']'            reduce using rule 43
+	'{'            reduce using rule 43
+	'}'            reduce using rule 43
+	')'            reduce using rule 43
+	'^'            shift, and enter state 85
+	':'            reduce using rule 43
+	','            reduce using rule 43
+	';'            reduce using rule 43
+	'&&'           reduce using rule 43
+	'||'           reduce using rule 43
+	zeroes         reduce using rule 43
+	range          reduce using rule 43
+	eye            reduce using rule 43
+	read           reduce using rule 43
+	write          reduce using rule 43
+	define         reduce using rule 43
+	begin          reduce using rule 43
+	end            reduce using rule 43
+	if             reduce using rule 43
+	else           reduce using rule 43
+	then           reduce using rule 43
+	while          reduce using rule 43
+	do             reduce using rule 43
+	foreach        reduce using rule 43
+	return         reduce using rule 43
+	%eof           reduce using rule 43
+
+
+State 139
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp '**' Exp .                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 42
+	'+'            reduce using rule 42
+	'-'            reduce using rule 42
+	'*'            reduce using rule 42
+	'/'            reduce using rule 42
+	'%'            reduce using rule 42
+	'**'           reduce using rule 42
+	'.'            reduce using rule 42
+	'<'            reduce using rule 42
+	'>'            reduce using rule 42
+	'<='           reduce using rule 42
+	'>='           reduce using rule 42
+	'='            reduce using rule 42
+	'!='           reduce using rule 42
+	']'            reduce using rule 42
+	'{'            reduce using rule 42
+	'}'            reduce using rule 42
+	')'            reduce using rule 42
+	'^'            reduce using rule 42
+	':'            reduce using rule 42
+	','            reduce using rule 42
+	';'            reduce using rule 42
+	'&&'           reduce using rule 42
+	'||'           reduce using rule 42
+	zeroes         reduce using rule 42
+	range          reduce using rule 42
+	eye            reduce using rule 42
+	read           reduce using rule 42
+	write          reduce using rule 42
+	define         reduce using rule 42
+	begin          reduce using rule 42
+	end            reduce using rule 42
+	if             reduce using rule 42
+	else           reduce using rule 42
+	then           reduce using rule 42
+	while          reduce using rule 42
+	do             reduce using rule 42
+	foreach        reduce using rule 42
+	return         reduce using rule 42
+	%eof           reduce using rule 42
+
+
+State 140
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp '%' Exp .                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 41
+	'+'            reduce using rule 41
+	'-'            reduce using rule 41
+	'*'            reduce using rule 41
+	'/'            reduce using rule 41
+	'%'            reduce using rule 41
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 41
+	'<'            reduce using rule 41
+	'>'            reduce using rule 41
+	'<='           reduce using rule 41
+	'>='           reduce using rule 41
+	'='            reduce using rule 41
+	'!='           reduce using rule 41
+	']'            reduce using rule 41
+	'{'            reduce using rule 41
+	'}'            reduce using rule 41
+	')'            reduce using rule 41
+	'^'            shift, and enter state 85
+	':'            reduce using rule 41
+	','            reduce using rule 41
+	';'            reduce using rule 41
+	'&&'           reduce using rule 41
+	'||'           reduce using rule 41
+	zeroes         reduce using rule 41
+	range          reduce using rule 41
+	eye            reduce using rule 41
+	read           reduce using rule 41
+	write          reduce using rule 41
+	define         reduce using rule 41
+	begin          reduce using rule 41
+	end            reduce using rule 41
+	if             reduce using rule 41
+	else           reduce using rule 41
+	then           reduce using rule 41
+	while          reduce using rule 41
+	do             reduce using rule 41
+	foreach        reduce using rule 41
+	return         reduce using rule 41
+	%eof           reduce using rule 41
+
+
 State 141
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp '+' Exp .                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp '/' Exp .                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 
-	id             reduce using rule 35
-	'+'            reduce using rule 35
-	'-'            reduce using rule 35
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	'<'            reduce using rule 35
-	'>'            reduce using rule 35
-	'<='           reduce using rule 35
-	'>='           reduce using rule 35
-	'='            reduce using rule 35
-	'!='           reduce using rule 35
-	']'            reduce using rule 35
-	'{'            reduce using rule 35
-	'}'            reduce using rule 35
-	')'            reduce using rule 35
-	'^'            shift, and enter state 80
-	':'            reduce using rule 35
-	','            reduce using rule 35
-	';'            reduce using rule 35
-	'&&'           reduce using rule 35
-	'||'           reduce using rule 35
-	read           reduce using rule 35
-	write          reduce using rule 35
-	define         reduce using rule 35
-	begin          reduce using rule 35
-	end            reduce using rule 35
-	if             reduce using rule 35
-	else           reduce using rule 35
-	then           reduce using rule 35
-	while          reduce using rule 35
-	do             reduce using rule 35
-	foreach        reduce using rule 35
-	return         reduce using rule 35
-	%eof           reduce using rule 35
+	id             reduce using rule 40
+	'+'            reduce using rule 40
+	'-'            reduce using rule 40
+	'*'            reduce using rule 40
+	'/'            reduce using rule 40
+	'%'            reduce using rule 40
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 40
+	'<'            reduce using rule 40
+	'>'            reduce using rule 40
+	'<='           reduce using rule 40
+	'>='           reduce using rule 40
+	'='            reduce using rule 40
+	'!='           reduce using rule 40
+	']'            reduce using rule 40
+	'{'            reduce using rule 40
+	'}'            reduce using rule 40
+	')'            reduce using rule 40
+	'^'            shift, and enter state 85
+	':'            reduce using rule 40
+	','            reduce using rule 40
+	';'            reduce using rule 40
+	'&&'           reduce using rule 40
+	'||'           reduce using rule 40
+	zeroes         reduce using rule 40
+	range          reduce using rule 40
+	eye            reduce using rule 40
+	read           reduce using rule 40
+	write          reduce using rule 40
+	define         reduce using rule 40
+	begin          reduce using rule 40
+	end            reduce using rule 40
+	if             reduce using rule 40
+	else           reduce using rule 40
+	then           reduce using rule 40
+	while          reduce using rule 40
+	do             reduce using rule 40
+	foreach        reduce using rule 40
+	return         reduce using rule 40
+	%eof           reduce using rule 40
 
 
 State 142
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp '*' Exp .                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 39
+	'+'            reduce using rule 39
+	'-'            reduce using rule 39
+	'*'            reduce using rule 39
+	'/'            reduce using rule 39
+	'%'            reduce using rule 39
+	'**'           shift, and enter state 83
+	'.'            reduce using rule 39
+	'<'            reduce using rule 39
+	'>'            reduce using rule 39
+	'<='           reduce using rule 39
+	'>='           reduce using rule 39
+	'='            reduce using rule 39
+	'!='           reduce using rule 39
+	']'            reduce using rule 39
+	'{'            reduce using rule 39
+	'}'            reduce using rule 39
+	')'            reduce using rule 39
+	'^'            shift, and enter state 85
+	':'            reduce using rule 39
+	','            reduce using rule 39
+	';'            reduce using rule 39
+	'&&'           reduce using rule 39
+	'||'           reduce using rule 39
+	zeroes         reduce using rule 39
+	range          reduce using rule 39
+	eye            reduce using rule 39
+	read           reduce using rule 39
+	write          reduce using rule 39
+	define         reduce using rule 39
+	begin          reduce using rule 39
+	end            reduce using rule 39
+	if             reduce using rule 39
+	else           reduce using rule 39
+	then           reduce using rule 39
+	while          reduce using rule 39
+	do             reduce using rule 39
+	foreach        reduce using rule 39
+	return         reduce using rule 39
+	%eof           reduce using rule 39
+
+
+State 143
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp '-' Exp .                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 38
+	'+'            reduce using rule 38
+	'-'            reduce using rule 38
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'<'            reduce using rule 38
+	'>'            reduce using rule 38
+	'<='           reduce using rule 38
+	'>='           reduce using rule 38
+	'='            reduce using rule 38
+	'!='           reduce using rule 38
+	']'            reduce using rule 38
+	'{'            reduce using rule 38
+	'}'            reduce using rule 38
+	')'            reduce using rule 38
+	'^'            shift, and enter state 85
+	':'            reduce using rule 38
+	','            reduce using rule 38
+	';'            reduce using rule 38
+	'&&'           reduce using rule 38
+	'||'           reduce using rule 38
+	zeroes         reduce using rule 38
+	range          reduce using rule 38
+	eye            reduce using rule 38
+	read           reduce using rule 38
+	write          reduce using rule 38
+	define         reduce using rule 38
+	begin          reduce using rule 38
+	end            reduce using rule 38
+	if             reduce using rule 38
+	else           reduce using rule 38
+	then           reduce using rule 38
+	while          reduce using rule 38
+	do             reduce using rule 38
+	foreach        reduce using rule 38
+	return         reduce using rule 38
+	%eof           reduce using rule 38
+
+
+State 144
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp '+' Exp .                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+
+	id             reduce using rule 37
+	'+'            reduce using rule 37
+	'-'            reduce using rule 37
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	'<'            reduce using rule 37
+	'>'            reduce using rule 37
+	'<='           reduce using rule 37
+	'>='           reduce using rule 37
+	'='            reduce using rule 37
+	'!='           reduce using rule 37
+	']'            reduce using rule 37
+	'{'            reduce using rule 37
+	'}'            reduce using rule 37
+	')'            reduce using rule 37
+	'^'            shift, and enter state 85
+	':'            reduce using rule 37
+	','            reduce using rule 37
+	';'            reduce using rule 37
+	'&&'           reduce using rule 37
+	'||'           reduce using rule 37
+	zeroes         reduce using rule 37
+	range          reduce using rule 37
+	eye            reduce using rule 37
+	read           reduce using rule 37
+	write          reduce using rule 37
+	define         reduce using rule 37
+	begin          reduce using rule 37
+	end            reduce using rule 37
+	if             reduce using rule 37
+	else           reduce using rule 37
+	then           reduce using rule 37
+	while          reduce using rule 37
+	do             reduce using rule 37
+	foreach        reduce using rule 37
+	return         reduce using rule 37
+	%eof           reduce using rule 37
+
+
+State 145
 
 	ElemList -> ElemList ';' ExpList .                  (rule 52)
 	ExpList -> ExpList . ',' Exp                        (rule 54)
 
 	'}'            reduce using rule 52
-	','            shift, and enter state 70
+	','            shift, and enter state 75
 	';'            reduce using rule 52
 
 
-State 143
+State 146
 
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 	ExpList -> ExpList ',' Exp .                        (rule 54)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	'}'            reduce using rule 54
 	')'            reduce using rule 54
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 	','            reduce using rule 54
 	';'            reduce using rule 54
 
 
-State 144
+State 147
+
+	FunCall -> id '(' ExpList ')' .                     (rule 55)
+
+	id             reduce using rule 55
+	'+'            reduce using rule 55
+	'-'            reduce using rule 55
+	'*'            reduce using rule 55
+	'/'            reduce using rule 55
+	'%'            reduce using rule 55
+	'**'           reduce using rule 55
+	'.'            reduce using rule 55
+	'<'            reduce using rule 55
+	'>'            reduce using rule 55
+	'<='           reduce using rule 55
+	'>='           reduce using rule 55
+	'='            reduce using rule 55
+	'!='           reduce using rule 55
+	':='           reduce using rule 55
+	'['            reduce using rule 55
+	']'            reduce using rule 55
+	'{'            reduce using rule 55
+	'}'            reduce using rule 55
+	')'            reduce using rule 55
+	'^'            reduce using rule 55
+	':'            reduce using rule 55
+	','            reduce using rule 55
+	';'            reduce using rule 55
+	'&&'           reduce using rule 55
+	'||'           reduce using rule 55
+	zeroes         reduce using rule 55
+	range          reduce using rule 55
+	eye            reduce using rule 55
+	read           reduce using rule 55
+	write          reduce using rule 55
+	define         reduce using rule 55
+	begin          reduce using rule 55
+	end            reduce using rule 55
+	if             reduce using rule 55
+	else           reduce using rule 55
+	then           reduce using rule 55
+	while          reduce using rule 55
+	do             reduce using rule 55
+	foreach        reduce using rule 55
+	return         reduce using rule 55
+	%eof           reduce using rule 55
+
+
+State 148
 
 	Lval -> Access '[' Exp ']' .                        (rule 25)
 
@@ -3858,6 +4267,9 @@ State 144
 	';'            reduce using rule 25
 	'&&'           reduce using rule 25
 	'||'           reduce using rule 25
+	zeroes         reduce using rule 25
+	range          reduce using rule 25
+	eye            reduce using rule 25
 	read           reduce using rule 25
 	write          reduce using rule 25
 	define         reduce using rule 25
@@ -3873,115 +4285,115 @@ State 144
 	%eof           reduce using rule 25
 
 
-State 145
+State 149
 
 	Lval -> Access '[' Exp ',' . Exp ']'                (rule 26)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Exp            goto state 156
+	Exp            goto state 160
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 146
+State 150
 
 	Lval -> Access '[' Ind ':' . Ind ']'                (rule 27)
 	Lval -> Access '[' Ind ':' . Ind ',' Ind ':' Ind ']'    (rule 28)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	']'            reduce using rule 31
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	','            reduce using rule 31
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	']'            reduce using rule 33
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	','            reduce using rule 33
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Ind            goto state 154
-	Exp            goto state 155
+	Ind            goto state 158
+	Exp            goto state 159
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 147
+State 151
 
 	FunDec -> FunDec define id '(' VarListFunc . ')' of type VarType as Instruc    (rule 5)
 	VarListFunc -> VarListFunc . ',' id ':' VarType     (rule 8)
 
-	')'            shift, and enter state 152
-	','            shift, and enter state 153
+	')'            shift, and enter state 156
+	','            shift, and enter state 157
 
 
-State 148
+State 152
 
 	VarListFunc -> id . ':' VarType                     (rule 7)
 
-	':'            shift, and enter state 151
+	':'            shift, and enter state 155
 
 
-State 149
+State 153
 
 	FunDec -> FunDec define id '(' ')' . of type VarType as Instruc    (rule 6)
 
-	of             shift, and enter state 150
+	of             shift, and enter state 154
 
 
-State 150
+State 154
 
 	FunDec -> FunDec define id '(' ')' of . type VarType as Instruc    (rule 6)
 
 	type           shift, and enter state 182
 
 
-State 151
+State 155
 
 	VarListFunc -> id ':' . VarType                     (rule 7)
 
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
 
 	VarType        goto state 181
 
-State 152
+State 156
 
 	FunDec -> FunDec define id '(' VarListFunc ')' . of type VarType as Instruc    (rule 5)
 
 	of             shift, and enter state 180
 
 
-State 153
+State 157
 
 	VarListFunc -> VarListFunc ',' . id ':' VarType     (rule 8)
 
 	id             shift, and enter state 179
 
 
-State 154
+State 158
 
 	Lval -> Access '[' Ind ':' Ind . ']'                (rule 27)
 	Lval -> Access '[' Ind ':' Ind . ',' Ind ':' Ind ']'    (rule 28)
@@ -3990,64 +4402,87 @@ State 154
 	','            shift, and enter state 178
 
 
-State 155
+State 159
 
-	Ind -> Exp .                                        (rule 32)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Ind -> Exp .                                        (rule 34)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	']'            reduce using rule 32
-	'^'            shift, and enter state 80
-	':'            reduce using rule 32
-	','            reduce using rule 32
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	']'            reduce using rule 34
+	'^'            shift, and enter state 85
+	':'            reduce using rule 34
+	','            reduce using rule 34
 
 
-State 156
+State 160
 
 	Lval -> Access '[' Exp ',' Exp . ']'                (rule 26)
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
 
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
 	']'            shift, and enter state 176
-	'^'            shift, and enter state 80
+	'^'            shift, and enter state 85
 
 
-State 157
+State 161
+
+	Exp -> Exp . '+' Exp                                (rule 37)
+	Exp -> Exp . '-' Exp                                (rule 38)
+	Exp -> Exp . '*' Exp                                (rule 39)
+	Exp -> Exp . '/' Exp                                (rule 40)
+	Exp -> Exp . '%' Exp                                (rule 41)
+	Exp -> Exp . '**' Exp                               (rule 42)
+	Exp -> Exp . '.' Exp                                (rule 43)
+	Exp -> Exp . '^'                                    (rule 46)
+	Zeroes -> zeroes '(' Exp ',' Exp . ')'              (rule 60)
+
+	'+'            shift, and enter state 78
+	'-'            shift, and enter state 79
+	'*'            shift, and enter state 80
+	'/'            shift, and enter state 81
+	'%'            shift, and enter state 82
+	'**'           shift, and enter state 83
+	'.'            shift, and enter state 84
+	')'            shift, and enter state 175
+	'^'            shift, and enter state 85
+
+
+State 162
 
 	VarListDec -> VarListDec ';' IdList . ':' VarType    (rule 68)
 	IdList -> IdList . ',' id                           (rule 70)
 
-	':'            shift, and enter state 175
-	','            shift, and enter state 132
+	':'            shift, and enter state 174
+	','            shift, and enter state 131
 
 
-State 158
+State 163
 
 	IdList -> IdList ',' id .                           (rule 70)
 
@@ -4055,13 +4490,16 @@ State 158
 	','            reduce using rule 70
 
 
-State 159
+State 164
 
 	VarListDec -> IdList ':' VarType .                  (rule 67)
 
 	id             reduce using rule 67
 	'{'            reduce using rule 67
 	';'            reduce using rule 67
+	zeroes         reduce using rule 67
+	range          reduce using rule 67
+	eye            reduce using rule 67
 	read           reduce using rule 67
 	write          reduce using rule 67
 	begin          reduce using rule 67
@@ -4071,7 +4509,7 @@ State 159
 	return         reduce using rule 67
 
 
-State 160
+State 165
 
 	VarType -> tnum .                                   (rule 9)
 
@@ -4080,6 +4518,9 @@ State 160
 	')'            reduce using rule 9
 	','            reduce using rule 9
 	';'            reduce using rule 9
+	zeroes         reduce using rule 9
+	range          reduce using rule 9
+	eye            reduce using rule 9
 	read           reduce using rule 9
 	write          reduce using rule 9
 	as             reduce using rule 9
@@ -4090,7 +4531,7 @@ State 160
 	return         reduce using rule 9
 
 
-State 161
+State 166
 
 	VarType -> tvec .                                   (rule 10)
 
@@ -4099,6 +4540,9 @@ State 161
 	')'            reduce using rule 10
 	','            reduce using rule 10
 	';'            reduce using rule 10
+	zeroes         reduce using rule 10
+	range          reduce using rule 10
+	eye            reduce using rule 10
 	read           reduce using rule 10
 	write          reduce using rule 10
 	as             reduce using rule 10
@@ -4109,7 +4553,7 @@ State 161
 	return         reduce using rule 10
 
 
-State 162
+State 167
 
 	VarType -> tmat .                                   (rule 11)
 
@@ -4118,6 +4562,9 @@ State 162
 	')'            reduce using rule 11
 	','            reduce using rule 11
 	';'            reduce using rule 11
+	zeroes         reduce using rule 11
+	range          reduce using rule 11
+	eye            reduce using rule 11
 	read           reduce using rule 11
 	write          reduce using rule 11
 	as             reduce using rule 11
@@ -4128,7 +4575,7 @@ State 162
 	return         reduce using rule 11
 
 
-State 163
+State 168
 
 	InsList -> InsList ';' Instruc .                    (rule 72)
 
@@ -4136,13 +4583,16 @@ State 163
 	end            reduce using rule 72
 
 
-State 164
+State 169
 
 	CondSelect -> if Boolean then Instruc OptionElse .    (rule 20)
 
 	id             reduce using rule 20
 	'{'            reduce using rule 20
 	';'            reduce using rule 20
+	zeroes         reduce using rule 20
+	range          reduce using rule 20
+	eye            reduce using rule 20
 	read           reduce using rule 20
 	write          reduce using rule 20
 	define         reduce using rule 20
@@ -4156,46 +4606,22 @@ State 164
 	%eof           reduce using rule 20
 
 
-State 165
+State 170
 
 	OptionElse -> else . Instruc                        (rule 22)
 
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
-
-	Instruc        goto state 174
-	CondSelect     goto state 8
-	Asig           goto state 9
-	Lval           goto state 10
-	Access         goto state 11
-	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
-
-State 166
-
-	ForEach -> foreach id in Exp do . Instruc           (rule 74)
-
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
 	Instruc        goto state 173
 	CondSelect     goto state 8
@@ -4203,240 +4629,63 @@ State 166
 	Lval           goto state 10
 	Access         goto state 11
 	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
-
-State 167
-
-	Eye -> eye '(' Exp ')' .                            (rule 63)
-
-	id             reduce using rule 63
-	'+'            reduce using rule 63
-	'-'            reduce using rule 63
-	'*'            reduce using rule 63
-	'/'            reduce using rule 63
-	'%'            reduce using rule 63
-	'**'           reduce using rule 63
-	'.'            reduce using rule 63
-	'<'            reduce using rule 63
-	'>'            reduce using rule 63
-	'<='           reduce using rule 63
-	'>='           reduce using rule 63
-	'='            reduce using rule 63
-	'!='           reduce using rule 63
-	']'            reduce using rule 63
-	'{'            reduce using rule 63
-	'}'            reduce using rule 63
-	')'            reduce using rule 63
-	'^'            reduce using rule 63
-	':'            reduce using rule 63
-	','            reduce using rule 63
-	';'            reduce using rule 63
-	'&&'           reduce using rule 63
-	'||'           reduce using rule 63
-	read           reduce using rule 63
-	write          reduce using rule 63
-	define         reduce using rule 63
-	begin          reduce using rule 63
-	end            reduce using rule 63
-	if             reduce using rule 63
-	else           reduce using rule 63
-	then           reduce using rule 63
-	while          reduce using rule 63
-	do             reduce using rule 63
-	foreach        reduce using rule 63
-	return         reduce using rule 63
-	%eof           reduce using rule 63
-
-
-State 168
-
-	Range -> range '(' Exp ')' .                        (rule 62)
-
-	id             reduce using rule 62
-	'+'            reduce using rule 62
-	'-'            reduce using rule 62
-	'*'            reduce using rule 62
-	'/'            reduce using rule 62
-	'%'            reduce using rule 62
-	'**'           reduce using rule 62
-	'.'            reduce using rule 62
-	'<'            reduce using rule 62
-	'>'            reduce using rule 62
-	'<='           reduce using rule 62
-	'>='           reduce using rule 62
-	'='            reduce using rule 62
-	'!='           reduce using rule 62
-	']'            reduce using rule 62
-	'{'            reduce using rule 62
-	'}'            reduce using rule 62
-	')'            reduce using rule 62
-	'^'            reduce using rule 62
-	':'            reduce using rule 62
-	','            reduce using rule 62
-	';'            reduce using rule 62
-	'&&'           reduce using rule 62
-	'||'           reduce using rule 62
-	read           reduce using rule 62
-	write          reduce using rule 62
-	define         reduce using rule 62
-	begin          reduce using rule 62
-	end            reduce using rule 62
-	if             reduce using rule 62
-	else           reduce using rule 62
-	then           reduce using rule 62
-	while          reduce using rule 62
-	do             reduce using rule 62
-	foreach        reduce using rule 62
-	return         reduce using rule 62
-	%eof           reduce using rule 62
-
-
-State 169
-
-	Zeroes -> zeroes '(' Exp ')' .                      (rule 61)
-
-	id             reduce using rule 61
-	'+'            reduce using rule 61
-	'-'            reduce using rule 61
-	'*'            reduce using rule 61
-	'/'            reduce using rule 61
-	'%'            reduce using rule 61
-	'**'           reduce using rule 61
-	'.'            reduce using rule 61
-	'<'            reduce using rule 61
-	'>'            reduce using rule 61
-	'<='           reduce using rule 61
-	'>='           reduce using rule 61
-	'='            reduce using rule 61
-	'!='           reduce using rule 61
-	']'            reduce using rule 61
-	'{'            reduce using rule 61
-	'}'            reduce using rule 61
-	')'            reduce using rule 61
-	'^'            reduce using rule 61
-	':'            reduce using rule 61
-	','            reduce using rule 61
-	';'            reduce using rule 61
-	'&&'           reduce using rule 61
-	'||'           reduce using rule 61
-	read           reduce using rule 61
-	write          reduce using rule 61
-	define         reduce using rule 61
-	begin          reduce using rule 61
-	end            reduce using rule 61
-	if             reduce using rule 61
-	else           reduce using rule 61
-	then           reduce using rule 61
-	while          reduce using rule 61
-	do             reduce using rule 61
-	foreach        reduce using rule 61
-	return         reduce using rule 61
-	%eof           reduce using rule 61
-
-
-State 170
-
-	Zeroes -> zeroes '(' Exp ',' . Exp ')'              (rule 60)
-
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
-
-	Lval           goto state 28
-	Access         goto state 11
-	Exp            goto state 172
-	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
 State 171
 
-	FunCall -> id '(' ExpList ')' .                     (rule 55)
+	ForEach -> foreach id in Exp do . Instruc           (rule 74)
 
-	id             reduce using rule 55
-	'+'            reduce using rule 55
-	'-'            reduce using rule 55
-	'*'            reduce using rule 55
-	'/'            reduce using rule 55
-	'%'            reduce using rule 55
-	'**'           reduce using rule 55
-	'.'            reduce using rule 55
-	'<'            reduce using rule 55
-	'>'            reduce using rule 55
-	'<='           reduce using rule 55
-	'>='           reduce using rule 55
-	'='            reduce using rule 55
-	'!='           reduce using rule 55
-	']'            reduce using rule 55
-	'{'            reduce using rule 55
-	'}'            reduce using rule 55
-	')'            reduce using rule 55
-	'^'            reduce using rule 55
-	':'            reduce using rule 55
-	','            reduce using rule 55
-	';'            reduce using rule 55
-	'&&'           reduce using rule 55
-	'||'           reduce using rule 55
-	read           reduce using rule 55
-	write          reduce using rule 55
-	define         reduce using rule 55
-	begin          reduce using rule 55
-	end            reduce using rule 55
-	if             reduce using rule 55
-	else           reduce using rule 55
-	then           reduce using rule 55
-	while          reduce using rule 55
-	do             reduce using rule 55
-	foreach        reduce using rule 55
-	return         reduce using rule 55
-	%eof           reduce using rule 55
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
+	Instruc        goto state 172
+	CondSelect     goto state 8
+	Asig           goto state 9
+	Lval           goto state 10
+	Access         goto state 11
+	Mat            goto state 12
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
 State 172
-
-	Exp -> Exp . '+' Exp                                (rule 35)
-	Exp -> Exp . '-' Exp                                (rule 36)
-	Exp -> Exp . '*' Exp                                (rule 37)
-	Exp -> Exp . '/' Exp                                (rule 38)
-	Exp -> Exp . '%' Exp                                (rule 39)
-	Exp -> Exp . '**' Exp                               (rule 40)
-	Exp -> Exp . '.' Exp                                (rule 41)
-	Exp -> Exp . '^'                                    (rule 44)
-	Zeroes -> zeroes '(' Exp ',' Exp . ')'              (rule 60)
-
-	'+'            shift, and enter state 73
-	'-'            shift, and enter state 74
-	'*'            shift, and enter state 75
-	'/'            shift, and enter state 76
-	'%'            shift, and enter state 77
-	'**'           shift, and enter state 78
-	'.'            shift, and enter state 79
-	')'            shift, and enter state 188
-	'^'            shift, and enter state 80
-
-
-State 173
 
 	ForEach -> foreach id in Exp do Instruc .           (rule 74)
 
 	id             reduce using rule 74
 	'{'            reduce using rule 74
 	';'            reduce using rule 74
+	zeroes         reduce using rule 74
+	range          reduce using rule 74
+	eye            reduce using rule 74
 	read           reduce using rule 74
 	write          reduce using rule 74
 	define         reduce using rule 74
@@ -4450,13 +4699,16 @@ State 173
 	%eof           reduce using rule 74
 
 
-State 174
+State 173
 
 	OptionElse -> else Instruc .                        (rule 22)
 
 	id             reduce using rule 22
 	'{'            reduce using rule 22
 	';'            reduce using rule 22
+	zeroes         reduce using rule 22
+	range          reduce using rule 22
+	eye            reduce using rule 22
 	read           reduce using rule 22
 	write          reduce using rule 22
 	define         reduce using rule 22
@@ -4470,15 +4722,63 @@ State 174
 	%eof           reduce using rule 22
 
 
-State 175
+State 174
 
 	VarListDec -> VarListDec ';' IdList ':' . VarType    (rule 68)
 
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
 
 	VarType        goto state 187
+
+State 175
+
+	Zeroes -> zeroes '(' Exp ',' Exp ')' .              (rule 60)
+
+	id             reduce using rule 60
+	'+'            reduce using rule 60
+	'-'            reduce using rule 60
+	'*'            reduce using rule 60
+	'/'            reduce using rule 60
+	'%'            reduce using rule 60
+	'**'           reduce using rule 60
+	'.'            reduce using rule 60
+	'<'            reduce using rule 60
+	'>'            reduce using rule 60
+	'<='           reduce using rule 60
+	'>='           reduce using rule 60
+	'='            reduce using rule 60
+	'!='           reduce using rule 60
+	':='           reduce using rule 60
+	'['            reduce using rule 60
+	']'            reduce using rule 60
+	'{'            reduce using rule 60
+	'}'            reduce using rule 60
+	')'            reduce using rule 60
+	'^'            reduce using rule 60
+	':'            reduce using rule 60
+	','            reduce using rule 60
+	';'            reduce using rule 60
+	'&&'           reduce using rule 60
+	'||'           reduce using rule 60
+	zeroes         reduce using rule 60
+	range          reduce using rule 60
+	eye            reduce using rule 60
+	read           reduce using rule 60
+	write          reduce using rule 60
+	define         reduce using rule 60
+	begin          reduce using rule 60
+	end            reduce using rule 60
+	if             reduce using rule 60
+	else           reduce using rule 60
+	then           reduce using rule 60
+	while          reduce using rule 60
+	do             reduce using rule 60
+	foreach        reduce using rule 60
+	return         reduce using rule 60
+	%eof           reduce using rule 60
+
 
 State 176
 
@@ -4509,6 +4809,9 @@ State 176
 	';'            reduce using rule 26
 	'&&'           reduce using rule 26
 	'||'           reduce using rule 26
+	zeroes         reduce using rule 26
+	range          reduce using rule 26
+	eye            reduce using rule 26
 	read           reduce using rule 26
 	write          reduce using rule 26
 	define         reduce using rule 26
@@ -4553,6 +4856,9 @@ State 177
 	';'            reduce using rule 27
 	'&&'           reduce using rule 27
 	'||'           reduce using rule 27
+	zeroes         reduce using rule 27
+	range          reduce using rule 27
+	eye            reduce using rule 27
 	read           reduce using rule 27
 	write          reduce using rule 27
 	define         reduce using rule 27
@@ -4572,28 +4878,28 @@ State 178
 
 	Lval -> Access '[' Ind ':' Ind ',' . Ind ':' Ind ']'    (rule 28)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	':'            reduce using rule 31
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	':'            reduce using rule 33
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
 	Ind            goto state 186
-	Exp            goto state 155
+	Exp            goto state 159
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
 State 179
 
@@ -4621,9 +4927,9 @@ State 182
 
 	FunDec -> FunDec define id '(' ')' of type . VarType as Instruc    (rule 6)
 
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
 
 	VarType        goto state 183
 
@@ -4631,34 +4937,34 @@ State 183
 
 	FunDec -> FunDec define id '(' ')' of type VarType . as Instruc    (rule 6)
 
-	as             shift, and enter state 192
+	as             shift, and enter state 191
 
 
 State 184
 
 	FunDec -> FunDec define id '(' VarListFunc ')' of type . VarType as Instruc    (rule 5)
 
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
 
-	VarType        goto state 191
+	VarType        goto state 190
 
 State 185
 
 	VarListFunc -> VarListFunc ',' id ':' . VarType     (rule 8)
 
-	tnum           shift, and enter state 160
-	tvec           shift, and enter state 161
-	tmat           shift, and enter state 162
+	tnum           shift, and enter state 165
+	tvec           shift, and enter state 166
+	tmat           shift, and enter state 167
 
-	VarType        goto state 190
+	VarType        goto state 189
 
 State 186
 
 	Lval -> Access '[' Ind ':' Ind ',' Ind . ':' Ind ']'    (rule 28)
 
-	':'            shift, and enter state 189
+	':'            shift, and enter state 188
 
 
 State 187
@@ -4668,6 +4974,9 @@ State 187
 	id             reduce using rule 68
 	'{'            reduce using rule 68
 	';'            reduce using rule 68
+	zeroes         reduce using rule 68
+	range          reduce using rule 68
+	eye            reduce using rule 68
 	read           reduce using rule 68
 	write          reduce using rule 68
 	begin          reduce using rule 68
@@ -4679,75 +4988,32 @@ State 187
 
 State 188
 
-	Zeroes -> zeroes '(' Exp ',' Exp ')' .              (rule 60)
-
-	id             reduce using rule 60
-	'+'            reduce using rule 60
-	'-'            reduce using rule 60
-	'*'            reduce using rule 60
-	'/'            reduce using rule 60
-	'%'            reduce using rule 60
-	'**'           reduce using rule 60
-	'.'            reduce using rule 60
-	'<'            reduce using rule 60
-	'>'            reduce using rule 60
-	'<='           reduce using rule 60
-	'>='           reduce using rule 60
-	'='            reduce using rule 60
-	'!='           reduce using rule 60
-	']'            reduce using rule 60
-	'{'            reduce using rule 60
-	'}'            reduce using rule 60
-	')'            reduce using rule 60
-	'^'            reduce using rule 60
-	':'            reduce using rule 60
-	','            reduce using rule 60
-	';'            reduce using rule 60
-	'&&'           reduce using rule 60
-	'||'           reduce using rule 60
-	read           reduce using rule 60
-	write          reduce using rule 60
-	define         reduce using rule 60
-	begin          reduce using rule 60
-	end            reduce using rule 60
-	if             reduce using rule 60
-	else           reduce using rule 60
-	then           reduce using rule 60
-	while          reduce using rule 60
-	do             reduce using rule 60
-	foreach        reduce using rule 60
-	return         reduce using rule 60
-	%eof           reduce using rule 60
-
-
-State 189
-
 	Lval -> Access '[' Ind ':' Ind ',' Ind ':' . Ind ']'    (rule 28)
 
-	id             shift, and enter state 35
-	num            shift, and enter state 36
-	'-'            shift, and enter state 37
-	']'            reduce using rule 31
-	'{'            shift, and enter state 20
-	'('            shift, and enter state 38
-	'$'            shift, and enter state 39
-	'@'            shift, and enter state 40
-	zeroes         shift, and enter state 41
-	range          shift, and enter state 42
-	eye            shift, and enter state 43
+	id             shift, and enter state 24
+	num            shift, and enter state 38
+	'-'            shift, and enter state 39
+	']'            reduce using rule 33
+	'{'            shift, and enter state 25
+	'('            shift, and enter state 40
+	'$'            shift, and enter state 41
+	'@'            shift, and enter state 42
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
 
-	Lval           goto state 28
+	Lval           goto state 36
 	Access         goto state 11
-	Ind            goto state 195
-	Exp            goto state 155
+	Ind            goto state 194
+	Exp            goto state 159
 	Mat            goto state 12
-	FunCall        goto state 30
-	FunEmb         goto state 31
-	Zeroes         goto state 32
-	Range          goto state 33
-	Eye            goto state 34
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
 
-State 190
+State 189
 
 	VarListFunc -> VarListFunc ',' id ':' VarType .     (rule 8)
 
@@ -4755,46 +5021,57 @@ State 190
 	','            reduce using rule 8
 
 
-State 191
+State 190
 
 	FunDec -> FunDec define id '(' VarListFunc ')' of type VarType . as Instruc    (rule 5)
 
-	as             shift, and enter state 194
+	as             shift, and enter state 193
 
 
-State 192
+State 191
 
 	FunDec -> FunDec define id '(' ')' of type VarType as . Instruc    (rule 6)
 
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
-	Instruc        goto state 193
+	Instruc        goto state 192
 	CondSelect     goto state 8
 	Asig           goto state 9
 	Lval           goto state 10
 	Access         goto state 11
 	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
-State 193
+State 192
 
 	FunDec -> FunDec define id '(' ')' of type VarType as Instruc .    (rule 6)
 
 	id             reduce using rule 6
 	'{'            reduce using rule 6
+	zeroes         reduce using rule 6
+	range          reduce using rule 6
+	eye            reduce using rule 6
 	read           reduce using rule 6
 	write          reduce using rule 6
 	define         reduce using rule 6
@@ -4805,41 +5082,49 @@ State 193
 	return         reduce using rule 6
 
 
-State 194
+State 193
 
 	FunDec -> FunDec define id '(' VarListFunc ')' of type VarType as . Instruc    (rule 5)
 
-	id             shift, and enter state 19
-	'{'            shift, and enter state 20
-	read           shift, and enter state 21
-	write          shift, and enter state 22
-	begin          shift, and enter state 23
-	if             shift, and enter state 24
-	while          shift, and enter state 25
-	foreach        shift, and enter state 26
-	return         shift, and enter state 27
+	id             shift, and enter state 24
+	'{'            shift, and enter state 25
+	zeroes         shift, and enter state 26
+	range          shift, and enter state 27
+	eye            shift, and enter state 28
+	read           shift, and enter state 29
+	write          shift, and enter state 30
+	begin          shift, and enter state 31
+	if             shift, and enter state 32
+	while          shift, and enter state 33
+	foreach        shift, and enter state 34
+	return         shift, and enter state 35
 
-	Instruc        goto state 197
+	Instruc        goto state 196
 	CondSelect     goto state 8
 	Asig           goto state 9
 	Lval           goto state 10
 	Access         goto state 11
 	Mat            goto state 12
-	InsBlock       goto state 13
-	While          goto state 14
-	ForEach        goto state 15
-	Read           goto state 16
-	Write          goto state 17
-	Return         goto state 18
+	FunCall        goto state 13
+	FunEmb         goto state 14
+	Zeroes         goto state 15
+	Range          goto state 16
+	Eye            goto state 17
+	InsBlock       goto state 18
+	While          goto state 19
+	ForEach        goto state 20
+	Read           goto state 21
+	Write          goto state 22
+	Return         goto state 23
 
-State 195
+State 194
 
 	Lval -> Access '[' Ind ':' Ind ',' Ind ':' Ind . ']'    (rule 28)
 
-	']'            shift, and enter state 196
+	']'            shift, and enter state 195
 
 
-State 196
+State 195
 
 	Lval -> Access '[' Ind ':' Ind ',' Ind ':' Ind ']' .    (rule 28)
 
@@ -4868,6 +5153,9 @@ State 196
 	';'            reduce using rule 28
 	'&&'           reduce using rule 28
 	'||'           reduce using rule 28
+	zeroes         reduce using rule 28
+	range          reduce using rule 28
+	eye            reduce using rule 28
 	read           reduce using rule 28
 	write          reduce using rule 28
 	define         reduce using rule 28
@@ -4883,12 +5171,15 @@ State 196
 	%eof           reduce using rule 28
 
 
-State 197
+State 196
 
 	FunDec -> FunDec define id '(' VarListFunc ')' of type VarType as Instruc .    (rule 5)
 
 	id             reduce using rule 5
 	'{'            reduce using rule 5
+	zeroes         reduce using rule 5
+	range          reduce using rule 5
+	eye            reduce using rule 5
 	read           reduce using rule 5
 	write          reduce using rule 5
 	define         reduce using rule 5
@@ -4905,4 +5196,4 @@ Grammar Totals
 Number of rules: 95
 Number of terminals: 57
 Number of non-terminals: 35
-Number of states: 198
+Number of states: 197

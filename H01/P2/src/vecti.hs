@@ -26,14 +26,14 @@ module Main (
 import System
 import System.IO
 import Lexer
-
+import Parser
 
 main :: IO ()
 main =  do
   args <- getArgs
   if null(args) then do putStrLn "No ha introducido elementos"
                   else if head args == "-e" then do
-                         print $ lexer $ head $ tail args
+                         print $ parser $lexer $ head $ tail args
                        else do
                          contents <- readFile $ head args
-                         print $ lexer contents
+                         print $ parser $lexer contents

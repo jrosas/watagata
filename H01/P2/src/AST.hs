@@ -93,7 +93,6 @@ data Exp = Num Double
 
 data BoolExp = True
              | False
-             | OnceDBool String BoolExp
              | Less Exp Exp
              | Great Exp Exp
              | LET Exp Exp
