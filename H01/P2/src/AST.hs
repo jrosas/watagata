@@ -1,7 +1,7 @@
 {------------------------------------- 
   Estos son los tipos que definimos   
 ---------------------------------------}
- {-|
+{-|
    Asunto: C&#243;digo fuente del proyecto 1. 
    Proyecto: Analizador Lexicogr&#225;fico en Haskell
    Materia: Taller de Traductores (CI-3725)
@@ -21,80 +21,78 @@
 
 
 module AST (
-            Raiz(..),
-            FunDec(..),
-            Vartype(..),
-            VarDec(..),
-            Instruc(..),
-            Cond2(..),
-            Print(..),
-            Exp(..),
-            Bool(..),
-            Reserve(..),
-            Function(..),
-            LeftVal(..),
-) where
+  Raiz(..),
+  FunDec(..),
+  Vartype(..),
+  VarDec(..),
+  Instruc(..),
+  Cond2(..),
+  Print(..),
+  Exp(..),
+  Bool(..),
+  Reserve(..),
+  Function(..),
+  LeftVal(..),
+  ) where
 
-import Lexer
 
 data AST = Raiz
-data Raiz = [FunDec] Instruc
-	deriving (Eq, Show)
+data Raiz = Prog [FunDec] Instruc
+          deriving (Eq, Show)
 
-data FunDec = Func String [VarDec] Vartype Instruc
-	deriving (Eq, Show)
-            
-data Vartype = Num
-             | Vec
-             | Mat
-	deriving (Eq, Show)
+data FunDec = FuncDec String [VarDec] Vartype Instruc
+            deriving (Eq, Show)
+                     
+data Vartype = TNum
+             | TVec
+             | TMat
+             deriving (Eq, Show)
 
-data VarDec = Var String Vartyp
-	deriving (Eq, Show)
+data VarDec = Var String Vartype
+            deriving (Eq, Show)
 
-Instruc = Asign LeftVal Exp
-        | InsBlock [VarDec] [Instruc]
-        | While Condition Instruc
-        | Iter String Exp Instruc
-        | Read Exp
-        | Write [Print]
-        | Return Exp
-        | Cond Condition Instruct Cond2
-	deriving (Eq, Show)
+data Instruc = Asign LeftVal Exp
+             | InsBlock [VarDec] [Instruc]
+             | While BoolExp Instruc
+             | Iter String Exp Instruc
+             | Read Exp
+             | Write [Print]
+             | Return Exp
+             | Cond BoolExp Instruc Cond2
+             deriving (Eq, Show)
 
 data Cond2 = Nothing 
-           | Else Instruct
-	deriving (Eq, Show)
-        
+           | Else Instruc
+           deriving (Eq, Show)
+                    
 data Print = Exp
            | Chars String
-	deriving (Eq, Show)
+           deriving (Eq, Show)
 
 data Exp = Num Double
-         | Mat String
-         | Binary String Exp Exp
+         | LeftVal
+         | BinExp String Exp Exp
          | OnceI String Exp
-         | OnceD String Exp
---         | OnceA String Exp
-         | Reserve 
+         | OnceDExp String Exp
+           --         | OnceA String Exp
          | Function
-	deriving (Eq, Show)
+         deriving (Eq, Show)
 
-data Bool = Reserve
-          | Binary String Bool Bool
-          | OnceD String Bool
---          | OnceA String Bool
-	deriving (Eq, Show)
-            
+data BoolExp = Reserve
+             | BinBool String BoolExp BoolExp
+             | OnceDBool String BoolExp
+            --          | OnceA String Bool
+             deriving (Eq, Show)
+                   
 data Reserve = Res String
-	deriving (Eq, Show)
+             deriving (Eq, Show)
 
 data Function = Func String [Exp]
-	deriving (Eq, Show)
+              deriving (Eq, Show)
 
-data LeftVal = Access
-             | Access Exp
-             | Access Exp Exp
-             | Access (Just Exp) (Just Exp)
-             | Access (Just Exp) (Just Exp) (Just Exp) (Just Exp)
-	deriving (Eq, Show)
+data LeftVal = IdMat String
+             | AccessElemV String Exp
+             | AccessElemM String Exp Exp
+             | ParAccessV String (Maybe Exp) (Maybe Exp)
+             | ParAccessM String (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
+             deriving (Eq, Show)
