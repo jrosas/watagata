@@ -1,0 +1,39 @@
+define sum(a: num, b: num) of type num as
+    return a+b^3
+
+begin
+    vars
+        one: _num;
+        two: _num;
+        three: _num;
+        caramba: _vec;
+        ñame: _mat
+
+    `one := 1;
+    t|wo := 2;
+    thr&ee := sum(one,two);
+    caramba :=! range(2**2);
+
+    while $caramba < 10? do
+    begin
+        vars
+            wepa: mat
+        wepa := {1,2,3;4,5,6;7,8,9};
+        one := sum(one,two)*caramba[2];
+        two := caramba.caramba;
+        caramba := wepa[:1,:] * caramba
+    end;
+    
+    
+
+    write wepa[one+two]
+end
+
+#Deben haber once errores correspondientes a los caracteres
+#^
+#_ (5 veces)
+#`
+#|
+#&
+#!
+#?

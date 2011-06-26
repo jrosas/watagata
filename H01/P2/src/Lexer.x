@@ -31,19 +31,20 @@ $digit = [0-9]
 $char = [a-zA-Z]
 @id = $char [ $char $digit _ ]*
 @num = $digit+\.?$digit* | \.$digit+
-
-@string = \"( [^\"] | \\ \")*\" |  \'( [^\'] | \\ \')*\'
+$prtdq = [\32-\126] # [ \" \\ ]
+$prtsq = [\32-\126] # [ \' \\ ]
+@string = \" ( $prtdq | \\$prtdq | \\\" | \\\\  )* \" | \'( $prtsq | \\$prtsq | \\\' | \\\\  )*\' 
 
 tokens :-
-  @string                      { \p s -> TkString (getPos p) s} 
   \# .*[\n]?                   ;  
-   $white+                     ;
+  $white+                      ;
+  @string                      { \p s -> TkString (getPos p) s}
   "num"                        { \p s -> TkTNum (getPos p) } 
   "vec"                        { \p s -> TkTVec (getPos p) }  
   "mat"                        { \p s -> TkTMat (getPos p) }
   "true"                       { \p s -> TkTrue (getPos p) }
   "false"                      { \p s -> TkFalse (getPos p)}
-  @num                         { \p s -> TkNum (getPos p) s}
+  @num                         { \p s -> TkNum (getPos p) (toDouble s) }
   \+                           { \p s -> TkPlus (getPos p) }
   \-                           { \p s -> TkMinus (getPos p) }
   \*                           { \p s -> TkTimes (getPos p) }
@@ -113,6 +114,14 @@ tokens :-
 
 getPos :: AlexPosn -> (Int,Int)
 getPos (AlexPn _ x y) = (x,y)
+{-
+  Funcion que transforma los reales de vectorinox a Doubles 
+-}
+toDouble :: String -> Double
+toDouble s 
+	 | last s == '.' = read (s++"0")
+	 | head s == '.' = read ("0"++s)
+	 | otherwise = read s
 
 {- 
    Esta funci&#243;n recibe una cadena de caracteres (String) la cual es

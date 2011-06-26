@@ -32,7 +32,7 @@ data Token =
     
   | TkString  (Int,Int) String -- ^ Cadena de cracteres literales.
   | TkId      (Int,Int) String -- ^ Identificador alfan&#250;merico.
-  | TkNum     (Int,Int) String -- ^ N&#250;mero real litelra.
+  | TkNum     (Int,Int) Double -- ^ N&#250;mero real litelra.
     
   | TkPlus    (Int,Int) -- ^ Operaci&#243;n de suma @+@ 
   | TkMinus   (Int,Int) -- ^ Operaci&#243;n de resta @-@

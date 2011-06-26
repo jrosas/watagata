@@ -125,7 +125,7 @@ OptionElse : {- empty -} %prec LOWER_ELSE {}
 	      
 Asig : Lval ':=' Exp{$1} 
 
-Lval : Mat {$1}
+Lval : Access {$1}
      | Access '[' Exp ']'{$1}
      | Access '[' Exp ',' Exp ']' {$1}
      | Access '[' Ind ':' Ind ']'{$1}
@@ -155,7 +155,8 @@ Exp : num          {$1}
     | FunCall{$1}
     | FunEmb{$1}
       
-Mat : '{' ElemList '}'{$1}   
+Mat : '{' ElemList '}'{$1}
+    | '{' '}' {$1}   
 
 ElemList : ExpList {$1}
          | ElemList ';' ExpList{$1}
@@ -181,6 +182,7 @@ Eye : eye '(' Exp ')'{$1}
 InsBlock : begin VarDec InsList end {$1}
 
 VarDec : vars VarListDec{$1}
+       | {- empty -} {}
          
 VarListDec : IdList ':' VarType{$1}
         | VarListDec ';' IdList ':' VarType{$1}
