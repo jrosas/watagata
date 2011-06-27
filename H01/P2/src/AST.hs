@@ -17,19 +17,12 @@ module AST (
   Raiz(..),
   FunDec(..),
   VarType(..),
-  VarFun(..),
   Instruc(..),
-  VarBlock(..), 
-  Cond2(..),
   OptElse(..),
-  Print(..),
   Exp(..),
   BoolExp(..),
-  Access(..),
-  Function(..),
-  Matrix(..),
-  MatList(..),
-  LeftVal(..)
+  
+
   ) where
 
 
@@ -37,7 +30,7 @@ data AST = Raiz
 data Raiz = Prog [FunDec] Instruc
           deriving (Eq, Show)
 
-data FunDec = FuncDec String [VarFun] VarType Instruc
+data FunDec = FuncDec Exp [(Exp,VarType)] VarType Instruc
             deriving (Eq, Show)
                      
 data VarType = TNum
@@ -45,34 +38,26 @@ data VarType = TNum
              | TMat
              deriving (Eq, Show)
 
-data VarFun = Var String VarType
-            deriving (Eq, Show)
 
 data Instruc = Asign Exp Exp
-             | InsBlock [VarBlock] [Instruc]
+             | InsBlock [([Exp],VarType)] [Instruc]
              | While BoolExp Instruc
-             | Iter String Exp Instruc
+             | Iter Exp Exp Instruc
              | Read Exp
-             | Write [Print]
+             | Write [Exp]
              | Return Exp
-             | Cond BoolExp Instruc Cond2
+             | Cond BoolExp Instruc (Maybe OptElse)
              deriving (Eq, Show)
 
-data VarBlock = Vars [String] VarType
-                deriving (Eq, Show)
-
-data Cond2 = Maybe OptElse
-           deriving (Eq, Show)
 
 data OptElse = Else Instruc
-               deriving (Eq, Show)
+             deriving (Eq, Show)
 
-data Print = Exp
-           | Chars String
-           deriving (Eq, Show)
+
 
 data Exp = Num Double
-         | Lef LeftVal
+         | Id String
+         | Chars String
          | Plus Exp Exp
          | Minus Exp Exp
          | Times Exp Exp
@@ -85,14 +70,15 @@ data Exp = Num Double
          | DS Exp
          | RB Exp
          | At Exp
-           deriving (Eq, Show)
+         | Matrix [[Exp]] 
+         | AccessElemV Exp Exp 
+         | AccessElemM Exp Exp Exp 
+         | ParAccessV  Exp (Maybe Exp) (Maybe Exp)
+         | ParAccessM  Exp (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
+         | Func String [Exp]  
+         deriving (Eq, Show)
 
-data LeftVal =  Only Access
-         | AccessElemV Access Exp
-         | AccessElemM Access Exp Exp
-         | ParAccessV Access (Maybe Exp) (Maybe Exp)
-         | ParAccessM Access (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
-           deriving (Eq, Show)
+
 
 data BoolExp = TRUE 
              | FALSE
@@ -109,18 +95,6 @@ data BoolExp = TRUE
              | Not BoolExp
                --          | OnceA String Bool
              deriving (Eq, Show)
-                   
+                      
+                      
 
-data Access = Id String
-            | Funct Function
-            | MatC Matrix
-             deriving (Eq, Show)
-                
-data Function = Func String [Exp]
-                deriving (Eq, Show)
-                       
-data Matrix = Matr [[Exp]]
-              deriving (Eq, Show)
-
-data MatList = Elems String [Exp]
-               deriving (Eq, Show)
