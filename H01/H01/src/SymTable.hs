@@ -16,7 +16,7 @@ module SymTable (
    ) where
 
 import qualified Data.Map as Map
---import AST 
+import AST
 
 -- | SymTable es el tipo especificado para la entrega de este proyecto, para 
 -- | expresar la Tabla de Símbolos del proyecto, funciones y los distintos 
@@ -28,16 +28,13 @@ data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
 -- | Definido con el constructor Sym y basado en 2 valores, el tipo y el valor
 -- | de la clave que apunta a ellos a través del Data.Map por el que llegamos
 -- | al mismo. 
-data Symbol = Symb (Type,String)
+data Symbol = Var VarType Exp
+            | Fun VarType SymTable Instruc
               deriving (Show)
               
--- | Hace referencia a los diferentes tipos que pueden tener las variables de 
--- | vectorinox, para así solo permitir variables con tipos validos, en la
--- | tabla de símbolos
-data Type = Num 
-          | Vec
-          | Mat
-            deriving (Show)
+-- | @emptySymTable@
+emptySymTable :: SymTable
+emptySymTable = Rama (Map.empty) Nothing
 
 -- | @find@ es la función que se encarga de devolvernos el símbolo, asociado
 -- | a la clave y tabla de símbolo del bloque al que pertenece, en algunos
@@ -76,8 +73,8 @@ insert :: String   -- ^ Símbolo a insertar en la Tabla de Símbolos.
        -> SymTable -- ^ Tabla de Símbolos donde insertar.
        -> SymTable -- ^ Nueva Tabla de Símbolos después de la inserción.
 insert key symb (Rama fl st) = if Map.member key fl
-                                    then Rama fl st
-                                    else Rama (Map.insert key symb fl) st
+                               then error $ "Ya existe una variable con nombre "++key
+                               else Rama (Map.insert key symb fl) st
 
 -- | @replace@ se encarga de sustituir el símbolo de una clave perteneciente a
 -- | la tabla de símbolos que le es suministrada. 
