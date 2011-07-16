@@ -1,8 +1,23 @@
 {
-{-
-Comentarios BLAH
 
--}
+ {-|
+Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2) 
+Proyecto: Analizador Lexicogr&#225;fico en Haskell
+Materia: Taller de Traductores (CI-3725)
+Trimestre: Abril-Julio 2011
+Profesor: Carlos Colmenares
+
+Grupo: H01
+  
+Parser del lenguaje de Vectorinox, define la asociatividad y precedencia de
+todos los operadores presentados del lenguaje, adem&#225;s de esto, se basa
+en el archivo AST y Tokens para poder trabajar con el lenguaje, ya que no 
+puede verificar por si solo, la correctitud gramatical del lenguaje, as&#237;
+que su parametro de entrada es una lista de Tokens ya verificados 
+lexicogr&#225;ficamente a los cuales solo hay que verificarles la correctitud 
+sint&#225;ctica de los mismos. Adem&#225;s de verificar el orden de las mismas
+  
+ -}
 
 module Parser (
        parser
@@ -10,7 +25,6 @@ module Parser (
 
 import AST
 import Tokens
-
 
 }
 
@@ -76,6 +90,14 @@ import Tokens
  in          { TkIn _ }
  return      { TkReturn _ }
 
+{-|
+
+  Tabla de Prescedencia de los Operadores del lenguaje vectorinox Donde los 
+  primeros tienen menor valor y los &#250;ltimos mayor valor, adem&#225;
+  de denotar con left: Asociatividad a izquierda, right: Asociatividad a
+  derecha y nonassoc: Sin asociatividad
+
+  -}
 %right ',' 
 %right ':='
 %nonassoc LOWER_ELSE
@@ -95,16 +117,29 @@ import Tokens
 %nonassoc '(' ')'
 
 %%
+{-|
+  Declaraci&#243;n del programa principal 
+  -}
+
 Prog : FunDecList Instruc { Prog $1 $2 }
 
+{-|
+  Declaraci&#243;n de la lista de declaraci&#243;n de funciones
+  -}
 FunDecList : {- empty -}        { [] }
            | FunDec             { $1 }       
  
+{-|
+  Posibles declaraciones de funciones
+  -}
 FunDec : define id '(' VarListFunc ')' of type VarType as Instruc {[FuncDec (Id $2) $4 $8 $10]}
        | define id '(' ')' of type VarType as Instruc{[FuncDec (Id $2) [] $7 $9]}
        | FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$1 ++[FuncDec (Id $3) $5 $9 $11]} 
        | FunDec define id '(' ')' of type VarType as Instruc{$1 ++ [FuncDec (Id $3) [] $8 $10]}
            
+{-|
+  Declaraci&#243;n de la lista de funciones de la declaraci&#243; de funciones
+  -}
 VarListFunc : id ':' VarType { [((Id $1), $3)] }
             | VarListFunc ',' id ':' VarType { $1 ++ [((Id $3), $5)] }
 

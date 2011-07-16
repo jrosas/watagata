@@ -1,16 +1,12 @@
 {
  {-|
-Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2) 
+Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 3) 
 Proyecto: Analizador Lexicogr&#225;fico en Haskell
 Materia: Taller de Traductores (CI-3725)
 Trimestre: Abril-Julio 2011
 Profesor: Carlos Colmenares
 
 Grupo: H01
-  Analizador Lexicogr&#225;fico desarrollado en Alex (A lexical analyser 
-  generator for Haskell) para el lenguaje Vectorinox, basado en la
-  especificaci&#243;n suministrada para el desarrollo del mismo
-  
  -}
 
 module Lexer (

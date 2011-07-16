@@ -1,17 +1,15 @@
 ##################################################################################
 # 										 #
-# Asunto: C&#243;digo fuente del proyecto 1                                      #   
+# Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2)                 #   
 # Proyecto: Analizador Lexicogr#225fico en Haskell                               #   
 # Materia: Taller de Traductores (CI-3725)					 #
 # Trimestre: Abril-Julio 2011							 #
 # Profesor: Carlos Colmenares							 #
 # 										 #
 # Grupo: H01									 #
-# Integrantes:            Carnet:  						 #
-# * Juan Rosas           (07-41502)						 #
-# * Jos&#233; Lezama     (07-41104)						 #
 # 										 #
 ##################################################################################
+
 .PHONY: doc
 all:	
 	cd src/; alex -o Lexer.hs Lexer.x
@@ -57,4 +55,3 @@ doc:	src/Lexer.x
 	cd src/; haddock --html --odir=../doc/ vecti.hs
 	cd src/; rm -f Lexer.hs
 	cd src/; rm -f Parser.hs
-
