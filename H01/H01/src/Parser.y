@@ -1,30 +1,33 @@
 {
 
  {-|
-Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2) 
+Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2)
 Proyecto: Analizador Lexicogr&#225;fico en Haskell
 Materia: Taller de Traductores (CI-3725)
 Trimestre: Abril-Julio 2011
 Profesor: Carlos Colmenares
 
 Grupo: H01
-  
+
 Parser del lenguaje de Vectorinox, define la asociatividad y precedencia de
 todos los operadores presentados del lenguaje, adem&#225;s de esto, se basa
-en el archivo AST y Tokens para poder trabajar con el lenguaje, ya que no 
+en el archivo AST y Tokens para poder trabajar con el lenguaje, ya que no
 puede verificar por si solo, la correctitud gramatical del lenguaje, as&#237;
-que su parametro de entrada es una lista de Tokens ya verificados 
-lexicogr&#225;ficamente a los cuales solo hay que verificarles la correctitud 
+que su parametro de entrada es una lista de Tokens ya verificados
+lexicogr&#225;ficamente a los cuales solo hay que verificarles la correctitud
 sint&#225;ctica de los mismos. Adem&#225;s de verificar el orden de las mismas
-  
+
  -}
 
 module Parser (
        parser
 ) where
 
+import SymTable
 import AST
 import Tokens
+
+
 
 }
 
@@ -32,7 +35,7 @@ import Tokens
 %error { syntaxError }
 %tokentype { Token }
 %token
- tnum        { TkTNum _ } 
+ tnum        { TkTNum _ }
  tvec        { TkTVec _ }
  tmat        { TkTMat _ }
  true        { TkTrue _ }
@@ -92,13 +95,13 @@ import Tokens
 
 {-|
 
-  Tabla de Prescedencia de los Operadores del lenguaje vectorinox Donde los 
+  Tabla de Prescedencia de los Operadores del lenguaje vectorinox Donde los
   primeros tienen menor valor y los &#250;ltimos mayor valor, adem&#225;
   de denotar con left: Asociatividad a izquierda, right: Asociatividad a
   derecha y nonassoc: Sin asociatividad
 
   -}
-%right ',' 
+%right ','
 %right ':='
 %nonassoc LOWER_ELSE
 %right if else
@@ -118,25 +121,25 @@ import Tokens
 
 %%
 {-|
-  Declaraci&#243;n del programa principal 
+  Declaraci&#243;n del programa principal
   -}
 
-Prog : FunDecList Instruc { Prog $1 $2 }
+Prog : FunDecList Instruc {([$1],Prog $1 $2) }
 
 {-|
   Declaraci&#243;n de la lista de declaraci&#243;n de funciones
   -}
 FunDecList : {- empty -}        { [] }
-           | FunDec             { $1 }       
- 
+           | FunDec             { $1 }
+
 {-|
   Posibles declaraciones de funciones
   -}
 FunDec : define id '(' VarListFunc ')' of type VarType as Instruc {[FuncDec (Id $2) $4 $8 $10]}
        | define id '(' ')' of type VarType as Instruc{[FuncDec (Id $2) [] $7 $9]}
-       | FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$1 ++[FuncDec (Id $3) $5 $9 $11]} 
+       | FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$1 ++[FuncDec (Id $3) $5 $9 $11]}
        | FunDec define id '(' ')' of type VarType as Instruc{$1 ++ [FuncDec (Id $3) [] $8 $10]}
-           
+
 {-|
   Declaraci&#243;n de la lista de funciones de la declaraci&#243; de funciones
   -}
@@ -149,11 +152,11 @@ Instruc : Asig { $1 }
         | While { $1 }
         | ForEach { $1 }
         | Read { $1 }
-        | Write { $1 }       
+        | Write { $1 }
         | Return { $1 }
-       
 
-Asig : Lvalue ':=' Exp{ Asign $1 $3} 
+
+Asig : Lvalue ':=' Exp{ Asign $1 $3}
 
 Lvalue : id {Id $1}
        | Lval {$1}
@@ -167,7 +170,7 @@ Access : Mat  { $1 }
        | FunCall { $1 }
        | FunEmb { $1}
        | id {Id $1}
-    
+
 Ind : {-empty-}{ Nothing }
     | Exp { Just $1 }
 
@@ -176,24 +179,24 @@ FunCall : id  '(' ExpList ')'{ Func  $1 $3}
 
 FunEmb : Zeroes { $1 }
        | Range { $1 }
-       | Eye{ $1 }      
-                      
+       | Eye{ $1 }
+
 Zeroes : zeroes '(' Exp ',' Exp ')' {Func "zeroes" [$3,$5] }
        | zeroes '(' Exp ')'{Func "zeroes" [$3] }
-         
+
 Range : range '(' Exp ')' {Func "range" [$3] }
 
 Eye : eye '(' Exp ')' {Func "eye" [$3] }
 
 Exp : num  { Num  $1 }
     | '(' Exp ')' {RB $2}
-    | Exp '+' Exp {Plus $1 $3} 
-    | Exp '-' Exp {Minus $1 $3} 
-    | Exp '*' Exp {Times $1 $3} 
-    | Exp '/' Exp {Div $1 $3} 
+    | Exp '+' Exp {Plus $1 $3}
+    | Exp '-' Exp {Minus $1 $3}
+    | Exp '*' Exp {Times $1 $3}
+    | Exp '/' Exp {Div $1 $3}
     | Exp '%' Exp {Mod $1 $3 }
-    | Exp '**' Exp {Expo $1 $3} 
-    | Exp '.' Exp  {Dot $1 $3} 
+    | Exp '**' Exp {Expo $1 $3}
+    | Exp '.' Exp  {Dot $1 $3}
     | '-' Exp %prec UN {MinusU $2}
     | Exp '^' {Caret $1}
     | '$' Exp {DS $2}
@@ -205,7 +208,7 @@ Exp : num  { Num  $1 }
     | id {Id $1}
 
 Mat : '{' ElemList '}' { Matrix $2  }
-    | '{' '}' { Matrix [] }   
+    | '{' '}' { Matrix [] }
 
 ElemList : ExpList { [$1] }
          | ElemList ';' ExpList { $1 ++ [$3] }
@@ -217,7 +220,7 @@ InsBlock : begin VarDec InsList end {InsBlock $2 $3}
 
 VarDec : vars VarListDec { $2}
        | {- empty -} {[]}
-         
+
 VarListDec : IdList ':' VarType { [($1,$3)] }
            | VarListDec ';' IdList ':' VarType { $1 ++ [($3 , $5)]}
 
@@ -227,14 +230,14 @@ VarType : tnum { TNum }
 
 IdList : id {  [(Id $1)] }
 | IdList ',' id {$1 ++  [(Id $3)] }
-       
+
 InsList : Instruc { [$1] }
          | InsList ';' Instruc{ $1 ++ [$3]}
 
 Write : write PrintList{ Write $2}
 
 PrintList : Print { [$1] }
-          | PrintList ',' Print { $1 ++ [$3]}  
+          | PrintList ',' Print { $1 ++ [$3]}
 
 Print : Exp { $1 }
       | string { Chars  $1 }
@@ -242,29 +245,29 @@ Print : Exp { $1 }
 While : while Boolean do Instruc{ While $2 $4}
 
 CondSelect : if Boolean then Instruc OptionElse { Cond $2 $4 $5}
- 
+
 OptionElse : {- empty -} %prec LOWER_ELSE { Nothing }
-           | else Instruc { Just (Else $2) }  
-    
+           | else Instruc { Just (Else $2) }
+
 Boolean : Exp '<' Exp {Less $1 $3 }
         | Exp '>' Exp {Great $1 $3}
         | Exp '<=' Exp {LET $1 $3}
         | Exp '>=' Exp {GET $1 $3}
         | Exp '=' Exp {Equal $1 $3}
         | Exp '!=' Exp {NEqual $1 $3}
-        | true { TRUE } 
+        | true { TRUE }
         | false { FALSE }
         | Boolean '&&' Boolean {And $1 $3}
         | Boolean '||' Boolean {Or $1 $3}
         | Boolean '=' Boolean {BoolEqual $1 $3}
         | '(' Boolean ')'{BoolRB $2}
-        | '!' Boolean   {Not $2}   
+        | '!' Boolean   {Not $2}
 
 ForEach : foreach id in Exp do Instruc { Iter (Id $2) $4 $6}
 
-Read : read Exp { Read $2 }     
+Read : read Exp { Read $2 }
 
-Return : return Exp { Return $2 }             
+Return : return Exp { Return $2 }
 {
 
 {-
