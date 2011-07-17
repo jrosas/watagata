@@ -124,37 +124,38 @@ import Tokens
   Declaraci&#243;n del programa principal
   -}
 
-Prog : FunDecList Instruc {([$1],Prog $1 $2) }
+Prog : FunDec Instruc { ($1 ,$2) }
 
 {-|
   Declaraci&#243;n de la lista de declaraci&#243;n de funciones
   -}
-FunDecList : {- empty -}        { [] }
-           | FunDec             { $1 }
+
 
 {-|
   Posibles declaraciones de funciones
+  
+FunDecList: {-empty-} { (emptySymTable,[]) }
+| FunDec {$1}
   -}
-FunDec : define id '(' VarListFunc ')' of type VarType as Instruc {[FuncDec (Id $2) $4 $8 $10]}
-       | define id '(' ')' of type VarType as Instruc{[FuncDec (Id $2) [] $7 $9]}
-       | FunDec define id '(' VarListFunc ')' of type VarType as Instruc {$1 ++[FuncDec (Id $3) $5 $9 $11]}
-       | FunDec define id '(' ')' of type VarType as Instruc{$1 ++ [FuncDec (Id $3) [] $8 $10]}
+FunDec: {-empty-} { ( emptySymTable , [] )}
+| FunDec define id '(' VarListFunc ')' of type VarType as Instruc {(insert $3 (Fun $9 (fst $5)(snd $5) ) (fst $1) , (FunDec $3 $11):snd $1) }
+
 
 {-|
   Declaraci&#243;n de la lista de funciones de la declaraci&#243; de funciones
   -}
-VarListFunc : id ':' VarType { [((Id $1), $3)] }
-            | VarListFunc ',' id ':' VarType { $1 ++ [((Id $3), $5)] }
+VarListFunc : {-empty-} { ( emptySymTable , []) }
+            | id ':' VarType { ( insert $1 (Var $3 Nothing) emptySymTable , [$3] ) }
+| VarListFunc ',' id ':' VarType { (insert  $3 (Var $5 Nothing) (fst $1) , $5:(snd $1) ) }
 
 Instruc : Asig { $1 }
         | InsBlock { $1 }
-        | CondSelect { $1 }
-        | While { $1 }
-        | ForEach { $1 }
-        | Read { $1 }
-        | Write { $1 }
-        | Return { $1 }
-
+       | CondSelect { $1 }
+       | While { $1 }
+       | ForEach { $1 }
+       | Read { $1 }
+       | Write { $1 }
+       | Return { $1 }
 
 Asig : Lvalue ':=' Exp{ Asign $1 $3}
 
@@ -219,17 +220,17 @@ ExpList : Exp { [$1] }
 InsBlock : begin VarDec InsList end {InsBlock $2 $3}
 
 VarDec : vars VarListDec { $2}
-       | {- empty -} {[]}
+       | {- empty -} { emptySymTable }
 
-VarListDec : IdList ':' VarType { [($1,$3)] }
-           | VarListDec ';' IdList ':' VarType { $1 ++ [($3 , $5)]}
+VarListDec : IdList ':' VarType {insertListId $1 (Var $3 Nothing) emptySymTable }
+           | VarListDec ';' IdList ':' VarType { insertListId $3 (Var $5 Nothing) $1}
 
 VarType : tnum { TNum }
         | tvec { TVec }
         | tmat { TMat }
 
-IdList : id {  [(Id $1)] }
-| IdList ',' id {$1 ++  [(Id $3)] }
+IdList : id {  [$1] }
+| IdList ',' id {$1 ++ [$3] }
 
 InsList : Instruc { [$1] }
          | InsList ';' Instruc{ $1 ++ [$3]}
@@ -282,6 +283,8 @@ retValS (TkString _ s) = s
 retValD :: Token -> Double
 retValD (TkNum _ s) = s
 
+insertListId (id:ids) symb symt = insertListId ids symb (insert id symb symt)
+insertListId [] _ symt = symt
 
 
 syntaxError :: [Token] -> a

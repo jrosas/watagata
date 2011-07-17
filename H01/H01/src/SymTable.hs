@@ -15,6 +15,7 @@ module SymTable (
    Symbol(..),
    VarType(..),
    Value(..),
+ 
    emptySymTable,
    find,
    insert,
@@ -23,7 +24,7 @@ module SymTable (
    ) where
 
 import qualified Data.Map as Map
-import AST
+
 
 -- | SymTable es el tipo especificado para la entrega de este proyecto, para
 -- | expresar la Tabla de Símbolos del proyecto, funciones y los distintos
@@ -37,8 +38,9 @@ data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
 -- | de la clave que apunta a ellos a través del Data.Map por el que llegamos
 -- | al mismo.
 data Symbol = Var VarType (Maybe Value)
-            | Fun VarType SymTable [VarType] Instruc
+            | Fun VarType SymTable [VarType]
               deriving (Eq, Show)
+
 
 {-|
    VarType hace referencia a cualquier tipo de Variable utilizada en Vectorinox

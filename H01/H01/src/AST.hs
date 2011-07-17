@@ -16,11 +16,11 @@ module AST (
   Exp(..),
   BoolExp(..),
 --  Symbol(..),
- -- FunDec(..),
+  FunDec(..),
  -- VarType(..),
   ) where
 
-
+import SymTable
 {-|
    Cualquier AST esta creado es creado por una ra&#237;z universal, la  cual  se
    subdivide  en Prog [FunDec]  (el cu&#225;l  puede llegar  a ser nulo,  y hace
@@ -34,10 +34,10 @@ module AST (
 {-
 data FunDec = FuncDec Exp [(Exp,VarType)] VarType Instruc
             deriving (Eq, Show)
-
-data FunDec = FuncDec Instruc
-            deriving (Eq, Show)
 -}
+data FunDec = FunDec String Instruc
+            deriving (Eq, Show)
+
 
 
 {-|
@@ -47,7 +47,7 @@ data FunDec = FuncDec Instruc
    tipo /Instruc/ hace referencia a ese conjunto.
 -}
 data Instruc = Asign Exp Exp
-             | InsBlock [Instruc]
+             | InsBlock SymTable [Instruc]
              | While BoolExp Instruc
              | Iter Exp Exp Instruc
              | Read Exp
