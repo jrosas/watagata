@@ -13,6 +13,8 @@
 module SymTable (
    SymTable(..),
    Symbol(..),
+   VarType(..),
+   Value(..),
    emptySymTable,
    find,
    insert,
@@ -27,15 +29,29 @@ import AST
 -- | expresar la Tabla de Símbolos del proyecto, funciones y los distintos
 -- | bloques del mismo, el constructor es Rama, tiene una lista de Clave y
 -- | Símbolo, seguido de una (posible) Tabla de símbolos que es la Tabla padre
+
 data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
-              deriving (Show)
+              deriving (Eq, Show)
 
 -- | Definido con el constructor Sym y basado en 2 valores, el tipo y el valor
 -- | de la clave que apunta a ellos a través del Data.Map por el que llegamos
 -- | al mismo.
-data Symbol = Var VarType Exp
+data Symbol = Var VarType (Maybe Value)
             | Fun VarType SymTable [VarType] Instruc
-              deriving (Show)
+              deriving (Eq, Show)
+
+{-|
+   VarType hace referencia a cualquier tipo de Variable utilizada en Vectorinox
+-}
+data VarType = TNum
+             | TVec
+             | TMat
+             deriving (Eq, Show)
+
+data Value = Numero
+           | Matriz
+           deriving (Eq, Show)
+
 
 -- | @emptySymTable@
 emptySymTable :: SymTable

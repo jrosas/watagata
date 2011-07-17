@@ -10,16 +10,16 @@
  -}
 
 module AST (
-  Raiz(..),
-  FunDec(..),
-  VarType(..),
+ -- Raiz(..),
   Instruc(..),
   OptElse(..),
   Exp(..),
   BoolExp(..),
-
-
+--  Symbol(..),
+ -- FunDec(..),
+ -- VarType(..),
   ) where
+
 
 {-|
    Cualquier AST esta creado es creado por una ra&#237;z universal, la  cual  se
@@ -28,20 +28,17 @@ module AST (
    programa  principal) una  &#250;nica  (la cu&#225;l   puede  ser un bloque de
    instrucciones)
 -}
-data AST = Raiz
-data Raiz = Prog [FunDec] Instruc
-          deriving (Eq, Show)
-
+--data AST = Raiz
+--data Raiz = Instruc
+  --        deriving (Eq, Show)
+{-
 data FunDec = FuncDec Exp [(Exp,VarType)] VarType Instruc
             deriving (Eq, Show)
 
-{-|
-   VarType hace referencia a cualquier tipo de Variable utilizada en Vectorinox
+data FunDec = FuncDec Instruc
+            deriving (Eq, Show)
 -}
-data VarType = TNum
-             | TVec
-             | TMat
-             deriving (Eq, Show)
+
 
 {-|
    Cualquier  lenguaje  de programaci&#243;n tiene un conjunto de instrucciones
@@ -50,7 +47,7 @@ data VarType = TNum
    tipo /Instruc/ hace referencia a ese conjunto.
 -}
 data Instruc = Asign Exp Exp
-             | InsBlock [([Exp],VarType)] [Instruc]
+             | InsBlock [Instruc]
              | While BoolExp Instruc
              | Iter Exp Exp Instruc
              | Read Exp
