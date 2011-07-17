@@ -34,7 +34,7 @@ data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
 -- | de la clave que apunta a ellos a través del Data.Map por el que llegamos
 -- | al mismo.
 data Symbol = Var VarType Exp
-            | Fun VarType SymTable Instruc
+            | Fun VarType SymTable [VarType] Instruc
               deriving (Show)
 
 -- | @emptySymTable@
@@ -78,7 +78,7 @@ insert :: String   -- ^ Símbolo a insertar en la Tabla de Símbolos.
        -> SymTable -- ^ Tabla de Símbolos donde insertar.
        -> SymTable -- ^ Nueva Tabla de Símbolos después de la inserción.
 insert key symb (Rama fl st) = if Map.member key fl
-                               then error $ "Ya existe una variable con nombre "++key
+                               then error $ "Ya Existe variable con id "++key
                                else Rama (Map.insert key symb fl) st
 
 -- | @replace@ se encarga de sustituir el símbolo de una clave perteneciente a
