@@ -17,7 +17,7 @@ module SymTable (
    find,
    insert,
    replace,
-   update
+   isMember
    ) where
 
 import qualified Data.Map as Map
