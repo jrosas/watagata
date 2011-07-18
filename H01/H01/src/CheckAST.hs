@@ -253,7 +253,13 @@ checkE varTable funTable (ParAccessM  exp1 exp2 exp3 exp4 exp5) =  if ct == Noth
                                                                              pexp5 = numbers exp5
 
 {- Chequeo de  Booleanos -}
-{- Definicion de los Basicos: True y False -}
+{- Definicion de los B&#225;sicos: True y False -}
+{-|
+  @checkB@ se encarga de verificar si una expresi&#243;n booleana es 
+  v&#225;lida, en caso de utilizar funciones o variables, realiza las busquedas
+  correspondientes en las SymTables de cada una.
+-}
+checkB :: SymTable -> SymTable -> ASTBoolExp -> VarType
 checkB varTable funTable TRUE = TBool
 checkB varTable funTable FALSE = TBool
 
