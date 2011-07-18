@@ -8,24 +8,9 @@
 
   Grupo: H01
 
-  Se encarga de la verificación de la correctitud estática de un programa
-  escrito en Vectorinox, para garantizar que un programa esta bien, al menos
-  de manera estática se debe verificar:
-    * No pueden haber dos funciones con el mismo nombre, sin importar el número
-    de argumentos de éstos.
-    * No pueden haber dos declaraciones de variable con el mismo nombre en el
-    mismo bloque.
-    * No se puede hacer mención a variables o funciones no declaradas.
-    * Las llamadas a funciones corresponen a las firmas de las funciones
-    declaradas
-    * Las expresiones son compatibles en tipos a gran escala: que las
-    expresiones cumplan con las reglas de tipoimpuestas en el enunciado del
-    lenguaje.
-    * No pueden haber instrucciones de retorno de valores en el programa
-    principal.
-    * En una instrucción de iteración sobre un vector/matriz, la instrucción
-    interna no puede de ninguna forma alterar la variable indicada en la
-    instrucción.
+  Este Modulo Corresponde al Interpretador del Lenguaje Vectorinox
+  La función principal es runStatement que recibe el AST y la SymbTable
+  asociada
 
  -}
 
@@ -37,11 +22,37 @@ runStatement,
 import SymTable
 import AST
 
-runStatement :: ((SymTable,[FunDec]),Instruc) -> IO()
+{-|
+   La función runStatemet es el centro del Interpretador de los programas
+   escritos en Vectorinox, se vale del resultado generado por el lexer y
+   por el parser para generar los resultados correspondientes
+-}
+
+runStatement :: ((SymTable,[FunDec]),ASTInstruc) -> IO()
 runStatement ((a,b),c) = evalInst c
 
-evalInst ()
+{-|
+   La función evalInst es un auxiliar para la función runStatement,
+   tiene como objetivo evaluar las Instrucciones que conmponen el lenguaje
+   Vectorinox
+-}
+
+evalInst :: ASTInstruc -> IO()
+evalInst (Write [(Id str)]) = putStr str
+evalInst _ = putStr "Not implemented"
+
+{-|
+   La función evalExpression es un auxiliar para la función runStatement,
+   tiene como objetivo evaluar el resultado de las Expresiones que conmponen
+   el lenguaje Vectorinox
+   evalExpression :: ASTExp  -> IO()
+-}
 
 
-evalExpression
-evalBool
+
+{-|
+   La función evalBool es un auxiliar para la función runStatement,
+   tiene como objetivo evaluar el resultado de las ExpresionesBooleanas
+   que conmponen el lenguaje Vectorinox
+   evalBool :: ASTExp -> IO()
+-}
