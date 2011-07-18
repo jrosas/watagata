@@ -16,3 +16,11 @@
    Vectorinox,  en  este  caso  pasara por el /Analizador/  Lexicogr&#225;fico
    y Adem&#225;s se generara un  parser del mismo. Para mostrar asi al usuario
    los tokens del rograma o los errores del mismo.
+
+   Implementado:
+     * Etapa 3: 50%    Corrida/Ejecuci&#243;n de un programa en vecti
+     * Proyecto: 80%   Corrida/Ejecuci&#243;n de un programa en vecti
+
+   Comentario:
+     Se dejo de implementar m&#225;s para la entrega 3, por el hecho de que
+     debimos acomodar muchas cosas de la entrega anterior
