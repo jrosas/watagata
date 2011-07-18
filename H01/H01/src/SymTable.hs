@@ -15,12 +15,15 @@ module SymTable (
    Symbol(..),
    VarType(..),
    Value(..),
- 
    emptySymTable,
    find,
    insert,
    replace,
-   isMember
+   isMember,
+   isEmpty,
+   typeSymbol,
+   signSymbol,
+   setFather
    ) where
 
 import qualified Data.Map as Map
@@ -30,7 +33,6 @@ import qualified Data.Map as Map
 -- | expresar la Tabla de Símbolos del proyecto, funciones y los distintos
 -- | bloques del mismo, el constructor es Rama, tiene una lista de Clave y
 -- | Símbolo, seguido de una (posible) Tabla de símbolos que es la Tabla padre
-
 data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
               deriving (Eq, Show)
 
@@ -41,13 +43,14 @@ data Symbol = Var VarType (Maybe Value)
             | Fun VarType SymTable [VarType]
               deriving (Eq, Show)
 
-
 {-|
    VarType hace referencia a cualquier tipo de Variable utilizada en Vectorinox
 -}
 data VarType = TNum
              | TVec
              | TMat
+             | TBool
+             | TString
              deriving (Eq, Show)
 
 data Value = Numero
@@ -58,6 +61,16 @@ data Value = Numero
 -- | @emptySymTable@
 emptySymTable :: SymTable
 emptySymTable = Rama (Map.empty) Nothing
+
+-- | @isEmpty@
+isEmpty :: SymTable -> Bool
+isEmpty (Rama fl _) = Map.null fl
+
+-- | @setFather@
+setFather :: SymTable
+          -> Maybe SymTable
+          -> SymTable
+setFather (Rama x y) symTableFather = Rama x symTableFather
 
 -- | @find@ es la función que se encarga de devolvernos el símbolo, asociado
 -- | a la clave y tabla de símbolo del bloque al que pertenece, en algunos
@@ -96,8 +109,24 @@ insert :: String   -- ^ Símbolo a insertar en la Tabla de Símbolos.
        -> SymTable -- ^ Tabla de Símbolos donde insertar.
        -> SymTable -- ^ Nueva Tabla de Símbolos después de la inserción.
 insert key symb (Rama fl st) = if Map.member key fl
-                               then error $ "Ya Existe variable con id "++key
+                               then mensaje key symb
                                else Rama (Map.insert key symb fl) st
+
+mensaje :: String
+        -> Symbol
+        -> SymTable
+mensaje key (Var _ _) = error $ "Error: La variable \""++key++"\" ya fue declarada"
+mensaje key (Fun _ _ _) = error $ "Error: La funcion \""++key++"\" ya fue declarada"
+
+typeSymbol :: Symbol
+         -> VarType
+typeSymbol (Var typeVar _) = typeVar
+typeSymbol (Fun typeFun _ _) = typeFun
+
+signSymbol :: Symbol
+         -> [VarType]
+signSymbol (Var _ _) = []
+signSymbol (Fun _ _ elemCall) = elemCall
 
 -- | @replace@ se encarga de sustituir el símbolo de una clave perteneciente a
 -- | la tabla de símbolos que le es suministrada.

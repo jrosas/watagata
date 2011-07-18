@@ -1,22 +1,22 @@
-##################################################################################
-#                                                                                #
-# Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 2)                 #   
-# Proyecto: Analizador Lexicogr#225fico en Haskell                               #   
-# Materia: Taller de Traductores (CI-3725)                                       #
-# Trimestre: Abril-Julio 2011                                                    #
-# Profesor: Carlos Colmenares                                                    #
-#                                                                                #
-# Grupo: H01                                                                     #
-#                                                                                #
-##################################################################################
+################################################################################
+#                                                                              #
+# Asunto: C&#243;digo fuente del Proyecto &#250;nico (Entrega 3)               #
+# Proyecto: Analizador Lexicogr#225fico en Haskell                             #
+# Materia: Taller de Traductores (CI-3725)                                     #
+# Trimestre: Abril-Julio 2011                                                  #
+# Profesor: Carlos Colmenares                                                  #
+#                                                                              #
+# Grupo: H01                                                                   #
+#                                                                              #
+################################################################################
 
    Este  programa  se encarga  de  obtener los argumentos suministrados por el
    usuario, sea un archivo o una l&#237;nea de comandos, para encargarse luego
-   procesar  el programa  obtenido por  los disntitos componentes del Lenguaje 
-   Vectorinox,  en  este  caso  pasara por el /Analizador/  Lexicogr&#225;fico 
-   y Adem&#225;s se generara un  parser del mismo. Para mostrar asi al usuario 
+   procesar  el programa  obtenido por  los disntitos componentes del Lenguaje
+   Vectorinox,  en  este  caso  pasara por el /Analizador/  Lexicogr&#225;fico
+   y Adem&#225;s se generara un  parser del mismo. Para mostrar asi al usuario
    los tokens del rograma o los errores del mismo.
 
    Implementaci&#243;n : 90% Aproximadamente
-   
-   Falto: 10% Tabla de S&#237;mbolos   
+
+   Falto: 10% Tabla de S&#237;mbolos

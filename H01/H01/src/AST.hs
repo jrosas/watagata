@@ -11,10 +11,10 @@
 
 module AST (
  -- Raiz(..),
-  Instruc(..),
+  ASTInstruc(..),
   OptElse(..),
-  Exp(..),
-  BoolExp(..),
+  ASTExp(..),
+  ASTBoolExp(..),
 --  Symbol(..),
   FunDec(..),
  -- VarType(..),
@@ -28,32 +28,24 @@ import SymTable
    programa  principal) una  &#250;nica  (la cu&#225;l   puede  ser un bloque de
    instrucciones)
 -}
---data AST = Raiz
---data Raiz = Instruc
-  --        deriving (Eq, Show)
-{-
-data FunDec = FuncDec Exp [(Exp,VarType)] VarType Instruc
-            deriving (Eq, Show)
--}
-data FunDec = FunDec String Instruc
-            deriving (Eq, Show)
 
-
+data FunDec = FunDec String ASTInstruc
+            deriving (Eq, Show)
 
 {-|
    Cualquier  lenguaje  de programaci&#243;n tiene un conjunto de instrucciones
    b&#225;sicas, m&#237;nimas  suficientes para que el lenguaje sea usable o en
    el mejor de los casos &#243;ptimo. Vectorinox no es la excepci&#243;n y este
-   tipo /Instruc/ hace referencia a ese conjunto.
+   tipo /ASTInstruc/ hace referencia a ese conjunto.
 -}
-data Instruc = Asign Exp Exp
-             | InsBlock SymTable [Instruc]
-             | While BoolExp Instruc
-             | Iter Exp Exp Instruc
-             | Read Exp
-             | Write [Exp]
-             | Return Exp
-             | Cond BoolExp Instruc (Maybe OptElse)
+data ASTInstruc = Asign ASTExp ASTExp
+             | InsBlock SymTable [ASTInstruc]
+             | While ASTBoolExp ASTInstruc
+             | Iter ASTExp ASTExp ASTInstruc
+             | Read ASTExp
+             | Write [ASTExp]
+             | Return ASTExp
+             | Cond ASTBoolExp ASTInstruc (Maybe OptElse)
              deriving (Eq, Show)
 
 {-|
@@ -61,7 +53,7 @@ data Instruc = Asign Exp Exp
   consigue esta instrucci&#243;n, este dato se encarga de hacer posible la
   opci&#243;n else en esta implementaci&#243;n
 -}
-data OptElse = Else Instruc
+data OptElse = Else ASTInstruc
              deriving (Eq, Show)
 
 {-|
@@ -73,27 +65,27 @@ data OptElse = Else Instruc
    Adem&#225;s de multiplicaci&#243;n de ma&#237;trices o vectores por Reales
    y se puede asignar nombre para los Reales, Vectores y Matrices
 -}
-data Exp = Num Double
+data ASTExp = Num Double
          | Id String
          | Chars String
-         | Plus Exp Exp
-         | Minus Exp Exp
-         | Times Exp Exp
-         | Div Exp Exp
-         | Mod Exp Exp
-         | Expo Exp Exp
-         | Dot Exp Exp
-         | MinusU Exp
-         | Caret Exp
-         | DS Exp
-         | RB Exp
-         | At Exp
-         | Matrix [[Exp]]
-         | AccessElemV Exp Exp
-         | AccessElemM Exp Exp Exp
-         | ParAccessV  Exp (Maybe Exp) (Maybe Exp)
-         | ParAccessM  Exp (Maybe Exp) (Maybe Exp) (Maybe Exp) (Maybe Exp)
-         | Func String [Exp]
+         | Plus ASTExp ASTExp
+         | Minus ASTExp ASTExp
+         | Times ASTExp ASTExp
+         | Div ASTExp ASTExp
+         | Mod ASTExp ASTExp
+         | Expo ASTExp ASTExp
+         | Dot ASTExp ASTExp
+         | MinusU ASTExp
+         | Caret ASTExp
+         | DS ASTExp
+         | RB ASTExp
+         | At ASTExp
+         | Matrix [[ASTExp]]
+         | AccessElemV ASTExp ASTExp
+         | AccessElemM ASTExp ASTExp ASTExp
+         | ParAccessV  ASTExp (Maybe ASTExp) (Maybe ASTExp)
+         | ParAccessM  ASTExp (Maybe ASTExp) (Maybe ASTExp) (Maybe ASTExp) (Maybe ASTExp)
+         | Func String [ASTExp]
          deriving (Eq, Show)
 
 {-
@@ -103,18 +95,18 @@ data Exp = Num Double
    Comparacion de numeros: menor (o igual), mayor (o igual),
    igual o desigualdad.
 -}
-data BoolExp = TRUE
+data ASTBoolExp = TRUE
              | FALSE
-             | Less Exp Exp
-             | Great Exp Exp
-             | LET Exp Exp
-             | GET Exp Exp
-             | Equal Exp Exp
-             | NEqual Exp Exp
-             | And BoolExp BoolExp
-             | Or BoolExp BoolExp
-             | BoolEqual BoolExp BoolExp
-             | BoolRB BoolExp
-             | Not BoolExp
+             | Less ASTExp ASTExp
+             | Great ASTExp ASTExp
+             | LET ASTExp ASTExp
+             | GET ASTExp ASTExp
+             | Equal ASTExp ASTExp
+             | NEqual ASTExp ASTExp
+             | And ASTBoolExp ASTBoolExp
+             | Or ASTBoolExp ASTBoolExp
+             | BoolEqual ASTBoolExp ASTBoolExp
+             | BoolRB ASTBoolExp
+             | Not ASTBoolExp
                --          | OnceA String Bool
              deriving (Eq, Show)

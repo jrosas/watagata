@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Funaux</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Funaux.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+></TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Funaux</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Description</TD
+></TR
+><TR
+><TD CLASS="doc"
+><P
+>Asunto: C&#xf3;digo fuente del Proyecto &#xfa;nico (Entrega 3)
+   Proyecto: Analizador Lexicogr&#xe1;fico en Haskell
+   Materia: Taller de Traductores (CI-3725)
+   Trimestre: Abril-Julio 2011
+   Profesor: Carlos Colmenares
+</P
+><P
+>Grupo: H01
+</P
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType"
+><A NAME="v%3AcheckType"
+></A
+></A
+><B
+>checkType</B
+> :: <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkTypeNum"
+><A NAME="v%3AcheckTypeNum"
+></A
+></A
+><B
+>checkTypeNum</B
+> :: [<A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+>] -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkTypeList"
+><A NAME="v%3AcheckTypeList"
+></A
+></A
+><B
+>checkTypeList</B
+> :: [<A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+>] -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkTypeLists"
+><A NAME="v%3AcheckTypeLists"
+></A
+></A
+><B
+>checkTypeLists</B
+> :: Eq t =&gt; [t] -&gt; [t] -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType1"
+><A NAME="v%3AcheckType1"
+></A
+></A
+><B
+>checkType1</B
+> :: <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType2"
+><A NAME="v%3AcheckType2"
+></A
+></A
+><B
+>checkType2</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType3"
+><A NAME="v%3AcheckType3"
+></A
+></A
+><B
+>checkType3</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType4"
+><A NAME="v%3AcheckType4"
+></A
+></A
+><B
+>checkType4</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkType6"
+><A NAME="v%3AcheckType6"
+></A
+></A
+><B
+>checkType6</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkBool2"
+><A NAME="v%3AcheckBool2"
+></A
+></A
+><B
+>checkBool2</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkBool3"
+><A NAME="v%3AcheckBool3"
+></A
+></A
+><B
+>checkBool3</B
+> :: [Char] -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+> -&gt; Maybe <A HREF="SymTable.html#t%3AVarType"
+>VarType</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:checkIter"
+><A NAME="v%3AcheckIter"
+></A
+></A
+><B
+>checkIter</B
+> :: <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> -&gt; <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+> -&gt; Bool</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.6.0</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>

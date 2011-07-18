@@ -1,0 +1,1467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>AST</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_AST.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+></TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>AST</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Description</TD
+></TR
+><TR
+><TD CLASS="doc"
+><P
+>Asunto: C&#xf3;digo fuente del Proyecto &#xfa;nico (Entrega 3)
+   Proyecto: Analizador Lexicogr&#xe1;fico en Haskell
+   Materia: Taller de Traductores (CI-3725)
+   Trimestre: Abril-Julio 2011
+   Profesor: Carlos Colmenares
+</P
+><P
+>Grupo: H01
+</P
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Synopsis</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AASTInstruc"
+>ASTInstruc</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AAsign"
+>Asign</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AInsBlock"
+>InsBlock</A
+> <A HREF="SymTable.html#t%3ASymTable"
+>SymTable</A
+> [<A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+>]</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AWhile"
+>While</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AIter"
+>Iter</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ARead"
+>Read</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AWrite"
+>Write</A
+> [<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AReturn"
+>Return</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ACond"
+>Cond</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+> (Maybe <A HREF="AST.html#t%3AOptElse"
+>OptElse</A
+>)</TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AOptElse"
+>OptElse</A
+>  = <A HREF="#v%3AElse"
+>Else</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AASTExp"
+>ASTExp</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3ANum"
+>Num</A
+> Double</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AId"
+>Id</A
+> String</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AChars"
+>Chars</A
+> String</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3APlus"
+>Plus</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AMinus"
+>Minus</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ATimes"
+>Times</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ADiv"
+>Div</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AMod"
+>Mod</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AExpo"
+>Expo</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ADot"
+>Dot</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AMinusU"
+>MinusU</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ACaret"
+>Caret</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ADS"
+>DS</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ARB"
+>RB</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AAt"
+>At</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AMatrix"
+>Matrix</A
+> [[<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]]</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AAccessElemV"
+>AccessElemV</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AAccessElemM"
+>AccessElemM</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AParAccessV"
+>ParAccessV</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AParAccessM"
+>ParAccessM</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AFunc"
+>Func</A
+> String [<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]</TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AASTBoolExp"
+>ASTBoolExp</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3ATRUE"
+>TRUE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AFALSE"
+>FALSE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ALess"
+>Less</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AGreat"
+>Great</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ALET"
+>LET</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AGET"
+>GET</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEqual"
+>Equal</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ANEqual"
+>NEqual</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AAnd"
+>And</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOr"
+>Or</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ABoolEqual"
+>BoolEqual</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ABoolRB"
+>BoolRB</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3ANot"
+>Not</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AFunDec"
+>FunDec</A
+>  = <A HREF="#v%3AFunDec"
+>FunDec</A
+> String <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:ASTInstruc"
+><A NAME="t%3AASTInstruc"
+></A
+></A
+><B
+>ASTInstruc</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Cualquier  lenguaje  de programaci&#xf3;n tiene un conjunto de instrucciones
+   b&#xe1;sicas, m&#xed;nimas  suficientes para que el lenguaje sea usable o en
+   el mejor de los casos &#xf3;ptimo. Vectorinox no es la excepci&#xf3;n y este
+   tipo <EM
+>ASTInstruc</EM
+> hace referencia a ese conjunto.
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:Asign"
+><A NAME="v%3AAsign"
+></A
+></A
+><B
+>Asign</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:InsBlock"
+><A NAME="v%3AInsBlock"
+></A
+></A
+><B
+>InsBlock</B
+> <A HREF="SymTable.html#t%3ASymTable"
+>SymTable</A
+> [<A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+>]</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:While"
+><A NAME="v%3AWhile"
+></A
+></A
+><B
+>While</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Iter"
+><A NAME="v%3AIter"
+></A
+></A
+><B
+>Iter</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Read"
+><A NAME="v%3ARead"
+></A
+></A
+><B
+>Read</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Write"
+><A NAME="v%3AWrite"
+></A
+></A
+><B
+>Write</B
+> [<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Return"
+><A NAME="v%3AReturn"
+></A
+></A
+><B
+>Return</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Cond"
+><A NAME="v%3ACond"
+></A
+></A
+><B
+>Cond</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+> (Maybe <A HREF="AST.html#t%3AOptElse"
+>OptElse</A
+>)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:OptElse"
+><A NAME="t%3AOptElse"
+></A
+></A
+><B
+>OptElse</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>En muchos lenguajes podemos observar el if-else, en Vectorinox tambi&#xe9;n se
+  consigue esta instrucci&#xf3;n, este dato se encarga de hacer posible la
+  opci&#xf3;n else en esta implementaci&#xf3;n
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:Else"
+><A NAME="v%3AElse"
+></A
+></A
+><B
+>Else</B
+> <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:ASTExp"
+><A NAME="t%3AASTExp"
+></A
+></A
+><B
+>ASTExp</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>En  Vectorinox  se  permite una  gran cantidad  de  instrucciones, las cuales
+   a nivel de manejo son todas expresiones, pero para el usuario se presentan :
+   Reales (Suma, Resta, Multiplicaci&#xf3;n, Divisi&#xf3;n, Exponenciaci&#xf3;n)
+   Vectores (Suma, Resta, Producto cruz y punto, acceso a elemento)
+   Matriz (Suma y Resta, adem&#xe1;s n&#xfa;mero de filas y columna)
+   Adem&#xe1;s de multiplicaci&#xf3;n de ma&#xed;trices o vectores por Reales
+   y se puede asignar nombre para los Reales, Vectores y Matrices
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:Num"
+><A NAME="v%3ANum"
+></A
+></A
+><B
+>Num</B
+> Double</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Id"
+><A NAME="v%3AId"
+></A
+></A
+><B
+>Id</B
+> String</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Chars"
+><A NAME="v%3AChars"
+></A
+></A
+><B
+>Chars</B
+> String</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Plus"
+><A NAME="v%3APlus"
+></A
+></A
+><B
+>Plus</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Minus"
+><A NAME="v%3AMinus"
+></A
+></A
+><B
+>Minus</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Times"
+><A NAME="v%3ATimes"
+></A
+></A
+><B
+>Times</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Div"
+><A NAME="v%3ADiv"
+></A
+></A
+><B
+>Div</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Mod"
+><A NAME="v%3AMod"
+></A
+></A
+><B
+>Mod</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Expo"
+><A NAME="v%3AExpo"
+></A
+></A
+><B
+>Expo</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Dot"
+><A NAME="v%3ADot"
+></A
+></A
+><B
+>Dot</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:MinusU"
+><A NAME="v%3AMinusU"
+></A
+></A
+><B
+>MinusU</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Caret"
+><A NAME="v%3ACaret"
+></A
+></A
+><B
+>Caret</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:DS"
+><A NAME="v%3ADS"
+></A
+></A
+><B
+>DS</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:RB"
+><A NAME="v%3ARB"
+></A
+></A
+><B
+>RB</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:At"
+><A NAME="v%3AAt"
+></A
+></A
+><B
+>At</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Matrix"
+><A NAME="v%3AMatrix"
+></A
+></A
+><B
+>Matrix</B
+> [[<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]]</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:AccessElemV"
+><A NAME="v%3AAccessElemV"
+></A
+></A
+><B
+>AccessElemV</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:AccessElemM"
+><A NAME="v%3AAccessElemM"
+></A
+></A
+><B
+>AccessElemM</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:ParAccessV"
+><A NAME="v%3AParAccessV"
+></A
+></A
+><B
+>ParAccessV</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:ParAccessM"
+><A NAME="v%3AParAccessM"
+></A
+></A
+><B
+>ParAccessM</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>) (Maybe <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Func"
+><A NAME="v%3AFunc"
+></A
+></A
+><B
+>Func</B
+> String [<A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+>]</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:ASTBoolExp"
+><A NAME="t%3AASTBoolExp"
+></A
+></A
+><B
+>ASTBoolExp</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:TRUE"
+><A NAME="v%3ATRUE"
+></A
+></A
+><B
+>TRUE</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:FALSE"
+><A NAME="v%3AFALSE"
+></A
+></A
+><B
+>FALSE</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Less"
+><A NAME="v%3ALess"
+></A
+></A
+><B
+>Less</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Great"
+><A NAME="v%3AGreat"
+></A
+></A
+><B
+>Great</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:LET"
+><A NAME="v%3ALET"
+></A
+></A
+><B
+>LET</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:GET"
+><A NAME="v%3AGET"
+></A
+></A
+><B
+>GET</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Equal"
+><A NAME="v%3AEqual"
+></A
+></A
+><B
+>Equal</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:NEqual"
+><A NAME="v%3ANEqual"
+></A
+></A
+><B
+>NEqual</B
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+> <A HREF="AST.html#t%3AASTExp"
+>ASTExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:And"
+><A NAME="v%3AAnd"
+></A
+></A
+><B
+>And</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Or"
+><A NAME="v%3AOr"
+></A
+></A
+><B
+>Or</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:BoolEqual"
+><A NAME="v%3ABoolEqual"
+></A
+></A
+><B
+>BoolEqual</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:BoolRB"
+><A NAME="v%3ABoolRB"
+></A
+></A
+><B
+>BoolRB</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v:Not"
+><A NAME="v%3ANot"
+></A
+></A
+><B
+>Not</B
+> <A HREF="AST.html#t%3AASTBoolExp"
+>ASTBoolExp</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:FunDec"
+><A NAME="t%3AFunDec"
+></A
+></A
+><B
+>FunDec</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Cualquier AST esta creado es creado por una ra&#xed;z universal, la  cual  se
+   subdivide  en Prog [FunDec]  (el cu&#xe1;l  puede llegar  a ser nulo,  y hace
+   referencia  a la lista de funciones  auxiliares declaradas antes de llamar al
+   programa  principal) una  &#xfa;nica  (la cu&#xe1;l   puede  ser un bloque de
+   instrucciones)
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:FunDec"
+><A NAME="v%3AFunDec"
+></A
+></A
+><B
+>FunDec</B
+> String <A HREF="AST.html#t%3AASTInstruc"
+>ASTInstruc</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.6.0</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>
