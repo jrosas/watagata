@@ -8,14 +8,14 @@
 
   Grupo: H01
 
-  Se encarga de la verificación de la correctitud estática de un programa
+  Se encarga de la verificaci&#243;n de la correctitud est&#225;tica de un programa
   escrito en Vectorinox, para garantizar que un programa esta bien, al menos
-  de manera estática se debe verificar:
-    * No pueden haber dos funciones con el mismo nombre, sin importar el número
-    de argumentos de éstos.
+  de manera est&#225;tica se debe verificar:
+    * No pueden haber dos funciones con el mismo nombre, sin importar el n&#250;mero
+    de argumentos de &#233;stos.
     * No pueden haber dos declaraciones de variable con el mismo nombre en el
     mismo bloque.
-    * No se puede hacer mención a variables o funciones no declaradas.
+    * No se puede hacer menci&#243;n a variables o funciones no declaradas.
     * Las llamadas a funciones corresponen a las firmas de las funciones
     declaradas
     * Las expresiones son compatibles en tipos a gran escala: que las
@@ -23,9 +23,9 @@
     lenguaje.
     * No pueden haber instrucciones de retorno de valores en el programa
     principal.
-    * En una instrucción de iteración sobre un vector/matriz, la instrucción
+    * En una instrucci&#243;n de iteraci&#243;n sobre un vector/matriz, la instrucci&#243;n
     interna no puede de ninguna forma alterar la variable indicada en la
-    instrucción.
+    instrucci&#243;n.
 
  -}
 
@@ -41,7 +41,7 @@ import AST
 import Funaux
 
 {-|
-  @CheckAST@ es la función, que se pidio para esta entrega, y el chequeo de la
+  @CheckAST@ es la funci&#243;n, que se pidio para esta entrega, y el chequeo de la
   parte estatica, del programa Vectorinox,
 -}
 checkAST :: ((SymTable, [FunDec]), ASTInstruc) -> Bool
@@ -50,7 +50,7 @@ checkAST ((funTable,funList),ins) = (and (map (\(a,b)->checkI 1 ((\(Fun a x c)->
 {-|
   Check de instrucciones del programa vectorinox, se encarga de verificar si las
   instrucciones han sido bien escritas, las expresiones de las mismas son
-  válidas, si se llama a return dentro del main o no y la correctitud de los
+  v&#225;lidas, si se llama a return dentro del main o no y la correctitud de los
   bloques de instrucciones del for each
 -}
 {- Chequeo de los ASTInstruc "Asign"/ Asignaciones -}
@@ -58,7 +58,7 @@ checkI :: (Num a) => a -> SymTable -> SymTable -> ASTInstruc -> Bool
 checkI nDec varTable funTable (Asign exp1 exp2)      =
     if checkType (checkE varTable funTable exp1) (checkE varTable funTable exp2)
     then True
-    else mensajeOp2 " Asign " exp1 exp2
+    else messageOp2 " Asign " exp1 exp2
 
 {- Chequeo de los ASTInstruc "Write" / Mostrar por Pantalla-}
 checkI nDec varTable funTable (Write exps)           =
@@ -109,7 +109,7 @@ checkI nDec varTable funTable (InsBlock symt ins)         =
         where newST = (setFather symt (Just varTable))
 
 {-|
-  @checkE@ se encarga de verificar si una expresión es válida,
+  @checkE@ se encarga de verificar si una expresi&#243;n es v&#225;lida,
   en caso de utilizar funciones o variables, realiza las busquedas
   correspondientes en las SymTables de cada una.
 -}
@@ -119,7 +119,7 @@ checkE varTable funTable (Num _)    = TNum
 
 {- Chequeo de Definicion de ASTExp Id / Variable -}
 checkE varTable funTable (Id name)  = if elemento == Nothing
-                                      then mensajeND " Variable " name
+                                      then messageND " Variable " name
                                       else SymTable.typeSymbol $ (\(Just x) -> x) elemento
                                           where elemento = (SymTable.find name varTable)
 
@@ -129,114 +129,114 @@ checkE varTable funTable (Chars _)  = TString
 {- Definicion de Matriz/Vector -}
 checkE varTable funTable (Matrix exps)     = if elemento
                                              then TMat
-                                             else mensajeBM " Matrix Elements " exps
+                                             else messageBM " Matrix Elements " exps
                                                  where elemento = checkTypeNum (concat (map (map (checkE varTable funTable)) exps))
 
 {- Chequeo de Definicion de Funciones -}
 checkE varTable funTable (Func embebed exps) | embebed == "range" = if checkTypeNum (map (checkE varTable funTable) exps) then TVec
-                                                                    else mensajeBC embebed exps
+                                                                    else messageBC embebed exps
                                              | embebed == "eye" = if checkTypeNum (map (checkE varTable funTable) exps) then TVec
-                                                                    else mensajeBC embebed exps
+                                                                    else messageBC embebed exps
                                              | embebed == "zeroes" = if checkTypeNum (map (checkE varTable funTable) exps) 
                                                                      then if (length exps== 1)
                                                                           then TVec
                                                                           else TMat
-                                                                     else mensajeBC embebed exps
+                                                                     else messageBC embebed exps
 {- Chequeo de Llamada de Funciones -}
 checkE varTable funTable (Func name exps)  = if SymTable.isMember name funTable
                                              then if (checkTypeLists (SymTable.signSymbol elemento) (map (checkE varTable funTable) exps))
                                                   then (SymTable.typeSymbol elemento)
-                                                  else mensajeBC name exps
-                                             else mensajeND " Function " name
+                                                  else messageBC name exps
+                                             else messageND " Function " name
                                                   where elemento = (\(Just x) -> x) (SymTable.find name funTable)
 
 {- Chequeo de Parentesis -}
 checkE varTable funTable (RB exp)          = if ct == Nothing
-                                             then mensajeBM " \"()\" - Round Bracket " exp
+                                             then messageBM " \"()\" - Round Bracket " exp
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType2 "RB" (checkE varTable funTable exp)
 {-Chequeo de Operaciones de Aritmeticas -}
 {- Suma -}
 checkE varTable funTable (Plus exp1 exp2) = if ct == Nothing
-                                            then mensajeOp2 "Plus" exp1 exp2
+                                            then messageOp2 "Plus" exp1 exp2
                                             else (\(Just x) -> x) ct
                                                 where ct = checkType3 "Plus" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Resta -}
 checkE varTable funTable (Minus exp1 exp2) = if ct == Nothing
-                                             then mensajeOp2 "Minus" exp1 exp2
+                                             then messageOp2 "Minus" exp1 exp2
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType3 "Minus" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Multiplicacion -}
 checkE varTable funTable (Times exp1 exp2) = if ct == Nothing
-                                             then mensajeOp2 "Times" exp1 exp2
+                                             then messageOp2 "Times" exp1 exp2
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType3 "Times" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Division -}
 checkE varTable funTable (Div exp1 exp2) = if ct == Nothing
-                                           then mensajeOp2 "Division" exp1 exp2
+                                           then messageOp2 "Division" exp1 exp2
                                            else (\(Just x) -> x) ct
                                                where ct = checkType3 "Div" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Modulo -}
 checkE varTable funTable (Mod exp1 exp2) = if ct == Nothing
-                                           then mensajeOp2 "Module" exp1 exp2
+                                           then messageOp2 "Module" exp1 exp2
                                            else (\(Just x) -> x) ct
                                                where ct = checkType3 "Mod" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Exponenciacion -}
 checkE varTable funTable (Expo exp1 exp2) = if ct == Nothing
-                                            then mensajeOp2 "Exponentiation" exp1 exp2
+                                            then messageOp2 "Exponentiation" exp1 exp2
                                             else (\(Just x) -> x) ct
                                                 where ct = checkType3 "Expo" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Producto Punto -}
 checkE varTable funTable (Dot exp1 exp2) = if ct == Nothing
-                                           then mensajeOp2 "Dot Product" exp1 exp2
+                                           then messageOp2 "Dot Product" exp1 exp2
                                            else (\(Just x) -> x) ct
                                                where ct = checkType3 "Dot" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Traspuesta -}
 checkE varTable funTable (Caret exp)         = if ct == Nothing
-                                               then mensajeBM " \"^\" - Caret " exp
+                                               then messageBM " \"^\" - Caret " exp
                                                else (\(Just x) -> x) ct
                                                    where ct = checkType2 "Caret" (checkE varTable funTable exp)
 
 {- Numero de Columnas-}
 checkE varTable funTable (DS exp)         = if ct == Nothing
-                                            then mensajeBM " \"$\" - Dollar Sign " exp
+                                            then messageBM " \"$\" - Dollar Sign " exp
                                             else (\(Just x) -> x) ct
                                                 where ct = checkType2 "DS" (checkE varTable funTable exp)
 
 {- Numero de De Filas -}
 checkE varTable funTable (At exp)         = if ct == Nothing
-                                            then mensajeBM " \"@\" - At " exp
+                                            then messageBM " \"@\" - At " exp
                                             else (\(Just x) -> x) ct
                                                 where ct = checkType2 "At" (checkE varTable funTable exp)
 
 {- Negacion, o Negativo de los Numeros -}
 checkE varTable funTable (MinusU exp)     = if ct == Nothing
-                                            then mensajeBM " \"-\" - Negative " exp
+                                            then messageBM " \"-\" - Negative " exp
                                             else (\(Just x) -> x) ct
                                                 where ct = checkType2 "MinusU" (checkE varTable funTable exp)
 
 {- Acceso a un Elemento de Vector -}
 checkE varTable funTable (AccessElemV exp1 exp2)  =  if ct == Nothing
-                                                     then mensajeAM exp1
+                                                     then messageAM exp1
                                                      else (\(Just x) -> x) ct
                                                          where ct = checkType3 "AccessElemV" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Acceso a un Elemento de Matriz -}
 checkE varTable funTable (AccessElemM exp1 exp2 exp3) =  if ct == Nothing
-                                                         then mensajeAM exp1
+                                                         then messageAM exp1
                                                          else (\(Just x) -> x) ct
                                                              where ct = checkType4 "AccessElemV" (checkE varTable funTable exp1) (checkE varTable funTable exp2) (checkE varTable funTable exp3)
 
 {- Acceso Parcial a un Vector -}
 checkE varTable funTable (ParAccessV  exp1 exp2 exp3) =  if ct == Nothing
-                                                         then mensajeAM exp1
+                                                         then messageAM exp1
                                                          else (\(Just x) -> x) ct
                                                              where ct = checkType4 "ParAccessElemV" (checkE varTable funTable exp1) (checkE varTable funTable pexp2) (checkE varTable funTable pexp3)
                                                                    pexp2 = numbers exp2
@@ -244,7 +244,7 @@ checkE varTable funTable (ParAccessV  exp1 exp2 exp3) =  if ct == Nothing
 
 {- Acceso Parcial a una Matriz -}
 checkE varTable funTable (ParAccessM  exp1 exp2 exp3 exp4 exp5) =  if ct == Nothing
-                                                                   then mensajeAM exp1
+                                                                   then messageAM exp1
                                                                    else (\(Just x) -> x) ct
                                                                        where ct = checkType6 "AccessElemM" (checkE varTable funTable exp1) (checkE varTable funTable pexp2) (checkE varTable funTable pexp3) (checkE varTable funTable pexp4) (checkE varTable funTable pexp5)
                                                                              pexp2 = numbers exp2
@@ -259,116 +259,116 @@ checkB varTable funTable FALSE = TBool
 
 {-  Menor que -}
 checkB varTable funTable (Less exp1 exp2)  = if ct == Nothing
-                                             then mensajeBB " \"<\"/ Less " exp1 exp2
+                                             then messageBB " \"<\"/ Less " exp1 exp2
                                              else (\(Just x) -> x) ct
                                                  where ct = checkBool3 "Less" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Mayor que -}
 checkB varTable funTable (Great exp1 exp2)  = if ct == Nothing
-                                              then mensajeBB " \">\"/  Great  " exp1 exp2
+                                              then messageBB " \">\"/  Great  " exp1 exp2
                                               else (\(Just x) -> x) ct
                                                   where ct = checkBool3 "" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Menor o Igual que -}
 checkB varTable funTable (LET exp1 exp2)  = if ct == Nothing
-                                            then mensajeBB " \"<=\" / Less Equal Than " exp1 exp2
+                                            then messageBB " \"<=\" / Less Equal Than " exp1 exp2
                                             else (\(Just x) -> x) ct
                                                 where ct = checkBool3 "" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Mayor o Igual que -}
 checkB varTable funTable (GET exp1 exp2)  = if ct == Nothing
-                                            then mensajeBB " \">=\" / Great Equal Than " exp1 exp2
+                                            then messageBB " \">=\" / Great Equal Than " exp1 exp2
                                             else (\(Just x) -> x) ct
                                                 where ct = checkBool3 "GET" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Igualdad de Numeros reales  -}
 checkB varTable funTable (Equal exp1 exp2)  = if ct == Nothing
-                                              then mensajeBB " \"=\" / Equal  " exp1 exp2
+                                              then messageBB " \"=\" / Equal  " exp1 exp2
                                               else (\(Just x) -> x) ct
                                                   where ct = checkBool3 "Equal" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 
 {- Desigualdad de Numeros reales -}
 checkB varTable funTable (NEqual exp1 exp2)  = if ct == Nothing
-                                               then mensajeBB " \"!=\" / Not Equal  " exp1 exp2
+                                               then messageBB " \"!=\" / Not Equal  " exp1 exp2
                                                else (\(Just x) -> x) ct
                                                    where ct = checkBool3 "NEqual" (checkE varTable funTable exp1) (checkE varTable funTable exp2)
 {- Operacion Booleana Y -}
 checkB varTable funTable (And exp1 exp2)  = if ct == Nothing
-                                            then mensajeBB " \"&&\" / And  " exp1 exp2
+                                            then messageBB " \"&&\" / And  " exp1 exp2
                                             else (\(Just x) -> x) ct
                                                 where ct = checkBool3 "And" (checkB varTable funTable exp1) (checkB varTable funTable exp2)
 
 {- Operacion Booleana O -}
 checkB varTable funTable (Or exp1 exp2)  = if ct == Nothing
-                                           then mensajeBB " \"||\" / Or  " exp1 exp2
+                                           then messageBB " \"||\" / Or  " exp1 exp2
                                            else (\(Just x) -> x) ct
                                                where ct = checkBool3 "Or" (checkB varTable funTable exp1) (checkB varTable funTable exp2)
 
 {- Operacion Igualdad de Booleanos -}
 checkB varTable funTable (BoolEqual exp1 exp2)  = if ct == Nothing
-                                                  then mensajeBB " \"=\" / Equal of Booleans  " exp1 exp2
+                                                  then messageBB " \"=\" / Equal of Booleans  " exp1 exp2
                                                   else (\(Just x) -> x) ct
                                                       where ct = checkBool3 "BoolEqual" (checkB varTable funTable exp1) (checkB varTable funTable exp2)
 
 {- Parentesis Booleanos -}
 checkB varTable funTable (BoolRB exp)         = if ct == Nothing
-                                                then mensajeBM " \"-\" - Round Bracket  " exp
+                                                then messageBM " \"-\" - Round Bracket  " exp
                                                 else (\(Just x) -> x) ct
                                                     where ct = checkType2 "BoolRB" (checkB varTable funTable exp)
 
 {- Negacion -}
 checkB varTable funTable (Not exp)         = if ct == Nothing
-                                             then mensajeBM " \"-\" - Negative  " exp
+                                             then messageBM " \"-\" - Negative  " exp
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType2 "Not" (checkB varTable funTable exp)
 
 
 {-
    Manejador de errores
-   Para checkAST se creo un manejador de errores en base a varios mensajes de
-   error, si los errores son de expresión, mientras que para las instrucciones
-   no se podia manejar de manera tan generica, a continuación los mensajes de
+   Para checkAST se creo un manejador de errores en base a varios mensaje de
+   error, si los errores son de expresi&#243;n, mientras que para las instrucciones
+   no se podia manejar de manera tan generica, a continuaci&#243;n los mensaje de
    error que podria manejar el programa
  -}
 {-|
-   @mensajeOp2@ se utiliza para mostrar un mensaje de error, en el uso de
+   @messageOp2@ se utiliza para mostrar un mensaje de error, en el uso de
    operadores y 2 expresiones
 -}
-mensajeOp2 :: String -> ASTExp -> ASTExp -> error
-mensajeOp2 op exp1 exp2 = error $ "Error: Can not do  \""++op++"\" of "++(show exp1)++" and "++(show exp2)
+messageOp2 :: String -> ASTExp -> ASTExp -> error
+messageOp2 op exp1 exp2 = error $ "Error: Can not do  \""++op++"\" of "++(show exp1)++" and "++(show exp2)
 
 {-|
-  @mensajeND@ Se encarga de mostrar si una variable o funcion (el primer String)
+  @messageND@ Se encarga de mostrar si una variable o funcion (el primer String)
   y su nombre (el segundo String) han sido o no definidos
 -}
-mensajeND :: String -> String -> error
-mensajeND elemND id = error $ "Error: "++elemND++"\""++id++"\" Not defined."
+messageND :: String -> String -> error
+messageND elemND id = error $ "Error: "++elemND++"\""++id++"\" Not defined."
 
 {-|
-  @mensajeBM@ muestra los problemas de error de tipo, en lugares que no deben
+  @messageBM@ muestra los problemas de error de tipo, en lugares que no deben
 -}
-mensajeBM problem exp = error $ "Error: Type not permited at "++(show exp)++" in "++problem
+messageBM problem exp = error $ "Error: Type not permited at "++(show exp)++" in "++problem
 
 {-|
-  la función @mensajeAM@  mostrara error en caso de que se hayan definido mal
+  la funci&#243;n @messageAM@  mostrara error en caso de que se hayan definido mal
   los elementos de una Matriz, o el acceso (a elemento o parcial) de la misma
 -}
-mensajeAM mat = error $ "Error: Can not access or Bad definition to "++(show mat)
+messageAM mat = error $ "Error: Can not access or Bad definition to "++(show mat)
 
 {-|
-  @mensajeBC@ se encarga de avisar cuando la llamada a una funcion no concuerda
+  @messageBC@ se encarga de avisar cuando la llamada a una funcion no concuerda
   con la definicion de la misma
 -}
-mensajeBC name parameters = error $ "Error: Bad call of function \""++name++"\" with the next parameters:"++(show parameters)
+messageBC name parameters = error $ "Error: Bad call of function \""++name++"\" with the next parameters:"++(show parameters)
 
 {-|
-  @mensajeBB@ Se muestra al producirse un error con las expresiones booleanas
+  @messageBB@ Se muestra al producirse un error con las expresiones booleanas
 -}
-mensajeBB op exp1 exp2 = error $ "Error: Can not \"Comparate/ "++op++"\" of "++(show exp1)++" and "++(show exp2)
+messageBB op exp1 exp2 = error $ "Error: Can not \"Comparate/ "++op++"\" of "++(show exp1)++" and "++(show exp2)
 
 {-|
   @numbers@ se encarga solo de transformar los Nothing a un Num cualquiera, y
-  los Just Num a Num, para así,realizar de manera mas fácil a los accesos
+  los Just Num a Num, para as&#237;,realizar de manera mas f&#225;cil a los accesos
   parciales de matriz y vectores
 -}
 numbers :: Maybe ASTExp -> ASTExp

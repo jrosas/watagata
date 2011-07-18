@@ -8,11 +8,11 @@
 
   Grupo: H01
 
-  SymTable es utilizada por nuestro analizador estático CheckAST.hs, para poder
+  SymTable es utilizada por nuestro analizador est&#225;tico CheckAST.hs, para poder
   verificar el uso de Variables, Funciones, y Sobreescribir/heredar variables a
-  través de los distintos bloques de instrucciones de los programas (.vec) de
-  Vectorinox, para así poder concluir si el analisis de las expresiones
-  relacionadas con funciones o variables son válidas
+  trav&#233;s de los distintos bloques de instrucciones de los programas (.vec) de
+  Vectorinox, para as&#237; poder concluir si el analisis de las expresiones
+  relacionadas con funciones o variables son v&#225;lidas
  -}
 
 module SymTable (
@@ -35,14 +35,14 @@ import qualified Data.Map as Map
 
 
 -- | SymTable es el tipo especificado para la entrega de este proyecto, para
--- | expresar la Tabla de Símbolos del proyecto, funciones y los distintos
+-- | expresar la Tabla de S&#237;mbolos del proyecto, funciones y los distintos
 -- | bloques del mismo, el constructor es Rama, tiene una lista de Clave y
--- | Símbolo, seguido de una (posible) Tabla de símbolos que es la Tabla padre
+-- | S&#237;mbolo, seguido de una (posible) Tabla de s&#237;mbolos que es la Tabla padre
 data SymTable = Rama (Map.Map String Symbol) (Maybe SymTable)
               deriving (Eq, Show)
 
 -- | Definido con el constructor Sym y basado en 2 valores, el tipo y el valor
--- | de la clave que apunta a ellos a través del Data.Map por el que llegamos
+-- | de la clave que apunta a ellos a trav&#233;s del Data.Map por el que llegamos
 -- | al mismo.
 data Symbol = Var VarType (Maybe Value)
             | Fun VarType SymTable [VarType]
@@ -59,7 +59,7 @@ data VarType = TNum
              | TString
              deriving (Eq, Show)
 {-|
-  @Value@ Son los posibles tipos de valores que puede llegar a tener un símbolo
+  @Value@ Son los posibles tipos de valores que puede llegar a tener un s&#237;mbolo
   que son Numero y Matriz
 -}
 data Value = Numero
@@ -67,31 +67,31 @@ data Value = Numero
            deriving (Eq, Show)
 
 
--- | @emptySymTable@ es una función que devuelve una SymTable sin elementos, y
--- | con padre vacía
-emptySymTable :: SymTable    -- ^ Tabla vacía devuelta por la función.
+-- | @emptySymTable@ es una funci&#243;n que devuelve una SymTable sin elementos, y
+-- | con padre vac&#237;a
+emptySymTable :: SymTable    -- ^ Tabla vac&#237;a devuelta por la funci&#243;n.
 emptySymTable = Rama (Map.empty) Nothing
 
--- | La función @isEmpty@  se encarga de verificar si una SymTable esta vacía o
+-- | La funci&#243;n @isEmpty@  se encarga de verificar si una SymTable esta vac&#237;a o
 -- | no, no se verificar el padre, para considerar esto
-isEmpty :: SymTable    -- ^ Tabla a verificar si es vacía o no
-        -> Bool        -- ^ Respuesta de la función, si o no
+isEmpty :: SymTable    -- ^ Tabla a verificar si es vac&#237;a o no
+        -> Bool        -- ^ Respuesta de la funci&#243;n, si o no
 isEmpty (Rama fl _) = Map.null fl
 
--- | @setFather@ se emcarga de establecerle un nuevo padre a algún SymTable
--- | en cualquier momento de la ejecución, para asi poder anidarlas en
+-- | @setFather@ se emcarga de establecerle un nuevo padre a alg&#250;n SymTable
+-- | en cualquier momento de la ejecuci&#243;n, para asi poder anidarlas en
 -- | base a la necesidad
 setFather :: SymTable          -- ^ Tabla a establecerle padre
-          -> Maybe SymTable    -- ^ Tabla que sera padre, podría ser vacía
+          -> Maybe SymTable    -- ^ Tabla que sera padre, podr&#237;a ser vac&#237;a
           -> SymTable          -- ^ Tabla resultado
 setFather (Rama x y) symTableFather = Rama x symTableFather
 
--- | @find@ es la función que se encarga de devolvernos el símbolo, asociado
--- | a la clave y tabla de símbolo del bloque al que pertenece, en algunos
--- | podría no pertenecer al bloque, sino al bloque contenedor
-find :: String       -- ^ Símbolo a buscar en la Tabla de Símbolos.
-     -> SymTable     -- ^ Tabla de Símbolos.
-     -> Maybe Symbol -- ^ Valor asociado al Símbolo, si existe.
+-- | @find@ es la funci&#243;n que se encarga de devolvernos el s&#237;mbolo, asociado
+-- | a la clave y tabla de s&#237;mbolo del bloque al que pertenece, en algunos
+-- | podr&#237;a no pertenecer al bloque, sino al bloque contenedor
+find :: String       -- ^ S&#237;mbolo a buscar en la Tabla de S&#237;mbolos.
+     -> SymTable     -- ^ Tabla de S&#237;mbolos.
+     -> Maybe Symbol -- ^ Valor asociado al S&#237;mbolo, si existe.
 find key (Rama fl Nothing) = if Map.member key fl
                              then Map.lookup key fl
                              else Nothing
@@ -99,13 +99,13 @@ find key (Rama fl (Just st)) = if Map.member key fl
                                then Map.lookup key fl
                                else find key st
 
--- | @isMember@ Es una función que se encarga de decir si el parámetro de
+-- | @isMember@ Es una funci&#243;n que se encarga de decir si el par&#225;metro de
 -- | entrada (una  clave), se encuentra en el bloque de variables con el cual
--- | es ingresado en la función, en casi afirmativo devuelve @True@, en caso
--- | contrario devolverá de manera lógica @False@
-isMember :: String       -- ^ Símbolo a buscar en la Tabla de Símbolos.
-         -> SymTable  -- ^ Tabla de Símbolos.
-         -> Bool      -- ^ ¿El Símbolo está en la Tabla de Símbolos?
+-- | es ingresado en la funci&#243;n, en casi afirmativo devuelve @True@, en caso
+-- | contrario devolver&#225; de manera l&#243;gica @False@
+isMember :: String       -- ^ S&#237;mbolo a buscar en la Tabla de S&#237;mbolos.
+         -> SymTable  -- ^ Tabla de S&#237;mbolos.
+         -> Bool      -- ^ ¿El S&#237;mbolo est&#225; en la Tabla de S&#237;mbolos?
 isMember key (Rama fl Nothing) = if Map.member key fl
                                  then True
                                  else False
@@ -114,44 +114,44 @@ isMember key (Rama fl (Just st)) = if Map.member key fl
                                   else there
                                       where there = isMember key st
 
--- | @insert@ función utilizada para agregar una nueva tupla (clave, símbolo)
--- | a la tabla de símbolos del bloque que pasamos como parámetro de entrada,
--- | esta tabla de símbolos puede recibir otra como parámetro de entrada, que
+-- | @insert@ funci&#243;n utilizada para agregar una nueva tupla (clave, s&#237;mbolo)
+-- | a la tabla de s&#237;mbolos del bloque que pasamos como par&#225;metro de entrada,
+-- | esta tabla de s&#237;mbolos puede recibir otra como par&#225;metro de entrada, que
 -- | es la que contiene al nuevo bloque
-insert :: String   -- ^ Símbolo a insertar en la Tabla de Símbolos.
+insert :: String   -- ^ S&#237;mbolo a insertar en la Tabla de S&#237;mbolos.
        -> Symbol   -- ^ Valor a asociar.
-       -> SymTable -- ^ Tabla de Símbolos donde insertar.
-       -> SymTable -- ^ Nueva Tabla de Símbolos después de la inserción.
+       -> SymTable -- ^ Tabla de S&#237;mbolos donde insertar.
+       -> SymTable -- ^ Nueva Tabla de S&#237;mbolos despu&#233;s de la inserci&#243;n.
 insert key symb (Rama fl st) = if Map.member key fl
-                               then mensaje key symb
+                               then message key symb
                                else Rama (Map.insert key symb fl) st
 
--- | @typeSymbol@ devuelvo el tipo del símbolo, se considera tipo de la función
+-- | @typeSymbol@ devuelvo el tipo del s&#237;mbolo, se considera tipo de la funci&#243;n
 -- | el tipo del valor devuelto por la misma
 typeSymbol :: Symbol     -- ^ Simbolo (Var o Fun) del que queremos saber el tipo
-         -> VarType      -- ^ Tipo del símnolo
+         -> VarType      -- ^ Tipo del s&#237;mnolo
 typeSymbol (Var typeVar _) = typeVar
 typeSymbol (Fun typeFun _ _) = typeFun
 
--- | La función @signSymbol@ se encarga de devolver la lista de firmas
--- | necesarias por una llamada a función,se
-signSymbol :: Symbol     -- ^ Símbolo del que queremos saber la firma de llamada
+-- | La funci&#243;n @signSymbol@ se encarga de devolver la lista de firmas
+-- | necesarias por una llamada a funci&#243;n,se
+signSymbol :: Symbol     -- ^ S&#237;mbolo del que queremos saber la firma de llamada
          -> [VarType]    -- ^ Lista para verificar la correctitud de la llamada
 signSymbol (Var _ _) = []
 signSymbol (Fun _ _ elemCall) = elemCall
 
--- | @replace@ se encarga de sustituir el símbolo de una clave perteneciente a
--- | la tabla de símbolos que le es suministrada.
-replace :: String   -- ^ Símbolo cuyo valor se quiere modificar.
-        -> Symbol   -- ^ Nuevo valor asociado al símbolo.
-        -> SymTable -- ^ Tabla de Símbolos a modificar.
-        -> SymTable -- ^ Tabla de Símbolos después de la modificación.
+-- | @replace@ se encarga de sustituir el s&#237;mbolo de una clave perteneciente a
+-- | la tabla de s&#237;mbolos que le es suministrada.
+replace :: String   -- ^ S&#237;mbolo cuyo valor se quiere modificar.
+        -> Symbol   -- ^ Nuevo valor asociado al s&#237;mbolo.
+        -> SymTable -- ^ Tabla de S&#237;mbolos a modificar.
+        -> SymTable -- ^ Tabla de S&#237;mbolos despu&#233;s de la modificaci&#243;n.
 replace key symb (Rama fl st) = if Map.member key fl
                                then Rama (Map.insert key symb fl) st
                                else Rama fl st
 
-mensaje :: String       -- ^ Nombre de la función o variable con problema
-        -> Symbol       -- ^ Símbolo para poder decir si es función o variable
+message :: String       -- ^ Nombre de la funci&#243;n o variable con problema
+        -> Symbol       -- ^ S&#237;mbolo para poder decir si es funci&#243;n o variable
         -> error        -- ^ Esto significa que el programa esta mal, error
-mensaje key (Var _ _) = error $ "Error: La variable \""++key++"\" ya fue declarada"
-mensaje key (Fun _ _ _) = error $ "Error: La funcion \""++key++"\" ya fue declarada"
+message key (Var _ _) = error $ "Error: La variable \""++key++"\" ya fue declarada"
+message key (Fun _ _ _) = error $ "Error: La funcion \""++key++"\" ya fue declarada"

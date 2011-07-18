@@ -7,15 +7,15 @@
 
    Grupo: H01
 
-   Funaux es una compilación de funciones check*, que funcionan como caja de
-   herramientas para checkAST, y así poderle facilitar al mismo:
+   Funaux es una compilaci&#243;n de funciones check*, que funcionan como caja de
+   herramientas para checkAST, y as&#237; poderle facilitar al mismo:
      * Chequeo de Tipos
      * Chequeo de Igualdad de Tipo
      * Chequeo de Tipos de Listas
      * Chequeo de Listas de TNum (para definir matrices)
      * Chequeo de correctitud de tipos en las expresiones y lo que devuelven las
      mismas
-     * Chequeo de que el Iterador no edite su condicion durante su ejecución
+     * Chequeo de que el Iterador no edite su condicion durante su ejecuci&#243;n
 
 -}
 
@@ -52,7 +52,7 @@ checkType _ _ = False
   @checkType1@ se encarga de verificar
 -}
 checkType1 :: VarType    -- ^ Elemento a verificar
-             -> Bool     -- ^ Si es un tipo válido, devuelve True
+             -> Bool     -- ^ Si es un tipo v&#225;lido, devuelve True
 checkType1 TNum = True
 checkType1 TMat = True
 checkType1 TVec = True
@@ -61,20 +61,20 @@ checkType1 TString = True
 
 {-|
   @checkTypeList@ se encarga de verficar si los elementos de una lista son
-  válidos
+  v&#225;lidos
 -}
-checkTypeList :: [VarType]     -- ^ Lista de VarType a verificar si son válidos
-              -> Bool          -- ^ True si es válido
+checkTypeList :: [VarType]     -- ^ Lista de VarType a verificar si son v&#225;lidos
+              -> Bool          -- ^ True si es v&#225;lido
 checkTypeList (a:as) = checkType1 a && checkTypeList as
 checkTypeList [] = True
 
 {-|
-  @checkTypeLists@ Verifica si 2 listas son del mismo tamaño, y además verifica
+  @checkTypeLists@ Verifica si 2 listas son del mismo tama&#241;o, y adem&#225;s verifica
   si el orden de ambas listas es el mismo
 -}
 checkTypeLists :: [VarType]     -- ^ Lista a comparar
                -> [VarType]     -- ^ Lista a comparar
-               -> Bool          -- ^ Si son del mismo tamaño/mismo orden true
+               -> Bool          -- ^ Si son del mismo tama&#241;o/mismo orden true
 checkTypeLists [] [] = True
 checkTypeLists (a:as) (b:bs)  = if (a == b) then  True && checkTypeLists as bs
                                else False
@@ -82,17 +82,17 @@ checkTypeLists a [] = False
 checkTypeLists [] a = False
 
 {-|
-  La función @checkTypeNum@ se encarga de verificar si la lista de elementos
-  es toda del tipo TNum, para verificar la correctitud de una declaración de
+  La funci&#243;n @checkTypeNum@ se encarga de verificar si la lista de elementos
+  es toda del tipo TNum, para verificar la correctitud de una declaraci&#243;n de
   matriz/vector
 -}
 checkTypeNum :: [VarType]       -- ^ Lista a verificar
-             -> Bool         -- ^ True si todos son números
+             -> Bool         -- ^ True si todos son n&#250;meros
 checkTypeNum l = and $ map (==TNum) l
 
 {-|
   @checkType2@ se encarga de verificar si las operaciones unarias de los tipos
-  de Numeros, Vectores y Matrices son válidos
+  de Numeros, Vectores y Matrices son v&#225;lidos
 -}
 checkType2 :: String -> VarType -> Maybe VarType
 checkType2 "RB" TNum = Just TNum
@@ -109,10 +109,10 @@ checkType2 _ _ = Nothing
 
 {-|
   @checkType3@ se encarga de verificar si las operaciones binarias de los tipos
-  de Numeros, Vectores y Matrices son válidos.
+  de Numeros, Vectores y Matrices son v&#225;lidos.
 
   Ademas del acceso a Vector, que recibe un Vector, numero 'a' y regresa el
-  elemento  en la posición 'a' del vector
+  elemento  en la posici&#243;n 'a' del vector
 -}
 checkType3 :: String -> VarType -> VarType -> Maybe VarType
 checkType3 "Plus" TNum TNum = Just TNum
@@ -158,7 +158,7 @@ checkType6 _ _ _ _ _ _=  Nothing
 
 {-|
   @checkBool2@ se encarga de verificar si las operaciones unarias de los tipos
-  Booleanos son válidos
+  Booleanos son v&#225;lidos
 -}
 checkBool2 :: String -> VarType -> Maybe VarType
 checkBool2 "BoolRB" TBool = Just TBool
@@ -167,7 +167,7 @@ checkBool2 _ _ = Nothing
 
 {-|
   @checkBool3@ se encarga de verificar si las operaciones binarias de los tipos
-  Booleanos son válidos
+  Booleanos son v&#225;lidos
 -}
 checkBool3 :: String -> VarType -> VarType ->  Maybe VarType
 checkBool3 "Less" TNum TNum = Just TBool
@@ -183,7 +183,7 @@ checkBool3 _ _ _ = Nothing
 
 {-|
   @checkIter@ es una funcion auxiliar de checkAST que se encarga de verificar si
-  las instrucciones de un 'For Each' editan a la expresión condicional del mismo
+  las instrucciones de un 'For Each' editan a la expresi&#243;n condicional del mismo
 -}
 checkIter :: ASTExp -> ASTInstruc -> Bool
 checkIter a (Asign b _) = if (a==b) then False else True

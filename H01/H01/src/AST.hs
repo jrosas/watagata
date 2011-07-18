@@ -97,7 +97,7 @@ data ASTExp = Num Double
 {-
    El if (entre otras muchas instrucciones) se basan en booleanos, y Vectorinox
    presenta una gran cantidad de estas expresiones, tales como:
-   /true/ y /false/, 'Y' y 'O' l&#243;gicos, negación,
+   /true/ y /false/, 'Y' y 'O' l&#243;gicos, negaci&#243;n,
    Comparacion de numeros: menor (o igual), mayor (o igual),
    igual o desigualdad.
 -}
