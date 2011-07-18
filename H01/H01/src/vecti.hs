@@ -34,4 +34,5 @@ main =  do
                          print $ parser $lexer $ head $ tail args
                        else do
                          contents <- readFile $ head args
-                         print $ ( show $ parser $lexer contents )  ++ (show (checkAST ( parser (lexer contents)))) 
+                         if (checkAST ( programa) then runStatement( programa)
+                                      where programa =  $parser $lexer$ contents 
