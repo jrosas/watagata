@@ -68,5 +68,5 @@ cleanall:
 docs:	src/Lexer.x
 	cd src/; alex -o Lexer.hs Lexer.x
 	cd src/; happy -o Parser.hs Parser.y
-	cd src/; haddock --html --odir=../doc/ vecti.hs > ../src/tmp
+	cd src/; haddock -w --html --odir=../doc/ vecti.hs
 	cd src/; rm -f Lexer.hs Parser.hs tmp
