@@ -73,3 +73,23 @@ checkBool3 "And" TBool TBool = Just TBool
 checkBool3 "Or" TBool TBool = Just TBool
 checkBool3 "BoolEqual" TBool TBool = Just TBool
 checkBool3 _ _ _ = Nothing
+{-
+checkforeach
+catch varTable funTable (Iter Exp1 Exp2 Instruc)    = (\(a,b)-> a && b)( checkIter Exp1 Instruc ,map (catch varTable funTable) [Exp1, Exp2, Instruc])
+-}
+checkIter a (Asign b _) = if (a==b) then False else True
+checkIter a (Read b) = if (a==b) then False else True
+checkIter a (While _ inst) = checkIter a inst
+checkIter a (Iter _ _ inst) = checkIter a inst
+checkIter a (Cond _ inst0 (Just (Else inst1))) = checkIter a inst0 && checkIter a inst1
+checkIter a (Cond _ inst _) = checkIter a inst
+checkIter a (Return _) = True
+checkIter a (Write _) = True
+checkIter (Id a) (InsBlock sym ints) = if (SymTable.isMember a sym) then True else and $ map (checkIter (Id a)) ints
+{-
+checkreturn inst = noreturn inst
+                   where noreturn (Return _ ) = False
+                         noreturn (While _ inst) = noreturn inst
+                         noreturn (Cond _ inst0 (Just _ inst1)) = noreturn inst0 && noreturn inst1
+                         noreturn (Cond _ inst _) = noreturn inst
+                         noreturn -}
