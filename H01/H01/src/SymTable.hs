@@ -8,6 +8,11 @@
 
   Grupo: H01
 
+  SymTable es utilizada por nuestro analizador estático CheckAST.hs, para poder
+  verificar el uso de Variables, Funciones, y Sobreescribir/heredar variables a
+  través de los distintos bloques de instrucciones de los programas (.vec) de
+  Vectorinox, para así poder concluir si el analisis de las expresiones
+  relacionadas con funciones o variables son válidas
  -}
 
 module SymTable (
@@ -44,7 +49,8 @@ data Symbol = Var VarType (Maybe Value)
               deriving (Eq, Show)
 
 {-|
-   VarType hace referencia a cualquier tipo de Variable utilizada en Vectorinox
+   @VarType@ hace referencia a cualquier tipo de utilizada en Vectorinox, no solo
+   variable, que son Numeros, Vectores, Matrices, Booleanos y Strings 
 -}
 data VarType = TNum
              | TVec
@@ -52,24 +58,32 @@ data VarType = TNum
              | TBool
              | TString
              deriving (Eq, Show)
-
+{-|
+  @Value@ Son los posibles tipos de valores que puede llegar a tener un símbolo
+  que son Numero y Matriz
+-}
 data Value = Numero
            | Matriz
            deriving (Eq, Show)
 
 
--- | @emptySymTable@
-emptySymTable :: SymTable
+-- | @emptySymTable@ es una función que devuelve una SymTable sin elementos, y
+-- | con padre vacía
+emptySymTable :: SymTable    -- ^ Tabla vacía devuelta por la función.
 emptySymTable = Rama (Map.empty) Nothing
 
--- | @isEmpty@
-isEmpty :: SymTable -> Bool
+-- | La función @isEmpty@  se encarga de verificar si una SymTable esta vacía o
+-- | no, no se verificar el padre, para considerar esto
+isEmpty :: SymTable    -- ^ Tabla a verificar si es vacía o no
+        -> Bool        -- ^ Respuesta de la función, si o no
 isEmpty (Rama fl _) = Map.null fl
 
--- | @setFather@
-setFather :: SymTable
-          -> Maybe SymTable
-          -> SymTable
+-- | @setFather@ se emcarga de establecerle un nuevo padre a algún SymTable
+-- | en cualquier momento de la ejecución, para asi poder anidarlas en
+-- | base a la necesidad
+setFather :: SymTable          -- ^ Tabla a establecerle padre
+          -> Maybe SymTable    -- ^ Tabla que sera padre, podría ser vacía
+          -> SymTable          -- ^ Tabla resultado
 setFather (Rama x y) symTableFather = Rama x symTableFather
 
 -- | @find@ es la función que se encarga de devolvernos el símbolo, asociado
@@ -112,19 +126,17 @@ insert key symb (Rama fl st) = if Map.member key fl
                                then mensaje key symb
                                else Rama (Map.insert key symb fl) st
 
-mensaje :: String
-        -> Symbol
-        -> SymTable
-mensaje key (Var _ _) = error $ "Error: La variable \""++key++"\" ya fue declarada"
-mensaje key (Fun _ _ _) = error $ "Error: La funcion \""++key++"\" ya fue declarada"
-
-typeSymbol :: Symbol
-         -> VarType
+-- | @typeSymbol@ devuelvo el tipo del símbolo, se considera tipo de la función
+-- | el tipo del valor devuelto por la misma
+typeSymbol :: Symbol     -- ^ Simbolo (Var o Fun) del que queremos saber el tipo
+         -> VarType      -- ^ Tipo del símnolo
 typeSymbol (Var typeVar _) = typeVar
 typeSymbol (Fun typeFun _ _) = typeFun
 
-signSymbol :: Symbol
-         -> [VarType]
+-- | La función @signSymbol@ se encarga de devolver la lista de firmas
+-- | necesarias por una llamada a función,se
+signSymbol :: Symbol     -- ^ Símbolo del que queremos saber la firma de llamada
+         -> [VarType]    -- ^ Lista para verificar la correctitud de la llamada
 signSymbol (Var _ _) = []
 signSymbol (Fun _ _ elemCall) = elemCall
 
@@ -137,3 +149,9 @@ replace :: String   -- ^ Símbolo cuyo valor se quiere modificar.
 replace key symb (Rama fl st) = if Map.member key fl
                                then Rama (Map.insert key symb fl) st
                                else Rama fl st
+
+mensaje :: String       -- ^ Nombre de la función o variable con problema
+        -> Symbol       -- ^ Símbolo para poder decir si es función o variable
+        -> error        -- ^ Esto significa que el programa esta mal, error
+mensaje key (Var _ _) = error $ "Error: La variable \""++key++"\" ya fue declarada"
+mensaje key (Fun _ _ _) = error $ "Error: La funcion \""++key++"\" ya fue declarada"

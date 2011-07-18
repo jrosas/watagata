@@ -16,7 +16,3 @@
    Vectorinox,  en  este  caso  pasara por el /Analizador/  Lexicogr&#225;fico
    y Adem&#225;s se generara un  parser del mismo. Para mostrar asi al usuario
    los tokens del rograma o los errores del mismo.
-
-   Implementaci&#243;n : 90% Aproximadamente
-
-   Falto: 10% Tabla de S&#237;mbolos

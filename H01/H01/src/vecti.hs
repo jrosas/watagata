@@ -8,6 +8,12 @@
 
   Grupo: H01
 
+   Este programa se encarga de obtener los argumentos suministrados por el
+   usuario, sea un archivo o una l&#237;nea de comandos, para encargarse luego
+   procesar el programa obtenido por los disntitos componentes del Lenguaje
+   /Vectorinox/, en este caso solo pasara por el /Analizador/
+   /Lexicogr&#225;fico/ del mismo. Para mostrar asi al usuario los tokens del
+   programa o los errores del mismo.
  -}
 
 module Main (

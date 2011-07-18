@@ -7,6 +7,12 @@
 
    Grupo: H01
 
+   Archivo que utiliza Parser.y como referencia para generar el Arbol de
+   An&#225;lisis Sint&#225;ctico. En este se define el tipo  de Rama que
+   puede llegar a tener el  AST del programa  principal, para formar asi
+   cualquier  posible combinaci&#243;n  de instrucciones,  que formen un
+   programa v&#225;lido
+
  -}
 
 module AST (

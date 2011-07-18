@@ -8,6 +8,25 @@
 
   Grupo: H01
 
+  Se encarga de la verificación de la correctitud estática de un programa
+  escrito en Vectorinox, para garantizar que un programa esta bien, al menos
+  de manera estática se debe verificar:
+    * No pueden haber dos funciones con el mismo nombre, sin importar el número
+    de argumentos de éstos.
+    * No pueden haber dos declaraciones de variable con el mismo nombre en el
+    mismo bloque.
+    * No se puede hacer mención a variables o funciones no declaradas.
+    * Las llamadas a funciones corresponen a las firmas de las funciones
+    declaradas
+    * Las expresiones son compatibles en tipos a gran escala: que las
+    expresiones cumplan con las reglas de tipoimpuestas en el enunciado del
+    lenguaje.
+    * No pueden haber instrucciones de retorno de valores en el programa
+    principal.
+    * En una instrucción de iteración sobre un vector/matriz, la instrucción
+    interna no puede de ninguna forma alterar la variable indicada en la
+    instrucción.
+
  -}
 
 module CheckAST(
@@ -21,37 +40,90 @@ import SymTable
 import AST
 import Funaux
 
-{- Check de Funciones-}
-checkAST ((funTable,funList),ins) =  (and (map (\(a,b)->checkI 1 ((\(Fun a x c)-> x) ( (\(Just q)-> q) (find a funTable))) funTable b) (map (\(FunDec s i) -> (s,i)) funList))) && checkI 0 emptySymTable funTable ins
+{-|
+  @CheckAST@ es la función, que se pidio para esta entrega, y el chequeo de la
+  parte estatica, del programa Vectorinox,
+-}
+checkAST :: ((SymTable, [FunDec]), ASTInstruc) -> Bool
+checkAST ((funTable,funList),ins) = (and (map (\(a,b)->checkI 1 ((\(Fun a x c)-> x) ( (\(Just q)-> q) (find a funTable))) funTable b) (map (\(FunDec s i) -> (s,i)) funList))) && checkI 0 emptySymTable funTable ins
 
-checkI nDec varTable funTable (Asign exp1 exp2)      = checkType (checkE varTable funTable exp1) (checkE varTable funTable exp2)
-checkI nDec varTable funTable (Write exps)           = checkTypeList $ map (checkE varTable funTable) exps
-checkI nDec varTable funTable (While boolExp ins)    = checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins
-checkI nDec varTable funTable (Iter exp1 exp2 ins)   =(\(a,b) -> a && b) (checkIter exp1 ins, (checkType1 (checkE varTable funTable exp1)) && (checkType1 (checkE varTable funTable exp2))  && (checkI nDec varTable funTable ins))
+{-|
+  Check de instrucciones del programa vectorinox, se encarga de verificar si las
+  instrucciones han sido bien escritas, las expresiones de las mismas son
+  válidas, si se llama a return dentro del main o no y la correctitud de los
+  bloques de instrucciones del for each
+-}
+{- Chequeo de los ASTInstruc "Asign"/ Asignaciones -}
+checkI :: (Num a) => a -> SymTable -> SymTable -> ASTInstruc -> Bool
+checkI nDec varTable funTable (Asign exp1 exp2)      =
+    if checkType (checkE varTable funTable exp1) (checkE varTable funTable exp2)
+    then True
+    else mensajeOp2 " Asign " exp1 exp2
+
+{- Chequeo de los ASTInstruc "Write" / Mostrar por Pantalla-}
+checkI nDec varTable funTable (Write exps)           =
+    if checkTypeList $ map (checkE varTable funTable) exps
+    then True
+    else error $ "Error: Can not Write"++(show exps)
+
+{- Chequeo de los ASTInstruc "While" / Ciclos-}
+checkI nDec varTable funTable (While boolExp ins)    =
+    if checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins
+    then True
+    else error $ "Error: Can not do While with the boolExp"++(show boolExp)++"and instruct"++(show ins)
+
+{- Chequeo de los ASTInstruc "Iter" / Iteraciones -}
+checkI nDec varTable funTable (Iter exp1 exp2 ins)   =
+    if (\(a,b) -> a && b) (checkIter exp1 ins, (checkType1 (checkE varTable funTable exp1)) && (checkType1 (checkE varTable funTable exp2))  && (checkI nDec varTable funTable ins))
+    then True
+    else error $ "Error: Can not comparate "++(show exp1)++" and "++(show exp2)++" to do"++(show ins)
+
+{- Chequeo de los ASTInstruc "Read" / Asignar por Teclado-}
 checkI nDec varTable funTable (Read (Id _))          = True
-checkI nDec varTable funTable (Return exp)           = if (nDec == 0)
-                                                       then error "Error: Can not use return at Main"
-                                                       else checkType1 (checkE varTable funTable exp)
-checkI nDec varTable funTable (Cond boolExp ins Nothing)  = checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins
-checkI nDec varTable funTable (Cond boolExp ins1 (Just (Else ins2)))  = checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins1 && checkI nDec varTable funTable ins2
-checkI nDec varTable funTable (InsBlock symt ins)         = and $ map (checkI nDec newST funTable) ins
-                                                            where newST = (setFather symt (Just varTable))
 
-checkE :: SymTable
-      -> SymTable
-      -> ASTExp
-      -> VarType
+{- Chequeo de los ASTInstruc "Return" - Retornar Valor-}
+checkI nDec varTable funTable (Return exp)           =
+    if (nDec == 0)
+    then error "Error: Can not use return at Main"
+    else if checkType1 (checkE varTable funTable exp)
+         then True
+         else error $ "Error: Can not return"++(show exp)
 
-{- Definicion de Tipo Num -}
+{- Chequeo de los ASTInstruc "Cond" / If -}
+checkI nDec varTable funTable (Cond boolExp ins Nothing)  =
+    if checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins
+    then True
+    else error $ "Error: Problem with the \"If\" of condition "++(show boolExp)++" to do "++(show ins)
+
+{- Chequeo de los ASTInstruc "Cond" / If-Else -}
+checkI nDec varTable funTable (Cond boolExp ins1 (Just (Else ins2)))  =
+    if checkType1 (checkB varTable funTable boolExp) && checkI nDec varTable funTable ins1 && checkI nDec varTable funTable ins2
+    then True
+    else error $ "Error: Problem with the \"If-Else\" of condition "++(show boolExp)
+
+{- Chequeo de los ASTInstruc "InsBlock" / Bloque de Instrucciones -}
+checkI nDec varTable funTable (InsBlock symt ins)         =
+    if and $ map (checkI nDec newST funTable) ins
+    then True
+    else error $ "Error: With the Instructions Blocks "++(show ins)
+        where newST = (setFather symt (Just varTable))
+
+{-|
+  @checkE@ se encarga de verificar si una expresión es válida,
+  en caso de utilizar funciones o variables, realiza las busquedas
+  correspondientes en las SymTables de cada una.
+-}
+{- Chequeo de Definicion de ASTExp Num / Tipo Num -}
+checkE :: SymTable -> SymTable -> ASTExp -> VarType
 checkE varTable funTable (Num _)    = TNum
 
-{- Definicion de Id -}
+{- Chequeo de Definicion de ASTExp Id / Variable -}
 checkE varTable funTable (Id name)  = if elemento == Nothing
                                       then mensajeND " Variable " name
                                       else SymTable.typeSymbol $ (\(Just x) -> x) elemento
                                           where elemento = (SymTable.find name varTable)
 
-{- Instancia del Tipo String -}
+{- Chequeo de Instancia del Tipo String -}
 checkE varTable funTable (Chars _)  = TString
 
 {- Definicion de Matriz/Vector -}
@@ -60,7 +132,7 @@ checkE varTable funTable (Matrix exps)     = if elemento
                                              else mensajeBM " Matrix Elements " exps
                                                  where elemento = checkTypeNum (concat (map (map (checkE varTable funTable)) exps))
 
-{- Definicion de Funciones -}
+{- Chequeo de Definicion de Funciones -}
 checkE varTable funTable (Func embebed exps) | embebed == "range" = if checkTypeNum (map (checkE varTable funTable) exps) then TVec
                                                                     else mensajeBC embebed exps
                                              | embebed == "eye" = if checkTypeNum (map (checkE varTable funTable) exps) then TVec
@@ -70,7 +142,7 @@ checkE varTable funTable (Func embebed exps) | embebed == "range" = if checkType
                                                                           then TVec
                                                                           else TMat
                                                                      else mensajeBC embebed exps
-
+{- Chequeo de Llamada de Funciones -}
 checkE varTable funTable (Func name exps)  = if SymTable.isMember name funTable
                                              then if (checkTypeLists (SymTable.signSymbol elemento) (map (checkE varTable funTable) exps))
                                                   then (SymTable.typeSymbol elemento)
@@ -78,12 +150,12 @@ checkE varTable funTable (Func name exps)  = if SymTable.isMember name funTable
                                              else mensajeND " Function " name
                                                   where elemento = (\(Just x) -> x) (SymTable.find name funTable)
 
-{- Parentesis -}
+{- Chequeo de Parentesis -}
 checkE varTable funTable (RB exp)          = if ct == Nothing
                                              then mensajeBM " \"()\" - Round Bracket " exp
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType2 "RB" (checkE varTable funTable exp)
-{- Operaciones de Aritmeticas -}
+{-Chequeo de Operaciones de Aritmeticas -}
 {- Suma -}
 checkE varTable funTable (Plus exp1 exp2) = if ct == Nothing
                                             then mensajeOp2 "Plus" exp1 exp2
@@ -180,7 +252,7 @@ checkE varTable funTable (ParAccessM  exp1 exp2 exp3 exp4 exp5) =  if ct == Noth
                                                                              pexp4 = numbers exp4
                                                                              pexp5 = numbers exp5
 
-{- Booleanos -}
+{- Chequeo de  Booleanos -}
 {- Definicion de los Basicos: True y False -}
 checkB varTable funTable TRUE = TBool
 checkB varTable funTable FALSE = TBool
@@ -250,26 +322,55 @@ checkB varTable funTable (Not exp)         = if ct == Nothing
                                              else (\(Just x) -> x) ct
                                                  where ct = checkType2 "Not" (checkB varTable funTable exp)
 
-mensajeOp2 :: String
-           -> ASTExp
-           -> ASTExp
-           -> error
+
+{-
+   Manejador de errores
+   Para checkAST se creo un manejador de errores en base a varios mensajes de
+   error, si los errores son de expresión, mientras que para las instrucciones
+   no se podia manejar de manera tan generica, a continuación los mensajes de
+   error que podria manejar el programa
+ -}
+{-|
+   @mensajeOp2@ se utiliza para mostrar un mensaje de error, en el uso de
+   operadores y 2 expresiones
+-}
+mensajeOp2 :: String -> ASTExp -> ASTExp -> error
 mensajeOp2 op exp1 exp2 = error $ "Error: Can not do  \""++op++"\" of "++(show exp1)++" and "++(show exp2)
 
-mensajeND :: String
-          -> String
-          -> error
+{-|
+  @mensajeND@ Se encarga de mostrar si una variable o funcion (el primer String)
+  y su nombre (el segundo String) han sido o no definidos
+-}
+mensajeND :: String -> String -> error
 mensajeND elemND id = error $ "Error: "++elemND++"\""++id++"\" Not defined."
 
+{-|
+  @mensajeBM@ muestra los problemas de error de tipo, en lugares que no deben
+-}
 mensajeBM problem exp = error $ "Error: Type not permited at "++(show exp)++" in "++problem
 
+{-|
+  la función @mensajeAM@  mostrara error en caso de que se hayan definido mal
+  los elementos de una Matriz, o el acceso (a elemento o parcial) de la misma
+-}
 mensajeAM mat = error $ "Error: Can not access or Bad definition to "++(show mat)
 
+{-|
+  @mensajeBC@ se encarga de avisar cuando la llamada a una funcion no concuerda
+  con la definicion de la misma
+-}
 mensajeBC name parameters = error $ "Error: Bad call of function \""++name++"\" with the next parameters:"++(show parameters)
 
+{-|
+  @mensajeBB@ Se muestra al producirse un error con las expresiones booleanas
+-}
 mensajeBB op exp1 exp2 = error $ "Error: Can not \"Comparate/ "++op++"\" of "++(show exp1)++" and "++(show exp2)
 
-numbers :: Maybe ASTExp
-        -> ASTExp
+{-|
+  @numbers@ se encarga solo de transformar los Nothing a un Num cualquiera, y
+  los Just Num a Num, para así,realizar de manera mas fácil a los accesos
+  parciales de matriz y vectores
+-}
+numbers :: Maybe ASTExp -> ASTExp
 numbers Nothing = Num 1
 numbers (Just a) = a
